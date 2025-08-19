@@ -1,140 +1,178 @@
-// src/components/Footer.tsx
+// src/components/Footer.tsx - Clean Professional Footer
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Footer() {
-const currentYear = 2025
-
   const services = [
-    { name: 'LLM Agents', href: '/services#llm-agents' },
-    { name: 'Chatbot Development', href: '/services#chatbots' },
-    { name: 'RAG Systems', href: '/services#rag' },
-    { name: 'AI Workflows', href: '/services#workflows' },
+    { name: 'Chatbots & AI Assistants', href: '/services#chatbots' },
+    { name: 'Data Analytics & Reporting', href: '/services#analytics' },
+    { name: 'Workflow Automation', href: '/services#automation' },
+    { name: 'Knowledge Systems', href: '/services#knowledge' },
+    { name: 'Generative AI Apps', href: '/services#generative' },
     { name: 'Custom AI Development', href: '/services#custom' },
-    { name: 'AI Consulting', href: '/services#consulting' },
   ]
 
   const company = [
-    { name: 'About Us', href: '/about' },
+    { name: 'About', href: '/about' },
     { name: 'Services', href: '/services' },
+    { name: 'Case Studies', href: '/case-studies' },
     { name: 'Contact', href: '/contact' },
+    { name: 'Partnership', href: '/partnership' },
+  ]
+
+  const resources = [
+    { name: 'Blog', href: '/blog' },
+    { name: 'Documentation', href: '/docs' },
     { name: 'Privacy Policy', href: '/privacy' },
     { name: 'Terms of Service', href: '/terms' },
+    { name: 'Support', href: '/support' },
   ]
 
   const regions = [
-    'United Arab Emirates',
-    'Saudi Arabia', 
-    'Qatar',
-    'Kuwait',
-    'Bahrain',
-    'Oman',
-    'Palestine',
-    'United Kingdom'
+    'Palestine', 'United Kingdom', 'United Arab Emirates',
+    'Saudi Arabia', 'Qatar', 'Kuwait', 'Bahrain', 'Oman'
   ]
 
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
-          <div className="lg:col-span-1">
-            <div className="flex items-center mb-6">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">TL</span>
-              </div>
-              <span className="ml-3 text-xl font-bold">TransformerLabs</span>
+    <footer className="footer">
+      <div className="footer-content">
+        {/* Brand Section */}
+        <div className="footer-brand">
+          <Image
+            src="/Logo_only_Transparent.svg"
+            alt="TransformerLabs"
+            width={32}
+            height={32}
+            className="footer-logo"
+          />
+          
+          <p className="footer-description">
+            We build AI solutions for businesses - chatbots, data analytics, 
+            workflow automation, and generative AI applications. Reliable development 
+            with flexible work arrangements.
+          </p>
+
+          <div className="contact-info">
+            <a 
+              href="mailto:Mo@MohammadOthman.com" 
+              className="contact-item"
+            >
+              <svg className="contact-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+              </svg>
+              Mo@MohammadOthman.com
+            </a>
+            
+            <div className="contact-item">
+              <svg className="contact-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+              </svg>
+              Nablus, Palestine & London, UK
             </div>
-            <p className="text-gray-300 mb-6 leading-relaxed">
-              Leading AI consulting company delivering enterprise-grade solutions across the Middle East. 
-              Specializing in LLM agents, intelligent automation, and scalable AI systems.
-            </p>
-            <div className="space-y-2">
-              <div className="flex items-center text-gray-300">
-                <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                </svg>
-                <a href="mailto:Mo@MohammadOthman.com" className="hover:text-blue-400 transition-colors">
-                  Mo@MohammadOthman.com
-                </a>
-              </div>
-              <div className="flex items-center text-gray-300">
-                <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                </svg>
-                <span>Nablus, West Bank & London, UK</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Services */}
-          <div>
-            <h3 className="text-lg font-semibold mb-6">AI Services</h3>
-            <ul className="space-y-3">
-              {services.map((service) => (
-                <li key={service.name}>
-                  <Link href={service.href} className="text-gray-300 hover:text-blue-400 transition-colors">
-                    {service.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Company */}
-          <div>
-            <h3 className="text-lg font-semibold mb-6">Company</h3>
-            <ul className="space-y-3">
-              {company.map((item) => (
-                <li key={item.name}>
-                  <Link href={item.href} className="text-gray-300 hover:text-blue-400 transition-colors">
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Markets Served */}
-          <div>
-            <h3 className="text-lg font-semibold mb-6">Markets We Serve</h3>
-            <ul className="space-y-2">
-              {regions.map((region) => (
-                <li key={region} className="text-gray-300 text-sm">
-                  {region}
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
 
-        {/* Bottom Section */}
-        <div className="border-t border-gray-800 mt-12 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-gray-400 text-sm mb-4 md:mb-0">
-              © {currentYear} TransformerLabs. All rights reserved.
-            </div>
-            <div className="flex space-x-6">
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                <span className="sr-only">LinkedIn</span>
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clipRule="evenodd" />
-                </svg>
-              </a>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                <span className="sr-only">Twitter</span>
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M6.29 18.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0020 3.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.073 4.073 0 01.8 7.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 010 16.407a11.616 11.616 0 006.29 1.84" />
-                </svg>
-              </a>
-              <a href="#" className="text-gray-400 hover:text-blue-400 transition-colors">
-                <span className="sr-only">GitHub</span>
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clipRule="evenodd" />
-                </svg>
-              </a>
+        {/* Services */}
+        <div className="footer-section">
+          <h3>Services</h3>
+          <ul className="footer-links">
+            {services.map((service) => (
+              <li key={service.name}>
+                <Link href={service.href} className="footer-link">
+                  {service.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Company */}
+        <div className="footer-section">
+          <h3>Company</h3>
+          <ul className="footer-links">
+            {company.map((item) => (
+              <li key={item.name}>
+                <Link href={item.href} className="footer-link">
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Resources & Markets */}
+        <div className="footer-section">
+          <h3>Resources</h3>
+          <ul className="footer-links">
+            {resources.map((item) => (
+              <li key={item.name}>
+                <Link href={item.href} className="footer-link">
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          
+          <div style={{ marginTop: 'var(--space-8)' }}>
+            <h3 style={{ marginBottom: 'var(--space-4)' }}>Markets We Serve</h3>
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(2, 1fr)', 
+              gap: 'var(--space-2)',
+              fontSize: '0.75rem',
+              color: 'var(--text-muted)'
+            }}>
+              {regions.map((region) => (
+                <div key={region}>{region}</div>
+              ))}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Footer Bottom */}
+      <div className="footer-bottom">
+        <div className="footer-copyright">
+          © 2025 TransformerLabs. All rights reserved.
+        </div>
+
+        <div className="social-links">
+          <a 
+            href="https://linkedin.com/company/transformerlabs" 
+            className="social-link"
+            aria-label="LinkedIn"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg className="social-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+          </a>
+          
+          <a 
+            href="https://twitter.com/transformerlabs" 
+            className="social-link"
+            aria-label="Twitter"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg className="social-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+            </svg>
+          </a>
+          
+          <a 
+            href="https://github.com/transformerlabs" 
+            className="social-link"
+            aria-label="GitHub"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg className="social-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+          </a>
         </div>
       </div>
     </footer>
