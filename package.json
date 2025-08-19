@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "export": "next build && touch out/.nojekyll",
+    "export": "next build && node scripts/nojekyll.js",
     "deploy": "npm run export && git add -A && git commit -m 'Deploy website' && git push"
   },
   "dependencies": {
