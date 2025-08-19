@@ -1,3 +1,4 @@
+// src/app/layout.tsx - Clean Professional Layout
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
@@ -14,26 +15,26 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL('https://transformerlabs.io'),
   title: {
-    default: 'TransformerLabs - Advanced AI Solutions & Neural Systems',
+    default: 'TransformerLabs - AI Development & Data Analytics Services',
     template: '%s | TransformerLabs'
   },
-  description: 'Leading AI company building production-ready neural systems, LLM agents, and intelligent workflows. Transforming businesses across the Middle East with cutting-edge artificial intelligence.',
+  description: 'We build AI solutions for businesses worldwide, specializing in MENA and Gulf markets - chatbots, data analytics, workflow automation, and generative AI applications.',
   keywords: [
-    'artificial intelligence',
-    'AI development',
-    'LLM agents',
-    'neural networks',
-    'machine learning',
-    'deep learning',
     'AI consulting',
+    'AI development services',
+    'custom AI solutions',
+    'LLM integration',
+    'artificial intelligence consulting',
+    'machine learning development',
+    'AI strategy consulting',
+    'workflow automation',
     'RAG systems',
-    'AI automation',
-    'Middle East AI',
-    'enterprise AI',
-    'generative AI',
-    'AI infrastructure',
-    'custom AI models',
-    'neural workflows'
+    'AI implementation',
+    'Middle East AI services',
+    'enterprise AI solutions',
+    'AI partnership',
+    'business intelligence',
+    'AI transformation'
   ],
   authors: [{ name: 'Mohammad Othman', url: 'https://MohammadOthman.com' }],
   creator: 'TransformerLabs',
@@ -43,21 +44,21 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://transformerlabs.io',
     siteName: 'TransformerLabs',
-    title: 'TransformerLabs - Advanced AI Solutions & Neural Systems',
-    description: 'Leading AI company building production-ready neural systems, LLM agents, and intelligent workflows for businesses across the Middle East.',
+    title: 'TransformerLabs - AI Consulting & Development Services',
+    description: 'Professional AI consulting and development services for businesses across the Middle East. Custom AI solutions that deliver real results.',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'TransformerLabs - AI Solutions',
+        alt: 'TransformerLabs - AI Consulting Services',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'TransformerLabs - Advanced AI Solutions',
-    description: 'Leading AI company building production-ready neural systems and intelligent workflows.',
+    title: 'TransformerLabs - AI Consulting & Development Services',
+    description: 'Professional AI consulting and development services for businesses across the Middle East.',
     images: ['/twitter-image.jpg'],
     creator: '@transformerlabs',
   },
@@ -78,23 +79,23 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://transformerlabs.io',
   },
-  category: 'technology',
+  category: 'business',
 }
 
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'Organization',
+  '@type': 'ProfessionalService',
   name: 'TransformerLabs',
   alternateName: 'Transformer Labs',
   url: 'https://transformerlabs.io',
   logo: 'https://transformerlabs.io/logo.png',
-  description: 'Leading AI company building production-ready neural systems, LLM agents, and intelligent workflows.',
+  description: 'Professional AI consulting and development services for businesses across the Middle East.',
   foundingDate: '2023-12',
   founder: {
     '@type': 'Person',
     name: 'Mohammad Othman',
     email: 'Mo@MohammadOthman.com',
-    jobTitle: 'CEO & AI Engineer',
+    jobTitle: 'CEO & AI Consultant',
     url: 'https://MohammadOthman.com'
   },
   address: [
@@ -112,32 +113,66 @@ const jsonLd = {
   ],
   areaServed: [
     {
+      '@type': 'Place',
+      name: 'Worldwide'
+    },
+    {
+      '@type': 'Place',
+      name: 'MENA Region'
+    },
+    {
+      '@type': 'Place',
+      name: 'Gulf States'
+    },
+    {
       '@type': 'Country',
       name: 'Palestine'
     },
     {
       '@type': 'Country',
       name: 'United Kingdom'
-    },
-    {
-      '@type': 'Place',
-      name: 'Middle East'
-    },
-    {
-      '@type': 'Place',
-      name: 'Gulf States'
     }
   ],
   serviceType: [
-    'Artificial Intelligence Development',
-    'LLM Agent Development',
-    'Neural Network Design',
-    'Machine Learning Consulting',
-    'AI Infrastructure',
-    'RAG Systems',
-    'AI Automation',
-    'Custom AI Models'
+    'AI Consulting',
+    'Custom AI Development',
+    'LLM Integration',
+    'Machine Learning Development',
+    'AI Strategy Consulting',
+    'Workflow Automation',
+    'RAG Systems Development',
+    'AI Implementation Services'
   ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'AI Services',
+    itemListElement: [
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'AI Strategy & Consulting',
+          description: 'Comprehensive AI strategy development and consulting services'
+        }
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Custom AI Development',
+          description: 'Custom AI solutions development tailored to business needs'
+        }
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'LLM Integration',
+          description: 'Large Language Model integration and customization services'
+        }
+      }
+    ]
+  },
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'Business',
@@ -145,20 +180,19 @@ const jsonLd = {
     availableLanguage: ['English', 'Arabic']
   },
   sameAs: [
-    'https://linkedin.com/company/transformerlabs',
+    'https://www.linkedin.com/company/transformer-labs',
     'https://twitter.com/transformerlabs',
     'https://github.com/transformerlabs'
   ],
   knowsAbout: [
-    'Large Language Models',
-    'Neural Networks',
-    'Deep Learning',
-    'Machine Learning',
     'Artificial Intelligence',
+    'Machine Learning',
+    'Large Language Models',
     'Natural Language Processing',
-    'Computer Vision',
-    'MLOps',
-    'AI Infrastructure'
+    'AI Strategy',
+    'Business Intelligence',
+    'Workflow Automation',
+    'Custom Software Development'
   ]
 }
 
@@ -179,7 +213,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#00d9ff" />
+        <meta name="theme-color" content="#EB1600" />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="format-detection" content="telephone=no" />
       </head>

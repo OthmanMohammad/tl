@@ -38,12 +38,12 @@ export default function Home() {
                 <span className="stat-label">Companies Served</span>
               </div>
               <div className="stat-item">
-                <span className="stat-number">6+</span>
+                <span className="stat-number">8+</span>
                 <span className="stat-label">Countries</span>
               </div>
               <div className="stat-item">
-                <span className="stat-number">2+ Years</span>
-                <span className="stat-label">Experience</span>
+                <span className="stat-number">100%</span>
+                <span className="stat-label">Project Success</span>
               </div>
             </div>
           </div>
@@ -65,36 +65,45 @@ export default function Home() {
               {
                 title: "Chatbots & AI Assistants",
                 description: "Customer service bots, internal assistants, and specialized AI agents that handle real conversations.",
-                icon: "💬"
+                icon: "Chat"
               },
               {
                 title: "Knowledge Systems", 
                 description: "AI that searches through your documents, databases, and files to answer questions instantly.",
-                icon: "📋"
+                icon: "Search"
               },
               {
                 title: "Workflow Automation",
                 description: "Automate repetitive tasks, data processing, and business processes with intelligent systems.",
-                icon: "⚙️"
+                icon: "Automation"
               },
               {
                 title: "Data Analytics & Reporting",
                 description: "Transform your data into insights with automated reports and intelligent analysis.",
-                icon: "📊"
+                icon: "Analytics"
               },
               {
                 title: "Generative AI Applications",
                 description: "Content generation, writing assistance, and creative AI tools customized for your needs.",
-                icon: "✨"
+                icon: "AI Generation"
               },
               {
                 title: "Custom AI Solutions",
                 description: "Purpose-built AI systems designed specifically for your industry and requirements.",
-                icon: "🎯"
+                icon: "Custom Development"
               }
             ].map((service, index) => (
               <div key={index} className="card">
-                <div className="card-icon">{service.icon}</div>
+                <div style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '600',
+                  color: 'var(--primary)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                  marginBottom: 'var(--space-4)'
+                }}>
+                  {service.icon}
+                </div>
                 <h3 className="card-title">{service.title}</h3>
                 <p className="card-description">{service.description}</p>
               </div>
@@ -117,27 +126,34 @@ export default function Home() {
                   {
                     title: "Project-Based Work",
                     description: "Fixed-scope projects with clear deliverables and timelines.",
-                    icon: "📋"
+                    icon: "PROJECT"
                   },
                   {
                     title: "Ongoing Partnerships",
                     description: "Long-term collaboration as your dedicated AI development team.",
-                    icon: "🤝"
+                    icon: "PARTNERSHIP"
                   },
                   {
                     title: "Consulting & Strategy",
                     description: "AI planning, architecture review, and technical guidance.",
-                    icon: "💡"
+                    icon: "CONSULTING"
                   },
                   {
                     title: "Support & Maintenance",
                     description: "Keep your AI systems running smoothly with ongoing support.",
-                    icon: "🔧"
+                    icon: "SUPPORT"
                   }
                 ].map((feature, index) => (
                   <div key={index} className="feature-item">
                     <div className="feature-icon" style={{ backgroundColor: 'var(--primary)' }}>
-                      {feature.icon}
+                      <span style={{ 
+                        fontSize: '0.75rem', 
+                        fontWeight: '700',
+                        color: 'white',
+                        letterSpacing: '0.1em'
+                      }}>
+                        {feature.icon}
+                      </span>
                     </div>
                     <h3 className="feature-title">{feature.title}</h3>
                     <p className="feature-description">{feature.description}</p>

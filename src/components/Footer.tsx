@@ -21,8 +21,6 @@ export default function Footer() {
   ]
 
   const resources = [
-    { name: 'Blog', href: '/blog' },
-    { name: 'Documentation', href: '/docs' },
     { name: 'Privacy Policy', href: '/privacy' },
     { name: 'Terms of Service', href: '/terms' },
     { name: 'Support', href: '/support' },
@@ -30,7 +28,7 @@ export default function Footer() {
 
   const regions = [
     'Palestine', 'United Kingdom', 'United Arab Emirates',
-    'Saudi Arabia', 'Qatar', 'Kuwait', 'Bahrain', 'Oman'
+    'Saudi Arabia', 'Qatar', 'Kuwait', 'Bahrain', 'Oman', 'Jordan', 'Lebanon'
   ]
 
   return (
@@ -139,7 +137,7 @@ export default function Footer() {
 
         <div className="social-links">
           <a 
-            href="https://linkedin.com/company/transformerlabs" 
+            href="https://www.linkedin.com/company/transformer-labs" 
             className="social-link"
             aria-label="LinkedIn"
             target="_blank"
