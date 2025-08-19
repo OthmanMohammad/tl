@@ -1,10 +1,10 @@
-// src/app/services/page.tsx - Services Page
+// src/app/services/page.tsx - Improved Services Page
 import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'AI Development Services',
-  description: 'Professional AI development services - chatbots, data analytics, workflow automation, generative AI applications, and custom AI solutions for businesses.',
+  title: 'AI Development Services - TransformerLabs',
+  description: 'Professional AI development services including chatbots, data analytics, workflow automation, and custom AI solutions. Clear pricing and reliable delivery.',
 }
 
 export default function Services() {
@@ -19,10 +19,22 @@ export default function Services() {
             </h1>
             
             <p className="hero-subtitle">
-              We build practical AI solutions that work reliably in business environments. 
-              From chatbots to complex data analytics, we handle the technical complexity 
-              so you can focus on your business.
+              We build practical AI solutions that work reliably in real business environments. 
+              From intelligent chatbots to advanced data analytics, we handle the complexity 
+              so you can focus on growing your business.
             </p>
+            
+            <div className="hero-buttons">
+              <Link href="/contact" className="btn btn-primary btn-lg">
+                Discuss Your Project
+              </Link>
+              <a 
+                href="mailto:Mo@MohammadOthman.com" 
+                className="btn btn-secondary btn-lg"
+              >
+                Email Directly
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -32,94 +44,117 @@ export default function Services() {
         <div className="container">
           <div className="section-header">
             <h2 className="section-title">What We Build</h2>
+            <p className="section-subtitle">
+              Proven AI applications that integrate seamlessly with your business
+            </p>
           </div>
           
-          <div className="grid-2" style={{ gap: 'var(--space-12)' }}>
+          <div className="grid-2" style={{ gap: 'var(--space-10)' }}>
             {[
               {
-                title: "Chatbots & AI Assistants",
+                title: "AI Chatbots & Virtual Assistants",
                 category: "CONVERSATIONAL AI",
-                description: "Customer service bots that handle real conversations, internal assistants for employee support, and specialized AI agents for specific business functions.",
+                icon: "🤖",
+                description: "Intelligent chatbots that handle customer inquiries, support tickets, and internal requests. Our bots understand context, manage complex conversations, and escalate to humans when needed.",
                 features: [
-                  "Natural language understanding",
-                  "Integration with existing systems",
-                  "Multi-language support",
-                  "Analytics and reporting",
-                  "Escalation to human agents"
-                ]
+                  "Natural language understanding and responses",
+                  "Integration with your existing systems (CRM, databases, etc.)",
+                  "Multi-language support for global businesses",
+                  "Analytics dashboard to track performance",
+                  "Seamless handoff to human agents"
+                ],
+                examples: "Customer support, FAQ automation, lead qualification, appointment scheduling"
               },
               {
-                title: "Data Analytics & Reporting",
-                category: "BUSINESS INTELLIGENCE",
-                description: "Transform your data into actionable insights with automated analysis, intelligent reporting, and predictive analytics.",
+                title: "Data Analytics & Business Intelligence",
+                category: "SMART ANALYTICS",
+                icon: "📊",
+                description: "Transform your raw data into actionable insights with automated reporting, trend analysis, and predictive analytics that help you make better business decisions.",
                 features: [
-                  "Automated report generation",
-                  "Predictive analytics",
-                  "Data visualization dashboards",
-                  "Anomaly detection",
-                  "Real-time monitoring"
-                ]
+                  "Automated report generation and scheduling",
+                  "Predictive analytics and forecasting",
+                  "Interactive data visualization dashboards",
+                  "Anomaly detection and alerting",
+                  "Real-time monitoring and KPI tracking"
+                ],
+                examples: "Sales forecasting, inventory optimization, customer behavior analysis, financial reporting"
               },
               {
-                title: "Knowledge Systems",
-                category: "INFORMATION RETRIEVAL", 
-                description: "AI that searches through your documents, databases, and files to provide instant answers to questions from employees or customers.",
+                title: "Document Processing & Knowledge Systems",
+                category: "INTELLIGENT AUTOMATION", 
+                icon: "📄",
+                description: "AI that reads, understands, and extracts information from your documents, contracts, reports, and files. Build searchable knowledge bases that answer questions instantly.",
                 features: [
-                  "Document processing and indexing",
-                  "Intelligent search capabilities",
-                  "Question answering systems",
-                  "Content recommendations",
-                  "Access control and security"
-                ]
+                  "Automated document classification and tagging",
+                  "Information extraction from PDFs, images, and text",
+                  "Intelligent search across all your content",
+                  "Question-answering systems for employees/customers",
+                  "Compliance and audit trail features"
+                ],
+                examples: "Contract analysis, invoice processing, research assistance, policy Q&A systems"
               },
               {
-                title: "Workflow Automation",
+                title: "Workflow Automation & Process Optimization",
                 category: "PROCESS AUTOMATION",
-                description: "Automate repetitive business processes, data entry, document processing, and decision-making workflows using AI.",
+                icon: "⚡",
+                description: "Streamline repetitive business processes with intelligent automation that handles data entry, approvals, routing, and decision-making workflows.",
                 features: [
-                  "Process analysis and optimization",
-                  "Automated data processing",
-                  "Decision support systems",
-                  "Integration with business tools",
-                  "Error handling and monitoring"
-                ]
+                  "Business process analysis and optimization",
+                  "Automated data entry and validation",
+                  "Intelligent routing and approval workflows",
+                  "Integration with existing business tools",
+                  "Error handling and exception management"
+                ],
+                examples: "Order processing, employee onboarding, expense approvals, inventory management"
               },
               {
-                title: "Generative AI Applications",
-                category: "CONTENT GENERATION",
-                description: "Content generation, writing assistance, image creation, and other creative AI tools customized for your specific needs and brand.",
+                title: "Content Generation & Creative AI",
+                category: "GENERATIVE AI",
+                icon: "✨",
+                description: "AI-powered content creation tools that generate marketing copy, product descriptions, reports, and other business content while maintaining your brand voice.",
                 features: [
-                  "Custom content generation",
-                  "Brand-compliant outputs",
-                  "Multi-format support",
-                  "Quality control systems",
-                  "Usage analytics"
-                ]
+                  "Custom content generation for your industry",
+                  "Brand voice and style consistency",
+                  "Multi-format content creation (text, images, videos)",
+                  "Quality control and approval workflows",
+                  "Usage analytics and optimization"
+                ],
+                examples: "Marketing copy, product descriptions, social media content, technical documentation"
               },
               {
                 title: "Custom AI Solutions",
                 category: "SPECIALIZED DEVELOPMENT",
-                description: "Purpose-built AI systems designed specifically for your industry, use case, and technical requirements.",
+                icon: "🛠️",
+                description: "Purpose-built AI applications designed specifically for your unique business requirements, industry constraints, and technical environment.",
                 features: [
-                  "Requirements analysis",
-                  "Custom model development",
-                  "System integration",
-                  "Performance optimization",
-                  "Ongoing maintenance"
-                ]
+                  "Detailed requirements analysis and planning",
+                  "Custom machine learning model development",
+                  "Seamless integration with existing systems",
+                  "Performance optimization and scaling",
+                  "Comprehensive testing and quality assurance"
+                ],
+                examples: "Industry-specific AI tools, custom prediction models, specialized automation systems"
               }
             ].map((service, index) => (
               <div key={index} className="card" style={{ padding: 'var(--space-10)' }}>
                 <div style={{
-                  fontSize: '0.75rem',
-                  fontWeight: '600',
-                  color: 'var(--primary)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.1em',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 'var(--space-3)',
                   marginBottom: 'var(--space-4)'
                 }}>
-                  {service.category}
+                  <span style={{ fontSize: '2rem' }}>{service.icon}</span>
+                  <div style={{
+                    fontSize: '0.75rem',
+                    fontWeight: '600',
+                    color: 'var(--primary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em'
+                  }}>
+                    {service.category}
+                  </div>
                 </div>
+                
                 <h3 style={{ 
                   fontSize: '1.5rem', 
                   fontWeight: '600', 
@@ -128,19 +163,24 @@ export default function Services() {
                 }}>
                   {service.title}
                 </h3>
+                
                 <p style={{ 
                   color: 'var(--text-secondary)', 
                   marginBottom: 'var(--space-6)',
-                  lineHeight: 1.6
+                  lineHeight: 1.6,
+                  fontSize: '1.125rem'
                 }}>
                   {service.description}
                 </p>
-                <div>
+                
+                <div style={{ marginBottom: 'var(--space-6)' }}>
                   <h4 style={{ 
                     fontSize: '0.875rem', 
                     fontWeight: '600', 
                     marginBottom: 'var(--space-3)',
-                    color: 'var(--text-primary)'
+                    color: 'var(--text-primary)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em'
                   }}>
                     Key Features:
                   </h4>
@@ -153,22 +193,49 @@ export default function Services() {
                     {service.features.map((feature, idx) => (
                       <li key={idx} className="flex items-start gap-3">
                         <div style={{
-                          width: '0.25rem',
-                          height: '0.25rem',
+                          width: '0.375rem',
+                          height: '0.375rem',
                           backgroundColor: 'var(--primary)',
                           borderRadius: '50%',
-                          marginTop: '0.625rem',
+                          marginTop: '0.5rem',
                           flexShrink: 0
                         }}></div>
                         <span style={{ 
                           fontSize: '0.875rem', 
-                          color: 'var(--text-secondary)' 
+                          color: 'var(--text-secondary)',
+                          lineHeight: 1.5
                         }}>
                           {feature}
                         </span>
                       </li>
                     ))}
                   </ul>
+                </div>
+                
+                <div style={{
+                  padding: 'var(--space-4)',
+                  backgroundColor: 'var(--surface)',
+                  borderRadius: 'var(--radius-lg)',
+                  border: '1px solid var(--border)'
+                }}>
+                  <h4 style={{ 
+                    fontSize: '0.75rem', 
+                    fontWeight: '600',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    color: 'var(--text-muted)',
+                    marginBottom: 'var(--space-2)'
+                  }}>
+                    Common Use Cases:
+                  </h4>
+                  <p style={{
+                    fontSize: '0.875rem',
+                    color: 'var(--text-secondary)',
+                    lineHeight: 1.5,
+                    margin: 0
+                  }}>
+                    {service.examples}
+                  </p>
                 </div>
               </div>
             ))}
@@ -180,9 +247,9 @@ export default function Services() {
       <section className="section" style={{ backgroundColor: 'var(--surface)' }}>
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">How We Work</h2>
+            <h2 className="section-title">How We Work With You</h2>
             <p className="section-subtitle">
-              Flexible arrangements to fit your needs and timeline
+              Flexible arrangements designed to fit your needs, timeline, and budget
             </p>
           </div>
           
@@ -190,44 +257,102 @@ export default function Services() {
             {[
               {
                 title: "Fixed-Price Projects",
-                description: "Clear scope, timeline, and deliverables. Best for well-defined requirements.",
-                timeline: "2-12 weeks"
+                icon: "📋",
+                description: "Clearly defined scope, timeline, and deliverables. Perfect for well-understood requirements with specific outcomes.",
+                timeline: "2-12 weeks",
+                bestFor: "Specific AI implementations, chatbot development, automation projects",
+                pricing: "Fixed quote based on scope"
               },
               {
-                title: "Ongoing Development",
-                description: "Continuous development as your dedicated AI team. Flexible monthly arrangements.",
-                timeline: "Ongoing"
+                title: "Ongoing Development Partnership",
+                icon: "🤝",
+                description: "Continuous development as your dedicated AI team. Flexible monthly arrangements that scale with your needs.",
+                timeline: "3+ months",
+                bestFor: "Growing AI capabilities, iterative development, long-term projects",
+                pricing: "Monthly retainer"
               },
               {
-                title: "Consulting & Strategy",
-                description: "AI planning, technical review, and strategic guidance for your projects.",
-                timeline: "1-4 weeks"
+                title: "Strategic AI Consulting",
+                icon: "💡",
+                description: "AI strategy planning, technical architecture review, and guidance for your internal teams.",
+                timeline: "1-4 weeks",
+                bestFor: "AI strategy development, technical reviews, team guidance",
+                pricing: "Hourly or project-based"
               },
               {
-                title: "Support & Maintenance",
-                description: "Keep your AI systems running smoothly with ongoing monitoring and updates.",
-                timeline: "Monthly"
+                title: "Maintenance & Support",
+                icon: "🛡️",
+                description: "Keep your AI systems running smoothly with monitoring, updates, bug fixes, and performance optimization.",
+                timeline: "Ongoing",
+                bestFor: "Existing AI systems, performance monitoring, regular updates",
+                pricing: "Monthly support plan"
               }
             ].map((arrangement, index) => (
               <div key={index} className="card">
-                <h3 className="card-title">{arrangement.title}</h3>
-                <p className="card-description">{arrangement.description}</p>
-                <div style={{
-                  marginTop: 'var(--space-4)',
-                  padding: 'var(--space-2) var(--space-3)',
-                  backgroundColor: 'var(--surface)',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--border)'
+                <div style={{ 
+                  fontSize: '2rem', 
+                  marginBottom: 'var(--space-4)',
+                  textAlign: 'center'
                 }}>
-                  <span style={{ 
-                    fontSize: '0.75rem', 
-                    fontWeight: '600',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    color: 'var(--text-muted)'
+                  {arrangement.icon}
+                </div>
+                <h3 className="card-title" style={{ textAlign: 'center' }}>
+                  {arrangement.title}
+                </h3>
+                <p className="card-description" style={{ textAlign: 'center', marginBottom: 'var(--space-6)' }}>
+                  {arrangement.description}
+                </p>
+                
+                <div className="space-y-3">
+                  <div style={{
+                    padding: 'var(--space-3)',
+                    backgroundColor: 'var(--surface)',
+                    borderRadius: 'var(--radius-md)',
+                    border: '1px solid var(--border)'
                   }}>
-                    Timeline: {arrangement.timeline}
-                  </span>
+                    <div style={{ 
+                      fontSize: '0.75rem', 
+                      fontWeight: '600',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      color: 'var(--text-muted)',
+                      marginBottom: 'var(--space-1)'
+                    }}>
+                      Timeline
+                    </div>
+                    <div style={{ 
+                      fontSize: '0.875rem',
+                      color: 'var(--text-primary)',
+                      fontWeight: '500'
+                    }}>
+                      {arrangement.timeline}
+                    </div>
+                  </div>
+                  
+                  <div style={{
+                    padding: 'var(--space-3)',
+                    backgroundColor: 'var(--surface)',
+                    borderRadius: 'var(--radius-md)',
+                    border: '1px solid var(--border)'
+                  }}>
+                    <div style={{ 
+                      fontSize: '0.75rem', 
+                      fontWeight: '600',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      color: 'var(--text-muted)',
+                      marginBottom: 'var(--space-1)'
+                    }}>
+                      Best For
+                    </div>
+                    <div style={{ 
+                      fontSize: '0.875rem',
+                      color: 'var(--text-secondary)',
+                      lineHeight: 1.4
+                    }}>
+                      {arrangement.bestFor}
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -239,7 +364,10 @@ export default function Services() {
       <section className="section">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Our Process</h2>
+            <h2 className="section-title">Our Development Process</h2>
+            <p className="section-subtitle">
+              Proven methodology that ensures successful AI implementations
+            </p>
           </div>
           
           <div className="grid-3">
@@ -247,20 +375,23 @@ export default function Services() {
               {
                 step: "01",
                 title: "Discovery & Planning",
-                description: "We understand your requirements, assess technical feasibility, and create a clear project plan."
+                description: "We start by understanding your business goals, current processes, and technical requirements. Together, we define success metrics and create a detailed project roadmap.",
+                deliverables: "Requirements document, technical architecture, project timeline"
               },
               {
                 step: "02", 
                 title: "Development & Testing",
-                description: "Build your AI solution with regular check-ins and testing to ensure everything works as expected."
+                description: "Our team builds your AI solution with regular check-ins and testing phases. You'll see progress weekly and can provide feedback throughout the development process.",
+                deliverables: "Working prototypes, regular demos, testing reports"
               },
               {
                 step: "03",
                 title: "Deployment & Support",
-                description: "Deploy your solution and provide training, documentation, and ongoing support as needed."
+                description: "We deploy your solution to your environment, provide comprehensive training for your team, and offer ongoing support to ensure long-term success.",
+                deliverables: "Live system, user training, documentation, support plan"
               }
             ].map((step, index) => (
-              <div key={index} className="text-center">
+              <div key={index} className="card" style={{ textAlign: 'center' }}>
                 <div style={{
                   width: '4rem',
                   height: '4rem',
@@ -269,7 +400,7 @@ export default function Services() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  margin: '0 auto var(--space-4)',
+                  margin: '0 auto var(--space-6)',
                   fontSize: '1.25rem',
                   fontWeight: '700',
                   color: 'white'
@@ -279,14 +410,42 @@ export default function Services() {
                 <h3 style={{ 
                   fontSize: '1.25rem', 
                   fontWeight: '600', 
-                  marginBottom: 'var(--space-3)',
+                  marginBottom: 'var(--space-4)',
                   color: 'var(--text-primary)'
                 }}>
                   {step.title}
                 </h3>
-                <p style={{ color: 'var(--text-secondary)' }}>
+                <p style={{ 
+                  color: 'var(--text-secondary)',
+                  marginBottom: 'var(--space-4)',
+                  lineHeight: 1.6
+                }}>
                   {step.description}
                 </p>
+                <div style={{
+                  padding: 'var(--space-3)',
+                  backgroundColor: 'var(--surface)',
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid var(--border)'
+                }}>
+                  <div style={{ 
+                    fontSize: '0.75rem', 
+                    fontWeight: '600',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    color: 'var(--text-muted)',
+                    marginBottom: 'var(--space-2)'
+                  }}>
+                    Key Deliverables
+                  </div>
+                  <div style={{ 
+                    fontSize: '0.875rem',
+                    color: 'var(--text-secondary)',
+                    lineHeight: 1.4
+                  }}>
+                    {step.deliverables}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -294,33 +453,46 @@ export default function Services() {
       </section>
 
       {/* CTA */}
-      <section className="section">
+      <section className="section" style={{ backgroundColor: 'var(--surface)' }}>
         <div className="container">
           <div className="cta-section">
             <h2 style={{ marginBottom: 'var(--space-6)' }}>
-              Ready to Discuss Your Project?
+              Ready to Build Your AI Solution?
             </h2>
             <p style={{ 
               fontSize: '1.125rem', 
               color: 'var(--text-secondary)', 
               marginBottom: 'var(--space-8)',
-              maxWidth: '600px',
+              maxWidth: '700px',
               margin: '0 auto var(--space-8)'
             }}>
-              Tell us what you're looking to build. We'll provide honest feedback 
-              on what's possible and how we can help.
+              Let's discuss your project requirements. We'll provide honest feedback 
+              on what's possible, realistic timelines, and how AI can actually benefit 
+              your specific business situation.
             </p>
             
             <div className="flex gap-4 justify-center flex-wrap">
               <Link href="/contact" className="btn btn-primary btn-lg">
-                Start a Conversation
+                Start Your Project
               </Link>
               <a 
-                href="mailto:Mo@MohammadOthman.com" 
+                href="mailto:Mo@MohammadOthman.com?subject=AI Project Inquiry" 
                 className="btn btn-secondary btn-lg"
               >
-                Email Directly
+                Email Us Directly
               </a>
+            </div>
+            
+            <div style={{
+              marginTop: 'var(--space-8)',
+              paddingTop: 'var(--space-6)',
+              borderTop: '1px solid var(--border)',
+              fontSize: '0.875rem',
+              color: 'var(--text-muted)'
+            }}>
+              <p>
+                💬 Free initial consultation • 📊 No-obligation project assessment • ⚡ 24-hour response time
+              </p>
             </div>
           </div>
         </div>

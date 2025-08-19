@@ -1,10 +1,10 @@
-// src/app/about/page.tsx - About Page
+// src/app/about/page.tsx - Improved About Page
 import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'About TransformerLabs',
-  description: 'Learn about TransformerLabs - AI development company specializing in practical business solutions across MENA and Gulf markets.',
+  description: 'Learn about TransformerLabs - AI development company specializing in practical business solutions. Based in Palestine and UK.',
 }
 
 export default function About() {
@@ -19,21 +19,21 @@ export default function About() {
             </h1>
             
             <p className="hero-subtitle">
-              We build AI solutions for businesses that need reliable, practical technology. 
-              Based in Palestine and the UK, we specialize in serving companies across 
-              the MENA and Gulf regions.
+              We build AI solutions that solve real business problems. Founded in 2023, 
+              we work with companies worldwide to implement practical AI applications 
+              that deliver measurable results.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Company Overview */}
+      {/* Company Story */}
       <section className="section">
         <div className="container">
-          <div className="grid-2" style={{ gap: 'var(--space-12)', alignItems: 'center' }}>
+          <div className="grid-2" style={{ gap: 'var(--space-12)', alignItems: 'start' }}>
             <div>
               <h2 style={{ marginBottom: 'var(--space-6)' }}>
-                Who We Are
+                Our Story
               </h2>
               <p style={{ 
                 fontSize: '1.125rem', 
@@ -41,9 +41,9 @@ export default function About() {
                 color: 'var(--text-secondary)',
                 marginBottom: 'var(--space-6)'
               }}>
-                TransformerLabs is an AI development company founded in 2023. We focus on 
-                building practical AI applications that solve real business problems rather 
-                than experimental or research projects.
+                TransformerLabs was founded with a simple mission: make AI accessible 
+                and practical for businesses of all sizes. We saw too many companies 
+                struggling with experimental AI projects that never delivered real value.
               </p>
               <p style={{ 
                 fontSize: '1.125rem', 
@@ -51,18 +51,18 @@ export default function About() {
                 color: 'var(--text-secondary)',
                 marginBottom: 'var(--space-6)'
               }}>
-                Our team has deep experience in machine learning, software development, 
-                and business applications. We understand both the technical possibilities 
-                of AI and the practical requirements of running a business.
+                Our approach is different. We focus on proven AI technologies and 
+                practical implementations that integrate seamlessly with existing 
+                business processes. No hype, no unrealistic promises – just reliable 
+                AI solutions that work.
               </p>
               <p style={{ 
                 fontSize: '1.125rem', 
                 lineHeight: 1.7, 
                 color: 'var(--text-secondary)'
               }}>
-                We work with companies across different industries, from startups to 
-                established enterprises, helping them implement AI solutions that 
-                actually deliver value.
+                Based in Palestine and the United Kingdom, we serve clients globally, 
+                with particular expertise in Middle Eastern and European markets.
               </p>
             </div>
             
@@ -78,29 +78,43 @@ export default function About() {
                 marginBottom: 'var(--space-6)',
                 color: 'var(--text-primary)'
               }}>
-                Key Facts
+                Our Focus
               </h3>
               <div className="space-y-4">
                 {[
-                  { label: "Founded", value: "December 2023" },
-                  { label: "Headquarters", value: "Nablus, Palestine & London, UK" },
-                  { label: "Focus Markets", value: "MENA and Gulf regions" },
-                  { label: "Specialization", value: "Business AI applications" },
-                  { label: "Work Style", value: "Projects, partnerships, consulting" }
-                ].map((fact, index) => (
-                  <div key={index} className="flex justify-between items-center py-2">
-                    <span style={{ 
-                      fontWeight: '500', 
-                      color: 'var(--text-secondary)' 
-                    }}>
-                      {fact.label}
-                    </span>
-                    <span style={{ 
+                  { 
+                    title: "Practical AI", 
+                    desc: "Solutions that solve real business problems, not experimental tech" 
+                  },
+                  { 
+                    title: "Reliable Delivery", 
+                    desc: "Proven track record of on-time, on-budget project completion" 
+                  },
+                  { 
+                    title: "Clear Communication", 
+                    desc: "No technical jargon – we explain everything in business terms" 
+                  },
+                  { 
+                    title: "Ongoing Support", 
+                    desc: "We stick around to ensure your AI solutions continue working" 
+                  }
+                ].map((item, index) => (
+                  <div key={index} style={{ marginBottom: 'var(--space-4)' }}>
+                    <h4 style={{ 
                       fontWeight: '600', 
-                      color: 'var(--text-primary)' 
+                      color: 'var(--text-primary)',
+                      marginBottom: 'var(--space-1)',
+                      fontSize: '1rem'
                     }}>
-                      {fact.value}
-                    </span>
+                      {item.title}
+                    </h4>
+                    <p style={{ 
+                      fontSize: '0.875rem', 
+                      color: 'var(--text-secondary)',
+                      lineHeight: 1.5
+                    }}>
+                      {item.desc}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -109,73 +123,74 @@ export default function About() {
         </div>
       </section>
 
-      {/* Expertise */}
+      {/* What We Build */}
       <section className="section" style={{ backgroundColor: 'var(--surface)' }}>
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Our Expertise</h2>
+            <h2 className="section-title">What We Specialize In</h2>
             <p className="section-subtitle">
-              We focus on AI technologies that have proven business value
+              We focus on AI applications with proven business value
             </p>
           </div>
           
           <div className="grid-3">
             {[
               {
-                area: "MACHINE LEARNING",
-                title: "AI Development",
-                description: "Deep learning, natural language processing, computer vision, and predictive analytics."
+                icon: "🤖",
+                title: "Conversational AI",
+                description: "Customer service chatbots, internal assistants, and AI agents that handle real conversations with customers and employees."
               },
               {
-                area: "SOFTWARE ENGINEERING",
-                title: "System Integration", 
-                description: "Building AI solutions that work with existing business systems and processes."
+                icon: "📊",
+                title: "Data & Analytics", 
+                description: "Automated reporting, predictive analytics, and intelligent insights that help you make better business decisions."
               },
               {
-                area: "BUSINESS APPLICATIONS",
-                title: "Practical Implementation",
-                description: "Understanding business requirements and translating them into working AI solutions."
+                icon: "⚡",
+                title: "Process Automation",
+                description: "Streamline workflows, automate repetitive tasks, and optimize business processes using intelligent automation."
               },
               {
-                area: "DATA PROCESSING",
-                title: "Analytics & Insights",
-                description: "Data pipeline development, automated reporting, and business intelligence."
+                icon: "🔍",
+                title: "Knowledge Systems",
+                description: "AI that searches through your documents and data to provide instant answers to questions from your team or customers."
               },
               {
-                area: "REGIONAL KNOWLEDGE",
-                title: "MENA Market Focus",
-                description: "Understanding of local business culture, languages, and regulatory requirements."
+                icon: "✨",
+                title: "Generative AI",
+                description: "Content generation, writing assistance, and creative AI tools customized for your specific business needs."
               },
               {
-                area: "PROJECT MANAGEMENT",
-                title: "Reliable Delivery",
-                description: "Proven track record of delivering projects on time and within scope."
+                icon: "🛠️",
+                title: "Custom Solutions",
+                description: "Purpose-built AI applications designed specifically for your industry, use case, and technical requirements."
               }
-            ].map((expertise, index) => (
+            ].map((service, index) => (
               <div key={index} className="card">
                 <div style={{
-                  fontSize: '0.75rem',
-                  fontWeight: '600',
-                  color: 'var(--primary)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.1em',
-                  marginBottom: 'var(--space-3)'
+                  fontSize: '2rem',
+                  marginBottom: 'var(--space-4)',
+                  textAlign: 'center'
                 }}>
-                  {expertise.area}
+                  {service.icon}
                 </div>
-                <h3 className="card-title">{expertise.title}</h3>
-                <p className="card-description">{expertise.description}</p>
+                <h3 className="card-title" style={{ textAlign: 'center', marginBottom: 'var(--space-3)' }}>
+                  {service.title}
+                </h3>
+                <p className="card-description" style={{ textAlign: 'center' }}>
+                  {service.description}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Approach */}
+      {/* Our Approach */}
       <section className="section">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Our Approach</h2>
+            <h2 className="section-title">How We Work</h2>
           </div>
           
           <div className="grid-2" style={{ gap: 'var(--space-12)' }}>
@@ -186,16 +201,16 @@ export default function About() {
                 marginBottom: 'var(--space-4)',
                 color: 'var(--text-primary)'
               }}>
-                Practical Over Experimental
+                Business-First Approach
               </h3>
               <p style={{ 
                 color: 'var(--text-secondary)', 
                 marginBottom: 'var(--space-6)',
                 lineHeight: 1.7
               }}>
-                We focus on AI technologies that are proven and reliable rather than 
-                cutting-edge research. Our goal is to build solutions that work 
-                consistently in real business environments.
+                We start by understanding your business goals, not the technology. 
+                Our AI solutions are designed to integrate with your existing processes 
+                and deliver measurable improvements to your operations.
               </p>
               
               <h3 style={{ 
@@ -204,31 +219,15 @@ export default function About() {
                 marginBottom: 'var(--space-4)',
                 color: 'var(--text-primary)'
               }}>
-                Clear Communication
+                Transparent Communication
               </h3>
               <p style={{ 
                 color: 'var(--text-secondary)', 
-                marginBottom: 'var(--space-6)',
                 lineHeight: 1.7
               }}>
-                We explain technical concepts in business terms and keep you informed 
-                throughout the development process. No jargon, no overselling.
-              </p>
-
-              <h3 style={{ 
-                fontSize: '1.5rem', 
-                fontWeight: '600', 
-                marginBottom: 'var(--space-4)',
-                color: 'var(--text-primary)'
-              }}>
-                Long-term Thinking
-              </h3>
-              <p style={{ 
-                color: 'var(--text-secondary)',
-                lineHeight: 1.7
-              }}>
-                We build solutions that can grow with your business and provide 
-                ongoing support to ensure they continue delivering value.
+                We keep you informed every step of the way. No technical jargon, 
+                no hidden costs, no surprises. You'll always know what we're building, 
+                why we're building it, and when it will be ready.
               </p>
             </div>
             
@@ -239,16 +238,15 @@ export default function About() {
                 marginBottom: 'var(--space-4)',
                 color: 'var(--text-primary)'
               }}>
-                Regional Focus
+                Flexible Partnership
               </h3>
               <p style={{ 
                 color: 'var(--text-secondary)', 
                 marginBottom: 'var(--space-6)',
                 lineHeight: 1.7
               }}>
-                We understand the business culture and requirements of companies 
-                in the MENA and Gulf regions, allowing us to build solutions 
-                that fit local contexts.
+                Whether you need a one-off project, ongoing development support, 
+                or strategic consulting, we adapt our services to your needs and timeline.
               </p>
               
               <h3 style={{ 
@@ -257,32 +255,14 @@ export default function About() {
                 marginBottom: 'var(--space-4)',
                 color: 'var(--text-primary)'
               }}>
-                Flexible Arrangements
-              </h3>
-              <p style={{ 
-                color: 'var(--text-secondary)', 
-                marginBottom: 'var(--space-6)',
-                lineHeight: 1.7
-              }}>
-                Whether you need a specific project completed, ongoing development 
-                support, or strategic consulting, we adapt our services to your needs.
-              </p>
-
-              <h3 style={{ 
-                fontSize: '1.5rem', 
-                fontWeight: '600', 
-                marginBottom: 'var(--space-4)',
-                color: 'var(--text-primary)'
-              }}>
-                Quality Focus
+                Long-term Success
               </h3>
               <p style={{ 
                 color: 'var(--text-secondary)',
                 lineHeight: 1.7
               }}>
-                We prioritize building robust, maintainable solutions over quick 
-                fixes. Every project includes proper testing, documentation, and 
-                knowledge transfer.
+                We build solutions that grow with your business and provide ongoing 
+                support to ensure they continue delivering value as your needs evolve.
               </p>
             </div>
           </div>
@@ -304,15 +284,6 @@ export default function About() {
               padding: 'var(--space-10)',
               textAlign: 'center'
             }}>
-              <div style={{
-                width: '5rem',
-                height: '5rem',
-                backgroundColor: 'var(--surface)',
-                borderRadius: '50%',
-                margin: '0 auto var(--space-6)',
-                border: '1px solid var(--border)'
-              }}></div>
-              
               <h3 style={{ 
                 fontSize: '1.5rem', 
                 fontWeight: '600', 
@@ -325,7 +296,8 @@ export default function About() {
               <p style={{ 
                 color: 'var(--primary)', 
                 fontWeight: '500',
-                marginBottom: 'var(--space-4)'
+                marginBottom: 'var(--space-6)',
+                fontSize: '1.125rem'
               }}>
                 Founder & Lead AI Engineer
               </p>
@@ -334,17 +306,18 @@ export default function About() {
                 color: 'var(--text-secondary)', 
                 lineHeight: 1.7,
                 maxWidth: '600px',
-                margin: '0 auto'
+                margin: '0 auto var(--space-6)',
+                fontSize: '1.125rem'
               }}>
-                Deep learning engineer with expertise in building practical AI applications 
-                for business use. Focused on delivering reliable solutions that solve real 
-                problems rather than experimental technology.
+                AI engineer with deep expertise in building practical business applications. 
+                Focused on delivering reliable solutions that solve real problems rather than 
+                experimental technology. Based between Palestine and the UK.
               </p>
               
               <div style={{ marginTop: 'var(--space-6)' }}>
                 <a 
                   href="mailto:Mo@MohammadOthman.com" 
-                  className="btn btn-secondary"
+                  className="btn btn-primary"
                 >
                   Contact Directly
                 </a>
@@ -359,7 +332,7 @@ export default function About() {
         <div className="container">
           <div className="cta-section">
             <h2 style={{ marginBottom: 'var(--space-6)' }}>
-              Let's Work Together
+              Ready to Work Together?
             </h2>
             <p style={{ 
               fontSize: '1.125rem', 
@@ -368,8 +341,8 @@ export default function About() {
               maxWidth: '600px',
               margin: '0 auto var(--space-8)'
             }}>
-              Whether you have a specific project in mind or want to explore 
-              how AI can benefit your business, we're here to help.
+              Whether you have a specific AI project in mind or want to explore 
+              how AI can benefit your business, let's start a conversation.
             </p>
             
             <div className="flex gap-4 justify-center flex-wrap">
