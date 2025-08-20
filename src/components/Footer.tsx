@@ -8,6 +8,7 @@ export default function Footer() {
     { name: 'Services', href: '/services' },
     { name: 'About', href: '/about' },
     { name: 'Contact', href: '/contact' },
+    { name: 'Careers', href: '/careers' }, // Added careers link
   ]
 
   const styles = {
