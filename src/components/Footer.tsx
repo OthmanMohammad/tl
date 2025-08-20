@@ -8,7 +8,12 @@ export default function Footer() {
     { name: 'Services', href: '/services' },
     { name: 'About', href: '/about' },
     { name: 'Contact', href: '/contact' },
-    { name: 'Careers', href: '/careers' }, // Added careers link
+    { name: 'Careers', href: '/careers' },
+  ]
+
+  const legalLinks = [
+    { name: 'Privacy Policy', href: '/privacy' },
+    { name: 'Terms of Service', href: '/terms' },
   ]
 
   const styles = {
@@ -74,7 +79,7 @@ export default function Footer() {
     // Middle Section - Main Content Grid
     mainContent: {
       display: 'grid',
-      gridTemplateColumns: '1fr 1fr 1fr',
+      gridTemplateColumns: '1fr 1fr 1fr 1fr',
       gap: 'var(--space-10)',
       marginBottom: 'var(--space-12)',
       textAlign: 'center' as const
@@ -179,6 +184,14 @@ export default function Footer() {
 
   // Mobile responsive styles
   const mobileStyles = `
+    @media (max-width: 1024px) {
+      .footer-main-content {
+        grid-template-columns: 1fr 1fr !important;
+        gap: var(--space-8) !important;
+        text-align: center !important;
+      }
+    }
+
     @media (max-width: 768px) {
       .footer-main-content {
         grid-template-columns: 1fr !important;
@@ -371,6 +384,20 @@ export default function Footer() {
                   <span>LinkedIn</span>
                 </a>
               </div>
+            </div>
+
+            {/* Legal Column */}
+            <div style={styles.contentColumn}>
+              <h3 style={styles.columnTitle}>Legal</h3>
+              <ul className="footer-nav-list" style={styles.navList}>
+                {legalLinks.map((item) => (
+                  <li key={item.name}>
+                    <Link href={item.href} className="footer-nav-item" style={styles.navItem}>
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
