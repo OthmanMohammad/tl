@@ -1,5 +1,21 @@
 import Link from 'next/link'
 import { Metadata } from 'next'
+import { 
+  Bot, 
+  BarChart3, 
+  FileText, 
+  Zap, 
+  Sparkles, 
+  Settings,
+  ClipboardList,
+  Handshake,
+  Lightbulb,
+  Shield,
+  CheckCircle,
+  Clock,
+  DollarSign,
+  Building2
+} from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'AI Development Services - TransformerLabs',
@@ -53,7 +69,7 @@ export default function Services() {
               {
                 title: "AI Chatbots & Virtual Assistants",
                 category: "CONVERSATIONAL AI",
-                icon: "🤖",
+                icon: <Bot size={48} className="text-primary" />,
                 description: "Intelligent chatbots that handle customer inquiries, support tickets, and internal requests. Our bots understand context, manage complex conversations, and escalate to humans when needed.",
                 features: [
                   "Natural language understanding and responses",
@@ -67,7 +83,7 @@ export default function Services() {
               {
                 title: "Data Analytics & Business Intelligence",
                 category: "SMART ANALYTICS",
-                icon: "📊",
+                icon: <BarChart3 size={48} className="text-primary" />,
                 description: "Transform your raw data into actionable insights with automated reporting, trend analysis, and predictive analytics that help you make better business decisions.",
                 features: [
                   "Automated report generation and scheduling",
@@ -81,7 +97,7 @@ export default function Services() {
               {
                 title: "Document Processing & Knowledge Systems",
                 category: "INTELLIGENT AUTOMATION", 
-                icon: "📄",
+                icon: <FileText size={48} className="text-primary" />,
                 description: "AI that reads, understands, and extracts information from your documents, contracts, reports, and files. Build searchable knowledge bases that answer questions instantly.",
                 features: [
                   "Automated document classification and tagging",
@@ -95,7 +111,7 @@ export default function Services() {
               {
                 title: "Workflow Automation & Process Optimization",
                 category: "PROCESS AUTOMATION",
-                icon: "⚡",
+                icon: <Zap size={48} className="text-primary" />,
                 description: "Streamline repetitive business processes with intelligent automation that handles data entry, approvals, routing, and decision-making workflows.",
                 features: [
                   "Business process analysis and optimization",
@@ -109,7 +125,7 @@ export default function Services() {
               {
                 title: "Content Generation & Creative AI",
                 category: "GENERATIVE AI",
-                icon: "✨",
+                icon: <Sparkles size={48} className="text-primary" />,
                 description: "AI-powered content creation tools that generate marketing copy, product descriptions, reports, and other business content while maintaining your brand voice.",
                 features: [
                   "Custom content generation for your industry",
@@ -123,7 +139,7 @@ export default function Services() {
               {
                 title: "Custom AI Solutions",
                 category: "SPECIALIZED DEVELOPMENT",
-                icon: "🛠️",
+                icon: <Settings size={48} className="text-primary" />,
                 description: "Purpose-built AI applications designed specifically for your unique business requirements, industry constraints, and technical environment.",
                 features: [
                   "Detailed requirements analysis and planning",
@@ -142,7 +158,7 @@ export default function Services() {
                   gap: 'var(--space-3)',
                   marginBottom: 'var(--space-4)'
                 }}>
-                  <span style={{ fontSize: '2rem' }}>{service.icon}</span>
+                  {service.icon}
                   <div style={{
                     fontSize: '0.75rem',
                     fontWeight: '600',
@@ -190,15 +206,8 @@ export default function Services() {
                     gap: 'var(--space-2)'
                   }}>
                     {service.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-3">
-                        <div style={{
-                          width: '0.375rem',
-                          height: '0.375rem',
-                          backgroundColor: 'var(--primary)',
-                          borderRadius: '50%',
-                          marginTop: '0.5rem',
-                          flexShrink: 0
-                        }}></div>
+                      <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--space-3)' }}>
+                        <CheckCircle size={16} className="text-green-600" style={{ marginTop: '0.125rem', flexShrink: 0 }} />
                         <span style={{ 
                           fontSize: '0.875rem', 
                           color: 'var(--text-secondary)',
@@ -256,7 +265,7 @@ export default function Services() {
             {[
               {
                 title: "Fixed-Price Projects",
-                icon: "📋",
+                icon: <ClipboardList size={32} className="text-primary" />,
                 description: "Clearly defined scope, timeline, and deliverables. Perfect for well-understood requirements with specific outcomes.",
                 timeline: "2-12 weeks",
                 bestFor: "Specific AI implementations, chatbot development, automation projects",
@@ -264,7 +273,7 @@ export default function Services() {
               },
               {
                 title: "Ongoing Development Partnership",
-                icon: "🤝",
+                icon: <Handshake size={32} className="text-primary" />,
                 description: "Continuous development as your dedicated AI team. Flexible monthly arrangements that scale with your needs.",
                 timeline: "3+ months",
                 bestFor: "Growing AI capabilities, iterative development, long-term projects",
@@ -272,7 +281,7 @@ export default function Services() {
               },
               {
                 title: "Strategic AI Consulting",
-                icon: "💡",
+                icon: <Lightbulb size={32} className="text-primary" />,
                 description: "AI strategy planning, technical architecture review, and guidance for your internal teams.",
                 timeline: "1-4 weeks",
                 bestFor: "AI strategy development, technical reviews, team guidance",
@@ -280,7 +289,7 @@ export default function Services() {
               },
               {
                 title: "Maintenance & Support",
-                icon: "🛡️",
+                icon: <Shield size={32} className="text-primary" />,
                 description: "Keep your AI systems running smoothly with monitoring, updates, bug fixes, and performance optimization.",
                 timeline: "Ongoing",
                 bestFor: "Existing AI systems, performance monitoring, regular updates",
@@ -289,7 +298,6 @@ export default function Services() {
             ].map((arrangement, index) => (
               <div key={index} className="card">
                 <div style={{ 
-                  fontSize: '2rem', 
                   marginBottom: 'var(--space-4)',
                   textAlign: 'center'
                 }}>
@@ -309,15 +317,22 @@ export default function Services() {
                     borderRadius: 'var(--radius-md)',
                     border: '1px solid var(--border)'
                   }}>
-                    <div style={{ 
-                      fontSize: '0.75rem', 
-                      fontWeight: '600',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                      color: 'var(--text-muted)',
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 'var(--space-2)',
                       marginBottom: 'var(--space-1)'
                     }}>
-                      Timeline
+                      <Clock size={14} className="text-primary" />
+                      <div style={{ 
+                        fontSize: '0.75rem', 
+                        fontWeight: '600',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        color: 'var(--text-muted)'
+                      }}>
+                        Timeline
+                      </div>
                     </div>
                     <div style={{ 
                       fontSize: '0.875rem',
@@ -334,15 +349,22 @@ export default function Services() {
                     borderRadius: 'var(--radius-md)',
                     border: '1px solid var(--border)'
                   }}>
-                    <div style={{ 
-                      fontSize: '0.75rem', 
-                      fontWeight: '600',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
-                      color: 'var(--text-muted)',
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 'var(--space-2)',
                       marginBottom: 'var(--space-1)'
                     }}>
-                      Best For
+                      <Building2 size={14} className="text-primary" />
+                      <div style={{ 
+                        fontSize: '0.75rem', 
+                        fontWeight: '600',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        color: 'var(--text-muted)'
+                      }}>
+                        Best For
+                      </div>
                     </div>
                     <div style={{ 
                       fontSize: '0.875rem',
@@ -487,11 +509,24 @@ export default function Services() {
               paddingTop: 'var(--space-6)',
               borderTop: '1px solid var(--border)',
               fontSize: '0.875rem',
-              color: 'var(--text-muted)'
+              color: 'var(--text-muted)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 'var(--space-6)'
             }}>
-              <p>
-                💬 Free initial consultation • 📊 No-obligation project assessment • ⚡ 24-hour response time
-              </p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                <CheckCircle size={16} className="text-green-600" />
+                <span>Free initial consultation</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                <CheckCircle size={16} className="text-green-600" />
+                <span>No-obligation project assessment</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                <CheckCircle size={16} className="text-green-600" />
+                <span>24-hour response time</span>
+              </div>
             </div>
           </div>
         </div>

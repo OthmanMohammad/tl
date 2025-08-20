@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { Mail, MapPin } from 'lucide-react'
 
 export default function Footer() {
   const navigation = [
@@ -74,10 +75,7 @@ export default function Footer() {
                   marginBottom: 'var(--space-2)'
                 }}
               >
-                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z"/>
-                  <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z"/>
-                </svg>
+                <Mail size={16} />
                 Mo@MohammadOthman.com
               </a>
               
@@ -88,9 +86,7 @@ export default function Footer() {
                 color: 'var(--text-secondary)',
                 fontSize: '0.875rem'
               }}>
-                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                  <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                </svg>
+                <MapPin size={16} />
                 Aberdeen, Scotland & Nablus, Palestine
               </div>
             </div>
@@ -227,9 +223,20 @@ export default function Footer() {
             
             <div style={{
               fontSize: '0.875rem',
-              color: 'var(--text-muted)'
+              color: 'var(--text-muted)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-3)'
             }}>
-              🏴󐁧󐁢󐁳󐁣󐁴󐁿 Scotland & 🇵🇸 Palestine
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
+                <MapPin size={12} />
+                <span>Scotland</span>
+              </div>
+              <span>&</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-1)' }}>
+                <MapPin size={12} />
+                <span>Palestine</span>
+              </div>
             </div>
           </div>
         </div>

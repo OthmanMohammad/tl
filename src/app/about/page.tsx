@@ -1,5 +1,19 @@
 import Link from 'next/link'
 import { Metadata } from 'next'
+import { 
+  Bot, 
+  BarChart3, 
+  Zap, 
+  Search, 
+  Sparkles, 
+  Settings,
+  Target,
+  Clock,
+  MessageSquare,
+  HeadphonesIcon,
+  Mail,
+  CheckCircle
+} from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'About TransformerLabs',
@@ -83,37 +97,52 @@ export default function About() {
                 {[
                   { 
                     title: "Practical AI", 
-                    desc: "Solutions that solve real business problems, not experimental tech" 
+                    desc: "Solutions that solve real business problems, not experimental tech",
+                    icon: <Target size={20} className="text-primary" />
                   },
                   { 
                     title: "Reliable Delivery", 
-                    desc: "Proven track record of on-time, on-budget project completion" 
+                    desc: "Proven track record of on-time, on-budget project completion",
+                    icon: <Clock size={20} className="text-primary" />
                   },
                   { 
                     title: "Clear Communication", 
-                    desc: "No technical jargon – we explain everything in business terms" 
+                    desc: "No technical jargon – we explain everything in business terms",
+                    icon: <MessageSquare size={20} className="text-primary" />
                   },
                   { 
                     title: "Ongoing Support", 
-                    desc: "We stick around to ensure your AI solutions continue working" 
+                    desc: "We stick around to ensure your AI solutions continue working",
+                    icon: <HeadphonesIcon size={20} className="text-primary" />
                   }
                 ].map((item, index) => (
-                  <div key={index} style={{ marginBottom: 'var(--space-4)' }}>
-                    <h4 style={{ 
-                      fontWeight: '600', 
-                      color: 'var(--text-primary)',
-                      marginBottom: 'var(--space-1)',
-                      fontSize: '1rem'
-                    }}>
-                      {item.title}
-                    </h4>
-                    <p style={{ 
-                      fontSize: '0.875rem', 
-                      color: 'var(--text-secondary)',
-                      lineHeight: 1.5
-                    }}>
-                      {item.desc}
-                    </p>
+                  <div key={index} style={{ 
+                    marginBottom: 'var(--space-4)',
+                    display: 'flex',
+                    gap: 'var(--space-3)',
+                    alignItems: 'flex-start'
+                  }}>
+                    <div style={{ marginTop: '0.125rem' }}>
+                      {item.icon}
+                    </div>
+                    <div>
+                      <h4 style={{ 
+                        fontWeight: '600', 
+                        color: 'var(--text-primary)',
+                        marginBottom: 'var(--space-1)',
+                        fontSize: '1rem'
+                      }}>
+                        {item.title}
+                      </h4>
+                      <p style={{ 
+                        fontSize: '0.875rem', 
+                        color: 'var(--text-secondary)',
+                        lineHeight: 1.5,
+                        margin: 0
+                      }}>
+                        {item.desc}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -135,39 +164,38 @@ export default function About() {
           <div className="grid-3">
             {[
               {
-                icon: "🤖",
+                icon: <Bot size={40} className="text-primary" />,
                 title: "Conversational AI",
                 description: "Customer service chatbots, internal assistants, and AI agents that handle real conversations with customers and employees."
               },
               {
-                icon: "📊",
+                icon: <BarChart3 size={40} className="text-primary" />,
                 title: "Data & Analytics", 
                 description: "Automated reporting, predictive analytics, and intelligent insights that help you make better business decisions."
               },
               {
-                icon: "⚡",
+                icon: <Zap size={40} className="text-primary" />,
                 title: "Process Automation",
                 description: "Streamline workflows, automate repetitive tasks, and optimize business processes using intelligent automation."
               },
               {
-                icon: "🔍",
+                icon: <Search size={40} className="text-primary" />,
                 title: "Knowledge Systems",
                 description: "AI that searches through your documents and data to provide instant answers to questions from your team or customers."
               },
               {
-                icon: "✨",
+                icon: <Sparkles size={40} className="text-primary" />,
                 title: "Generative AI",
                 description: "Content generation, writing assistance, and creative AI tools customized for your specific business needs."
               },
               {
-                icon: "🛠️",
+                icon: <Settings size={40} className="text-primary" />,
                 title: "Custom Solutions",
                 description: "Purpose-built AI applications designed specifically for your industry, use case, and technical requirements."
               }
             ].map((service, index) => (
               <div key={index} className="card">
                 <div style={{
-                  fontSize: '2rem',
                   marginBottom: 'var(--space-4)',
                   textAlign: 'center'
                 }}>
@@ -317,7 +345,13 @@ export default function About() {
                 <a 
                   href="mailto:Mo@MohammadOthman.com" 
                   className="btn btn-primary"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-2)'
+                  }}
                 >
+                  <Mail size={16} />
                   Contact Directly
                 </a>
               </div>
@@ -351,6 +385,32 @@ export default function About() {
               <Link href="/services" className="btn btn-secondary btn-lg">
                 View Our Services
               </Link>
+            </div>
+
+            <div style={{
+              marginTop: 'var(--space-8)',
+              paddingTop: 'var(--space-6)',
+              borderTop: '1px solid var(--border)',
+              fontSize: '0.875rem',
+              color: 'var(--text-muted)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 'var(--space-6)',
+              flexWrap: 'wrap'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                <CheckCircle size={16} className="text-green-600" />
+                <span>Free consultation</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                <CheckCircle size={16} className="text-green-600" />
+                <span>No obligation</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+                <CheckCircle size={16} className="text-green-600" />
+                <span>24-hour response</span>
+              </div>
             </div>
           </div>
         </div>

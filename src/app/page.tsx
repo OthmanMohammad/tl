@@ -1,4 +1,16 @@
 import Link from 'next/link'
+import { 
+  Bot, 
+  BarChart3, 
+  Zap, 
+  FileText, 
+  Search, 
+  Settings,
+  CheckCircle,
+  Target,
+  RotateCcw,
+  Award
+} from 'lucide-react'
 
 export default function Home() {
   return (
@@ -44,37 +56,36 @@ export default function Home() {
               {
                 title: "AI Chatbots & Assistants",
                 description: "Intelligent chatbots for customer service, support tickets, and internal operations that understand context and handle complex conversations.",
-                icon: "🤖"
+                icon: <Bot size={48} className="text-primary" />
               },
               {
                 title: "Data Analytics & Insights", 
                 description: "Transform your business data into actionable insights with automated reporting, predictive analytics, and intelligent dashboards.",
-                icon: "📊"
+                icon: <BarChart3 size={48} className="text-primary" />
               },
               {
                 title: "Workflow Automation",
                 description: "Streamline business processes with intelligent automation that handles repetitive tasks and complex decision-making workflows.",
-                icon: "⚡"
+                icon: <Zap size={48} className="text-primary" />
               },
               {
                 title: "Document Processing",
                 description: "AI that reads, understands, and extracts insights from documents, contracts, and reports automatically.",
-                icon: "📄"
+                icon: <FileText size={48} className="text-primary" />
               },
               {
                 title: "Knowledge Systems",
                 description: "Searchable AI systems that provide instant answers from your company's knowledge base and documentation.",
-                icon: "🔍"
+                icon: <Search size={48} className="text-primary" />
               },
               {
                 title: "Custom AI Solutions",
                 description: "Tailored AI applications designed specifically for your industry requirements and business processes.",
-                icon: "🛠️"
+                icon: <Settings size={48} className="text-primary" />
               }
             ].map((service, index) => (
               <div key={index} className="card">
                 <div style={{
-                  fontSize: '2.5rem',
                   marginBottom: 'var(--space-4)',
                   textAlign: 'center'
                 }}>
@@ -104,22 +115,21 @@ export default function Home() {
               {
                 title: "Proven Results",
                 description: "Track record of successful AI implementations across multiple industries with measurable business impact.",
-                icon: "✅"
+                icon: <Award size={48} className="text-primary" />
               },
               {
                 title: "Business-First Approach",
                 description: "We focus on solving real business problems, not just implementing cool technology.",
-                icon: "🎯"
+                icon: <Target size={48} className="text-primary" />
               },
               {
                 title: "End-to-End Service",
                 description: "From strategy and development to deployment and ongoing support - we handle everything.",
-                icon: "🔄"
+                icon: <RotateCcw size={48} className="text-primary" />
               }
             ].map((feature, index) => (
               <div key={index} className="card">
                 <div style={{
-                  fontSize: '2.5rem',
                   marginBottom: 'var(--space-4)',
                   textAlign: 'center'
                 }}>
