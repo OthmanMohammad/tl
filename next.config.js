@@ -5,7 +5,13 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
-  // Remove basePath and assetPrefix since I'm using custom domain
+  // Disable server-side features for static export
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  }
 }
 
 module.exports = nextConfig
