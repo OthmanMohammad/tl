@@ -11,7 +11,7 @@ import {
   CheckCircle,
   Handshake,
   Lightbulb,
-  Shield
+  Linkedin
 } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -53,8 +53,12 @@ export default function Contact() {
                     fontSize: '1.125rem', 
                     fontWeight: '600', 
                     marginBottom: 'var(--space-3)',
-                    color: 'var(--text-primary)'
+                    color: 'var(--text-primary)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-2)'
                   }}>
+                    <Mail size={20} className="text-primary" />
                     Email
                   </h3>
                   <a 
@@ -68,7 +72,6 @@ export default function Contact() {
                       gap: 'var(--space-2)'
                     }}
                   >
-                    <Mail size={20} />
                     Mo@MohammadOthman.com
                   </a>
                   <p style={{ 
@@ -85,8 +88,12 @@ export default function Contact() {
                     fontSize: '1.125rem', 
                     fontWeight: '600', 
                     marginBottom: 'var(--space-3)',
-                    color: 'var(--text-primary)'
+                    color: 'var(--text-primary)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-2)'
                   }}>
+                    <Linkedin size={20} className="text-primary" />
                     LinkedIn
                   </h3>
                   <a 
@@ -339,7 +346,7 @@ export default function Contact() {
             <h2 className="section-title">Types of Work We Take On</h2>
           </div>
           
-          <div className="grid-4">
+          <div className="grid-3">
             {[
               {
                 type: "FIXED PROJECTS",
@@ -361,78 +368,77 @@ export default function Contact() {
                 description: "AI planning, technical review, and strategic advice.",
                 examples: ["AI strategy", "Technical assessment", "Architecture review"],
                 icon: <Lightbulb size={32} className="text-primary" />
-              },
-              {
-                type: "MAINTENANCE",
-                title: "Support Services",
-                description: "Ongoing support for existing AI systems.",
-                examples: ["System monitoring", "Updates & fixes", "Performance optimization"],
-                icon: <Shield size={32} className="text-primary" />
               }
             ].map((workType, index) => (
               <div key={index} className="card">
-                <div style={{
-                  textAlign: 'center',
-                  marginBottom: 'var(--space-4)'
-                }}>
-                  {workType.icon}
-                </div>
-                <div style={{
-                  fontSize: '0.75rem',
-                  fontWeight: '600',
-                  color: 'var(--primary)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.1em',
-                  marginBottom: 'var(--space-3)',
-                  textAlign: 'center'
-                }}>
-                  {workType.type}
-                </div>
-                <h3 className="card-title" style={{ textAlign: 'center' }}>
-                  {workType.title}
-                </h3>
-                <p style={{ 
-                  color: 'var(--text-secondary)', 
-                  marginBottom: 'var(--space-4)',
-                  fontSize: '0.875rem',
-                  textAlign: 'center'
-                }}>
-                  {workType.description}
-                </p>
-                <div>
-                  <h4 style={{ 
-                    fontSize: '0.75rem', 
-                    fontWeight: '600',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    color: 'var(--text-muted)',
-                    marginBottom: 'var(--space-2)',
-                    textAlign: 'center'
-                  }}>
-                    Examples:
-                  </h4>
-                  <ul style={{ listStyle: 'none', fontSize: '0.875rem' }}>
-                    {workType.examples.map((example, idx) => (
-                      <li key={idx} style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        justifyContent: 'center',
-                        marginBottom: 'var(--space-1)'
+                <div className="card-content">
+                  <div className="card-main">
+                    <div style={{
+                      textAlign: 'center',
+                      marginBottom: 'var(--space-4)'
+                    }}>
+                      {workType.icon}
+                    </div>
+                    <div style={{
+                      fontSize: '0.75rem',
+                      fontWeight: '600',
+                      color: 'var(--primary)',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.1em',
+                      marginBottom: 'var(--space-3)',
+                      textAlign: 'center'
+                    }}>
+                      {workType.type}
+                    </div>
+                    <h3 className="card-title" style={{ textAlign: 'center' }}>
+                      {workType.title}
+                    </h3>
+                    <p style={{ 
+                      color: 'var(--text-secondary)', 
+                      marginBottom: 'var(--space-4)',
+                      fontSize: '0.875rem',
+                      textAlign: 'center'
+                    }}>
+                      {workType.description}
+                    </p>
+                  </div>
+                  
+                  <div className="card-footer-content">
+                    <div style={{
+                      padding: 'var(--space-4)',
+                      backgroundColor: 'var(--background)',
+                      borderRadius: 'var(--radius-lg)',
+                      border: '1px solid var(--border)'
+                    }}>
+                      <h4 style={{ 
+                        fontSize: '0.75rem', 
+                        fontWeight: '600',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        color: 'var(--text-muted)',
+                        marginBottom: 'var(--space-3)',
+                        textAlign: 'center'
                       }}>
-                        <div style={{
-                          width: '0.25rem',
-                          height: '0.25rem',
-                          backgroundColor: 'var(--primary)',
-                          borderRadius: '50%',
-                          marginRight: 'var(--space-2)',
-                          flexShrink: 0
-                        }}></div>
-                        <span style={{ color: 'var(--text-secondary)', textAlign: 'center' }}>
-                          {example}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                        Examples:
+                      </h4>
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 'var(--space-2)',
+                        alignItems: 'center'
+                      }}>
+                        {workType.examples.map((example, idx) => (
+                          <span key={idx} style={{ 
+                            color: 'var(--text-secondary)', 
+                            fontSize: '0.875rem',
+                            textAlign: 'center'
+                          }}>
+                            {example}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -479,13 +485,26 @@ export default function Contact() {
                     fontSize: '1.125rem', 
                     fontWeight: '600', 
                     marginBottom: 'var(--space-3)',
-                    color: 'var(--text-primary)'
+                    color: 'var(--text-primary)',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: 'var(--space-3)'
                   }}>
-                    {faq.question}
+                    <div style={{
+                      width: '0.5rem',
+                      height: '0.5rem',
+                      background: 'linear-gradient(135deg, var(--primary) 0%, #FF6B47 100%)',
+                      borderRadius: '50%',
+                      marginTop: '0.5rem',
+                      flexShrink: 0,
+                      boxShadow: '0 2px 4px rgba(255, 54, 33, 0.2)'
+                    }}></div>
+                    <span>{faq.question}</span>
                   </h3>
                   <p style={{ 
                     color: 'var(--text-secondary)',
-                    lineHeight: 1.6
+                    lineHeight: 1.6,
+                    marginLeft: 'calc(0.5rem + var(--space-3))' // Align with question text
                   }}>
                     {faq.answer}
                   </p>
