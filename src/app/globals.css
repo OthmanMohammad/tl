@@ -17,3 +17,164 @@
 
 /* 5. Utilities last - highest specificity */
 @import '../styles/utilities.css';
+
+/* 6. Image optimization - Apply globally */
+/* Image Optimization - Frontend Best Practices */
+
+/* Base image rules - Apply to all images */
+img, picture, figure, svg {
+  /* Prevent text selection/highlighting */
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  
+  /* Prevent dragging */
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -ms-user-drag: none;
+  user-drag: none;
+  
+  /* Prevent context menu on right-click */
+  -webkit-touch-callout: none;
+  
+  /* Ensure responsive behavior */
+  max-width: 100%;
+  height: auto;
+  display: block;
+  box-sizing: border-box;
+  
+  /* Smooth rendering */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+  
+  /* Prevent image from being focused (unless it's interactive) */
+  outline: none;
+}
+
+/* Decorative images (most common case) - Non-interactive */
+.decorative-image,
+.hero img,
+.section img:not(.interactive),
+.card img:not(.interactive),
+img:not(.interactive):not(.clickable):not([role="button"]):not([tabindex]) {
+  /* Make completely non-interactive */
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Interactive images (like logos that are links) - Keep clickable but prevent dragging */
+.interactive-image,
+.logo img,
+.clickable-image,
+a img,
+button img,
+[role="button"] img,
+img.interactive,
+img.clickable,
+img[onclick],
+img[role="button"] {
+  /* Keep clickable but prevent selection/dragging */
+  pointer-events: auto;
+  cursor: pointer;
+  
+  /* Still prevent selection and dragging */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  -ms-user-drag: none;
+  user-drag: none;
+}
+
+/* Logo specific rules */
+.logo img,
+.logo-image,
+.navbar img,
+.footer img:not(.social-icon) {
+  /* Logos should be clickable but not draggable/selectable */
+  cursor: pointer;
+  pointer-events: auto;
+  transition: opacity var(--duration-fast) var(--ease);
+}
+
+.logo img:hover,
+.logo-image:hover {
+  opacity: 0.8;
+}
+
+/* Icon images */
+.icon,
+.icon img,
+svg.icon,
+img.icon {
+  /* Icons are usually decorative */
+  pointer-events: none;
+  cursor: inherit;
+}
+
+/* Social media icons - Keep clickable */
+.social-icon,
+.social-link img,
+img[alt*="social" i],
+img[src*="social" i] {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Card images */
+.card-image,
+.card img {
+  /* Card images are usually decorative */
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Hero section images */
+.hero-image,
+.hero img,
+.section img {
+  /* Hero images are decorative */
+  pointer-events: none;
+}
+
+/* Footer logo */
+.footer-logo,
+.footer img.logo,
+.footer-logo-image {
+  /* Footer logos might be clickable */
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Responsive optimizations */
+@media (max-width: 768px) {
+  /* Touch-specific interactions */
+  .interactive-image,
+  .logo img,
+  .clickable-image {
+    cursor: pointer; /* Show pointer on mobile for tap */
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  img {
+    /* Ensure images are visible in high contrast */
+    opacity: 1;
+    filter: contrast(1.2);
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  img {
+    /* Remove transitions for users who prefer reduced motion */
+    transition: none;
+    transform: none !important;
+  }
+}
