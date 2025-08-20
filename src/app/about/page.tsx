@@ -43,11 +43,15 @@ export default function About() {
       {/* Company Story */}
       <section className="section">
         <div className="container">
+          {/* Story Header - Full Width */}
+          <h2 style={{ marginBottom: 'var(--space-8)' }}>
+            Our Story
+          </h2>
+          
+          {/* Story Content - Aligned Grid */}
           <div className="grid-2" style={{ gap: 'var(--space-12)', alignItems: 'start' }}>
+            {/* Left Column - Description */}
             <div>
-              <h2 style={{ marginBottom: 'var(--space-6)' }}>
-                Our Story
-              </h2>
               <p style={{ 
                 fontSize: '1.125rem', 
                 lineHeight: 1.7, 
@@ -79,6 +83,7 @@ export default function About() {
               </p>
             </div>
             
+            {/* Right Column - Our Focus (Now aligned with description) */}
             <div style={{
               backgroundColor: 'var(--surface)',
               border: '1px solid var(--border)',
