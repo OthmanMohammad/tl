@@ -1,13 +1,17 @@
-/* Card Components */
+/* Card Components - Equal Height with Flex Layout */
 .card {
   background: var(--background);
-  /* REMOVED: border: 1px solid var(--border); */
   border-radius: var(--radius-2xl);
   padding: var(--space-8);
   transition: all var(--duration-normal) var(--ease);
   position: relative;
-  overflow: visible; /* Changed from hidden to prevent text cut-off */
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05); /* Subtle shadow to replace border */
+  overflow: visible;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  
+  /* EQUAL HEIGHT CARDS */
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Take full height of grid item */
 }
 
 .card::before {
@@ -16,7 +20,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 3px; /* Slightly thicker for better visibility */
+  height: 3px;
   background: var(--gradient-primary);
   transform: scaleX(0);
   transition: transform var(--duration-slow) var(--ease);
@@ -25,13 +29,31 @@
 }
 
 .card:hover {
-  /* REMOVED: border-color: var(--border-accent); */
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
 }
 
 .card:hover::before {
   transform: scaleX(1);
+}
+
+/* Card Content Structure for Equal Heights */
+.card-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex: 1;
+}
+
+.card-main {
+  flex: 1; /* Takes up available space */
+  display: flex;
+  flex-direction: column;
+}
+
+.card-footer-content {
+  margin-top: auto; /* Pushes to bottom */
+  padding-top: var(--space-4);
 }
 
 /* Card variants */
@@ -41,13 +63,11 @@
 
 .card-accent {
   background: var(--surface-accent);
-  /* REMOVED: border-color: var(--border-accent); */
 }
 
 .card-primary {
   background: var(--gradient-primary);
   color: var(--text-inverse);
-  /* REMOVED: border-color: var(--primary); */
 }
 
 .card-primary .card-title {
@@ -63,7 +83,8 @@
   margin-bottom: var(--space-6);
   padding-bottom: var(--space-4);
   border-bottom: 1px solid var(--border);
-  overflow: visible; /* Prevent text cut-off */
+  overflow: visible;
+  flex-shrink: 0; /* Don't shrink */
 }
 
 .card-primary .card-header {
@@ -77,9 +98,9 @@
   margin-bottom: var(--space-3);
   color: var(--text-primary);
   letter-spacing: -0.02em;
-  line-height: 1.35; /* Increased from default to prevent cut-off */
+  line-height: 1.35;
   overflow: visible;
-  padding-bottom: 0.125rem; /* Add padding for descenders */
+  padding-bottom: 0.125rem;
 }
 
 .card-subtitle {
@@ -90,15 +111,17 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   overflow: visible;
+  flex-shrink: 0; /* Don't shrink */
 }
 
 .card-description {
   color: var(--text-secondary);
-  line-height: 1.65; /* Increased for better readability */
-  margin-bottom: 0;
+  line-height: 1.65;
+  margin-bottom: var(--space-4); /* Add margin for spacing */
   font-size: 1rem;
   overflow: visible;
-  padding-bottom: 0.125rem; /* Prevent cut-off */
+  padding-bottom: 0.125rem;
+  flex: 1; /* Take available space */
 }
 
 .card-description:last-child {
@@ -112,6 +135,7 @@
   display: block;
   color: var(--primary);
   transition: all var(--duration-normal) var(--ease);
+  flex-shrink: 0; /* Don't shrink */
 }
 
 .card:hover .card-icon {
@@ -125,7 +149,7 @@
 
 /* Card footer */
 .card-footer {
-  margin-top: var(--space-6);
+  margin-top: auto; /* Push to bottom */
   padding-top: var(--space-4);
   border-top: 1px solid var(--border);
   display: flex;
@@ -133,6 +157,7 @@
   justify-content: space-between;
   gap: var(--space-4);
   overflow: visible;
+  flex-shrink: 0; /* Don't shrink */
 }
 
 .card-primary .card-footer {
@@ -143,8 +168,10 @@
 .card-actions {
   display: flex;
   gap: var(--space-3);
-  margin-top: var(--space-6);
+  margin-top: auto; /* Push to bottom */
+  padding-top: var(--space-4);
   flex-wrap: wrap;
+  flex-shrink: 0; /* Don't shrink */
 }
 
 /* Interactive card */
@@ -152,7 +179,9 @@
   cursor: pointer;
   text-decoration: none;
   color: inherit;
-  display: block;
+  display: flex; /* Maintain flex structure */
+  flex-direction: column;
+  height: 100%;
   outline: none;
   -webkit-tap-highlight-color: transparent;
 }
@@ -174,6 +203,7 @@
   height: 200px;
   object-fit: cover;
   margin: calc(-1 * var(--space-8)) calc(-1 * var(--space-8)) var(--space-6);
+  flex-shrink: 0; /* Don't shrink */
 }
 
 /* Card sizes */
@@ -192,9 +222,11 @@
 /* Special card layouts */
 .card-horizontal {
   display: flex;
+  flex-direction: row; /* Override column for horizontal */
   align-items: center;
   gap: var(--space-6);
   padding: var(--space-6);
+  height: auto; /* Override height for horizontal */
 }
 
 .card-horizontal .card-icon {
@@ -207,7 +239,7 @@
   overflow: visible;
 }
 
-/* Card grid utilities */
+/* Card grid utilities - ENSURE EQUAL HEIGHTS */
 .card-grid {
   display: grid;
   gap: var(--space-6);
@@ -215,14 +247,87 @@
 
 .card-grid-2 {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  align-items: stretch; /* Equal heights */
 }
 
 .card-grid-3 {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  align-items: stretch; /* Equal heights */
 }
 
 .card-grid-4 {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  align-items: stretch; /* Equal heights */
+}
+
+/* Grid layouts - ENSURE EQUAL HEIGHTS */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
+  gap: var(--space-8);
+  align-items: stretch; /* Equal heights for cards */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  gap: var(--space-8);
+  align-items: stretch; /* Equal heights for cards */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: var(--space-6);
+  align-items: stretch; /* Equal heights for cards */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Services Page Specific - Metadata at Bottom */
+.service-card-metadata {
+  margin-top: auto; /* Push to bottom */
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex-shrink: 0; /* Don't shrink */
+}
+
+.service-metadata-item {
+  padding: var(--space-3);
+  background-color: var(--surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.service-metadata-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  marginBottom: 'var(--space-1)';
+  fontSize: '0.75rem';
+  fontWeight: '600';
+  textTransform: 'uppercase';
+  letterSpacing: '0.05em';
+  color: 'var(--text-muted)';
+}
+
+.service-metadata-content {
+  fontSize: '0.875rem';
+  color: 'var(--text-primary)';
+  fontWeight: '500';
+}
+
+/* Process Cards - Deliverables at Bottom */
+.process-card-deliverables {
+  margin-top: auto; /* Push to bottom */
+  padding-top: var(--space-4);
 }
 
 /* Status indicators */
@@ -263,6 +368,7 @@
     flex-direction: column;
     text-align: center;
     gap: var(--space-4);
+    height: 100%; /* Restore height for mobile */
   }
   
   .card-horizontal .card-icon {
@@ -276,6 +382,12 @@
   .card-grid-2,
   .card-grid-3,
   .card-grid-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .grid-2,
+  .grid-3,
+  .grid-4 {
     grid-template-columns: 1fr;
   }
   
