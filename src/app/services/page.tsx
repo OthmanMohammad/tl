@@ -256,119 +256,111 @@ export default function Services() {
         </div>
       </section>
 
-      {/* Work Arrangements */}
-      <section className="section" style={{ backgroundColor: 'var(--surface)' }}>
+        {/* Work Arrangements */}
+        <section className="section" style={{ backgroundColor: 'var(--surface)' }}>
         <div className="container">
-          <div className="section-header">
+            <div className="section-header">
             <h2 className="section-title">How We Work With You</h2>
             <p className="section-subtitle">
-              Flexible arrangements designed to fit your needs, timeline, and budget
+                Flexible arrangements designed to fit your needs, timeline, and budget
             </p>
-          </div>
-          
-          <div className="grid-4">
+            </div>
+            
+            <div className="grid-4">
             {[
-              {
+                {
                 title: "Fixed-Price Projects",
                 icon: <ClipboardList size={32} className="text-primary" />,
                 description: "Clearly defined scope, timeline, and deliverables. Perfect for well-understood requirements with specific outcomes.",
                 timeline: "2-12 weeks",
                 bestFor: "Specific AI implementations, chatbot development, automation projects",
                 pricing: "Fixed quote based on scope"
-              },
-              {
+                },
+                {
                 title: "Ongoing Development Partnership",
                 icon: <Handshake size={32} className="text-primary" />,
                 description: "Continuous development as your dedicated AI team. Flexible monthly arrangements that scale with your needs.",
                 timeline: "3+ months",
                 bestFor: "Growing AI capabilities, iterative development, long-term projects",
                 pricing: "Monthly retainer"
-              },
-              {
+                },
+                {
                 title: "Strategic AI Consulting",
                 icon: <Lightbulb size={32} className="text-primary" />,
                 description: "AI strategy planning, technical architecture review, and guidance for your internal teams.",
                 timeline: "1-4 weeks",
                 bestFor: "AI strategy development, technical reviews, team guidance",
                 pricing: "Hourly or project-based"
-              },
-              {
-                title: "Maintenance & Support",
-                icon: <Shield size={32} className="text-primary" />,
-                description: "Keep your AI systems running smoothly with monitoring, updates, bug fixes, and performance optimization.",
-                timeline: "Ongoing",
-                bestFor: "Existing AI systems, performance monitoring, regular updates",
-                pricing: "Monthly support plan"
-              }
+                }
             ].map((arrangement, index) => (
-              <div key={index} className="card">
+                <div key={index} className="card">
                 <div className="card-content">
-                  <div className="card-main">
+                    <div className="card-main">
                     <div style={{ 
-                      marginBottom: 'var(--space-4)',
-                      textAlign: 'center'
+                        marginBottom: 'var(--space-4)',
+                        textAlign: 'center'
                     }}>
-                      {arrangement.icon}
+                        {arrangement.icon}
                     </div>
                     <h3 className="card-title" style={{ textAlign: 'center' }}>
-                      {arrangement.title}
+                        {arrangement.title}
                     </h3>
                     <p className="card-description" style={{ textAlign: 'center', marginBottom: 'var(--space-6)' }}>
-                      {arrangement.description}
+                        {arrangement.description}
                     </p>
-                  </div>
-                  
-                  <div className="service-card-metadata">
+                    </div>
+                    
+                    <div className="service-card-metadata">
                     <div className="service-metadata-item">
-                      <div className="service-metadata-label">
+                        <div className="service-metadata-label">
                         <Clock size={14} className="text-primary" />
                         <div style={{ 
-                          fontSize: '0.75rem', 
-                          fontWeight: '600',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.05em',
-                          color: 'var(--text-muted)'
+                            fontSize: '0.75rem', 
+                            fontWeight: '600',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            color: 'var(--text-muted)'
                         }}>
-                          Timeline
+                            Timeline
                         </div>
-                      </div>
-                      <div style={{ 
+                        </div>
+                        <div style={{ 
                         fontSize: '0.875rem',
                         color: 'var(--text-primary)',
                         fontWeight: '500'
-                      }}>
+                        }}>
                         {arrangement.timeline}
-                      </div>
+                        </div>
                     </div>
                     
                     <div className="service-metadata-item">
-                      <div className="service-metadata-label">
+                        <div className="service-metadata-label">
                         <Building2 size={14} className="text-primary" />
                         <div style={{ 
-                          fontSize: '0.75rem', 
-                          fontWeight: '600',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.05em',
-                          color: 'var(--text-muted)'
+                            fontSize: '0.75rem', 
+                            fontWeight: '600',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            color: 'var(--text-muted)'
                         }}>
-                          Best For
+                            Best For
                         </div>
-                      </div>
-                      <div style={{ 
+                        </div>
+                        <div style={{ 
                         fontSize: '0.875rem',
                         color: 'var(--text-secondary)',
                         lineHeight: 1.4
-                      }}>
+                        }}>
                         {arrangement.bestFor}
-                      </div>
+                        </div>
                     </div>
-                  </div>
+                    </div>
                 </div>
-              </div>
+                </div>
             ))}
-          </div>
+            </div>
         </div>
-      </section>
+        </section>
 
       {/* Process */}
       <section className="section">
