@@ -6,7 +6,6 @@ import {
   FileText, 
   Search, 
   Settings,
-  CheckCircle,
   Target,
   RotateCcw,
   Award
@@ -75,7 +74,7 @@ export default function Home() {
               },
               {
                 title: "Knowledge Systems",
-                description: "Searchable AI systems that provide instant answers from your company's knowledge base and documentation.",
+                description: "Searchable AI systems that provide instant answers from your company&apos;s knowledge base and documentation.",
                 icon: <Search size={48} className="text-primary" />
               },
               {
@@ -153,7 +152,7 @@ export default function Home() {
           <div className="section-header">
             <h2 className="section-title">Industries We Serve</h2>
             <p className="section-subtitle">
-              AI solutions tailored for your industry's specific needs
+              AI solutions tailored for your industry&apos;s specific needs
             </p>
           </div>
           
@@ -216,7 +215,7 @@ export default function Home() {
               maxWidth: '600px',
               margin: '0 auto var(--space-8)'
             }}>
-              Let's discuss how AI can solve your specific business challenges. 
+              Let&apos;s discuss how AI can solve your specific business challenges. 
               We provide honest assessments and realistic timelines.
             </p>
             

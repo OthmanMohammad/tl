@@ -253,8 +253,8 @@ export default function About() {
                 lineHeight: 1.7
               }}>
                 We keep you informed every step of the way. No technical jargon, 
-                no hidden costs, no surprises. You'll always know what we're building, 
-                why we're building it, and when it will be ready.
+                no hidden costs, no surprises. You&apos;ll always know what we&apos;re building, 
+                why we&apos;re building it, and when it will be ready.
               </p>
             </div>
             
@@ -375,7 +375,7 @@ export default function About() {
               margin: '0 auto var(--space-8)'
             }}>
               Whether you have a specific AI project in mind or want to explore 
-              how AI can benefit your business, let's start a conversation.
+              how AI can benefit your business, let&apos;s start a conversation.
             </p>
             
             <div className="flex gap-4 justify-center flex-wrap">

@@ -13,7 +13,6 @@ import {
   Shield,
   CheckCircle,
   Clock,
-  DollarSign,
   Building2
 } from 'lucide-react'
 
@@ -402,7 +401,7 @@ export default function Services() {
               {
                 step: "02", 
                 title: "Development & Testing",
-                description: "Our team builds your AI solution with regular check-ins and testing phases. You'll see progress weekly and can provide feedback throughout the development process.",
+                description: "Our team builds your AI solution with regular check-ins and testing phases. You&apos;ll see progress weekly and can provide feedback throughout the development process.",
                 deliverables: "Working prototypes, regular demos, testing reports"
               },
               {
@@ -487,8 +486,8 @@ export default function Services() {
               maxWidth: '700px',
               margin: '0 auto var(--space-8)'
             }}>
-              Let's discuss your project requirements. We'll provide honest feedback 
-              on what's possible, realistic timelines, and how AI can actually benefit 
+              Let&apos;s discuss your project requirements. We&apos;ll provide honest feedback 
+              on what&apos;s possible, realistic timelines, and how AI can actually benefit 
               your specific business situation.
             </p>
             

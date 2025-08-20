@@ -309,7 +309,7 @@ export default function Contact() {
                     fontStyle: 'italic',
                     marginBottom: 'var(--space-4)'
                   }}>
-                    Don't worry if you don't have all these details yet. 
+                    Don&apos;t worry if you don&apos;t have all these details yet. 
                     We can help you figure out the specifics during our initial discussion.
                   </p>
                   
@@ -510,7 +510,7 @@ export default function Contact() {
               maxWidth: '600px',
               margin: '0 auto var(--space-8)'
             }}>
-              Send us an email with your project details and we'll get back to you 
+              Send us an email with your project details and we&apos;ll get back to you 
               within 24 hours with next steps.
             </p>
             
