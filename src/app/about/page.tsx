@@ -14,6 +14,7 @@ import {
   Mail,
   CheckCircle
 } from 'lucide-react'
+import ProfessionalGlobe from '@/components/ProfessionalGlobe'
 
 export const metadata: Metadata = {
   title: 'About TransformerLabs',
@@ -83,7 +84,7 @@ export default function About() {
               </p>
             </div>
             
-            {/* Right Column - Our Focus (Now aligned with description) */}
+            {/* Right Column - Our Focus */}
             <div style={{
               backgroundColor: 'var(--surface)',
               border: '1px solid var(--border)',
@@ -156,8 +157,23 @@ export default function About() {
         </div>
       </section>
 
-      {/* What We Build */}
+      {/* Global Presence Section with Professional Globe */}
       <section className="section" style={{ backgroundColor: 'var(--surface)' }}>
+        <div className="container">
+          <div className="section-header">
+            <h2 className="section-title">Our Global Presence</h2>
+            <p className="section-subtitle">
+              Strategic locations in Scotland and Palestine enable us to serve clients 
+              across Europe, the Middle East, and beyond
+            </p>
+          </div>
+          
+          <ProfessionalGlobe />
+        </div>
+      </section>
+
+      {/* What We Build */}
+      <section className="section">
         <div className="container">
           <div className="section-header">
             <h2 className="section-title">What We Specialize In</h2>
