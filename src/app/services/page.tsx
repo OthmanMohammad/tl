@@ -512,17 +512,49 @@ export default function Services() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: 'var(--space-6)'
+              gap: 'var(--space-4)',
+              flexWrap: 'wrap',
+              flexDirection: 'row'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 'var(--space-2)',
+                padding: 'var(--space-2) var(--space-3)',
+                backgroundColor: 'var(--surface)',
+                borderRadius: 'var(--radius-lg)',
+                border: '1px solid var(--border)',
+                minWidth: 'fit-content',
+                whiteSpace: 'nowrap'
+              }}>
                 <CheckCircle size={16} className="text-green-600" />
                 <span>Free initial consultation</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 'var(--space-2)',
+                padding: 'var(--space-2) var(--space-3)',
+                backgroundColor: 'var(--surface)',
+                borderRadius: 'var(--radius-lg)',
+                border: '1px solid var(--border)',
+                minWidth: 'fit-content',
+                whiteSpace: 'nowrap'
+              }}>
                 <CheckCircle size={16} className="text-green-600" />
                 <span>No-obligation project assessment</span>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 'var(--space-2)',
+                padding: 'var(--space-2) var(--space-3)',
+                backgroundColor: 'var(--surface)',
+                borderRadius: 'var(--radius-lg)',
+                border: '1px solid var(--border)',
+                minWidth: 'fit-content',
+                whiteSpace: 'nowrap'
+              }}>
                 <CheckCircle size={16} className="text-green-600" />
                 <span>24-hour response time</span>
               </div>
