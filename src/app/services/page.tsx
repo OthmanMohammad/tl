@@ -150,99 +150,105 @@ export default function Services() {
                 examples: "Industry-specific AI tools, custom prediction models, specialized automation systems"
               }
             ].map((service, index) => (
-              <div key={index} className="card" style={{ padding: 'var(--space-10)' }}>
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 'var(--space-3)',
-                  marginBottom: 'var(--space-4)'
-                }}>
-                  {service.icon}
-                  <div style={{
-                    fontSize: '0.75rem',
-                    fontWeight: '600',
-                    color: 'var(--primary)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.1em'
-                  }}>
-                    {service.category}
+              <div key={index} className="card">
+                <div className="card-content">
+                  <div className="card-main">
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 'var(--space-3)',
+                      marginBottom: 'var(--space-4)'
+                    }}>
+                      {service.icon}
+                      <div style={{
+                        fontSize: '0.75rem',
+                        fontWeight: '600',
+                        color: 'var(--primary)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em'
+                      }}>
+                        {service.category}
+                      </div>
+                    </div>
+                    
+                    <h3 style={{ 
+                      fontSize: '1.5rem', 
+                      fontWeight: '600', 
+                      marginBottom: 'var(--space-4)',
+                      color: 'var(--text-primary)'
+                    }}>
+                      {service.title}
+                    </h3>
+                    
+                    <p style={{ 
+                      color: 'var(--text-secondary)', 
+                      marginBottom: 'var(--space-6)',
+                      lineHeight: 1.6,
+                      fontSize: '1.125rem'
+                    }}>
+                      {service.description}
+                    </p>
+                    
+                    <div style={{ marginBottom: 'var(--space-6)' }}>
+                      <h4 style={{ 
+                        fontSize: '0.875rem', 
+                        fontWeight: '600', 
+                        marginBottom: 'var(--space-3)',
+                        color: 'var(--text-primary)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em'
+                      }}>
+                        Key Features:
+                      </h4>
+                      <ul style={{ 
+                        listStyle: 'none',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 'var(--space-2)'
+                      }}>
+                        {service.features.map((feature, idx) => (
+                          <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--space-3)' }}>
+                            <CheckCircle size={16} className="text-green-600" style={{ marginTop: '0.125rem', flexShrink: 0 }} />
+                            <span style={{ 
+                              fontSize: '0.875rem', 
+                              color: 'var(--text-secondary)',
+                              lineHeight: 1.5
+                            }}>
+                              {feature}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                </div>
-                
-                <h3 style={{ 
-                  fontSize: '1.5rem', 
-                  fontWeight: '600', 
-                  marginBottom: 'var(--space-4)',
-                  color: 'var(--text-primary)'
-                }}>
-                  {service.title}
-                </h3>
-                
-                <p style={{ 
-                  color: 'var(--text-secondary)', 
-                  marginBottom: 'var(--space-6)',
-                  lineHeight: 1.6,
-                  fontSize: '1.125rem'
-                }}>
-                  {service.description}
-                </p>
-                
-                <div style={{ marginBottom: 'var(--space-6)' }}>
-                  <h4 style={{ 
-                    fontSize: '0.875rem', 
-                    fontWeight: '600', 
-                    marginBottom: 'var(--space-3)',
-                    color: 'var(--text-primary)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em'
-                  }}>
-                    Key Features:
-                  </h4>
-                  <ul style={{ 
-                    listStyle: 'none',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 'var(--space-2)'
-                  }}>
-                    {service.features.map((feature, idx) => (
-                      <li key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--space-3)' }}>
-                        <CheckCircle size={16} className="text-green-600" style={{ marginTop: '0.125rem', flexShrink: 0 }} />
-                        <span style={{ 
-                          fontSize: '0.875rem', 
-                          color: 'var(--text-secondary)',
-                          lineHeight: 1.5
-                        }}>
-                          {feature}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                <div style={{
-                  padding: 'var(--space-4)',
-                  backgroundColor: 'var(--surface)',
-                  borderRadius: 'var(--radius-lg)',
-                  border: '1px solid var(--border)'
-                }}>
-                  <h4 style={{ 
-                    fontSize: '0.75rem', 
-                    fontWeight: '600',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    color: 'var(--text-muted)',
-                    marginBottom: 'var(--space-2)'
-                  }}>
-                    Common Use Cases:
-                  </h4>
-                  <p style={{
-                    fontSize: '0.875rem',
-                    color: 'var(--text-secondary)',
-                    lineHeight: 1.5,
-                    margin: 0
-                  }}>
-                    {service.examples}
-                  </p>
+                  
+                  <div className="card-footer-content">
+                    <div style={{
+                      padding: 'var(--space-4)',
+                      backgroundColor: 'var(--surface)',
+                      borderRadius: 'var(--radius-lg)',
+                      border: '1px solid var(--border)'
+                    }}>
+                      <h4 style={{ 
+                        fontSize: '0.75rem', 
+                        fontWeight: '600',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        color: 'var(--text-muted)',
+                        marginBottom: 'var(--space-2)'
+                      }}>
+                        Common Use Cases:
+                      </h4>
+                      <p style={{
+                        fontSize: '0.875rem',
+                        color: 'var(--text-secondary)',
+                        lineHeight: 1.5,
+                        margin: 0
+                      }}>
+                        {service.examples}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -296,81 +302,65 @@ export default function Services() {
               }
             ].map((arrangement, index) => (
               <div key={index} className="card">
-                <div style={{ 
-                  marginBottom: 'var(--space-4)',
-                  textAlign: 'center'
-                }}>
-                  {arrangement.icon}
-                </div>
-                <h3 className="card-title" style={{ textAlign: 'center' }}>
-                  {arrangement.title}
-                </h3>
-                <p className="card-description" style={{ textAlign: 'center', marginBottom: 'var(--space-6)' }}>
-                  {arrangement.description}
-                </p>
-                
-                <div className="space-y-3">
-                  <div style={{
-                    padding: 'var(--space-3)',
-                    backgroundColor: 'var(--surface)',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1px solid var(--border)'
-                  }}>
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 'var(--space-2)',
-                      marginBottom: 'var(--space-1)'
-                    }}>
-                      <Clock size={14} className="text-primary" />
-                      <div style={{ 
-                        fontSize: '0.75rem', 
-                        fontWeight: '600',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                        color: 'var(--text-muted)'
-                      }}>
-                        Timeline
-                      </div>
-                    </div>
+                <div className="card-content">
+                  <div className="card-main">
                     <div style={{ 
-                      fontSize: '0.875rem',
-                      color: 'var(--text-primary)',
-                      fontWeight: '500'
+                      marginBottom: 'var(--space-4)',
+                      textAlign: 'center'
                     }}>
-                      {arrangement.timeline}
+                      {arrangement.icon}
                     </div>
+                    <h3 className="card-title" style={{ textAlign: 'center' }}>
+                      {arrangement.title}
+                    </h3>
+                    <p className="card-description" style={{ textAlign: 'center', marginBottom: 'var(--space-6)' }}>
+                      {arrangement.description}
+                    </p>
                   </div>
                   
-                  <div style={{
-                    padding: 'var(--space-3)',
-                    backgroundColor: 'var(--surface)',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1px solid var(--border)'
-                  }}>
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 'var(--space-2)',
-                      marginBottom: 'var(--space-1)'
-                    }}>
-                      <Building2 size={14} className="text-primary" />
+                  <div className="service-card-metadata">
+                    <div className="service-metadata-item">
+                      <div className="service-metadata-label">
+                        <Clock size={14} className="text-primary" />
+                        <div style={{ 
+                          fontSize: '0.75rem', 
+                          fontWeight: '600',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                          color: 'var(--text-muted)'
+                        }}>
+                          Timeline
+                        </div>
+                      </div>
                       <div style={{ 
-                        fontSize: '0.75rem', 
-                        fontWeight: '600',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.05em',
-                        color: 'var(--text-muted)'
+                        fontSize: '0.875rem',
+                        color: 'var(--text-primary)',
+                        fontWeight: '500'
                       }}>
-                        Best For
+                        {arrangement.timeline}
                       </div>
                     </div>
-                    <div style={{ 
-                      fontSize: '0.875rem',
-                      color: 'var(--text-secondary)',
-                      lineHeight: 1.4
-                    }}>
-                      {arrangement.bestFor}
+                    
+                    <div className="service-metadata-item">
+                      <div className="service-metadata-label">
+                        <Building2 size={14} className="text-primary" />
+                        <div style={{ 
+                          fontSize: '0.75rem', 
+                          fontWeight: '600',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.05em',
+                          color: 'var(--text-muted)'
+                        }}>
+                          Best For
+                        </div>
+                      </div>
+                      <div style={{ 
+                        fontSize: '0.875rem',
+                        color: 'var(--text-secondary)',
+                        lineHeight: 1.4
+                      }}>
+                        {arrangement.bestFor}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -401,7 +391,7 @@ export default function Services() {
               {
                 step: "02", 
                 title: "Development & Testing",
-                description: "Our team builds your AI solution with regular check-ins and testing phases. You&apos;ll see progress weekly and can provide feedback throughout the development process.",
+                description: "Our team builds your AI solution with regular check-ins and testing phases. You'll see progress weekly and can provide feedback throughout the development process.",
                 deliverables: "Working prototypes, regular demos, testing reports"
               },
               {
@@ -411,59 +401,69 @@ export default function Services() {
                 deliverables: "Live system, user training, documentation, support plan"
               }
             ].map((step, index) => (
-              <div key={index} className="card" style={{ textAlign: 'center' }}>
-                <div style={{
-                  width: '4rem',
-                  height: '4rem',
-                  backgroundColor: 'var(--primary)',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto var(--space-6)',
-                  fontSize: '1.25rem',
-                  fontWeight: '700',
-                  color: 'white'
-                }}>
-                  {step.step}
-                </div>
-                <h3 style={{ 
-                  fontSize: '1.25rem', 
-                  fontWeight: '600', 
-                  marginBottom: 'var(--space-4)',
-                  color: 'var(--text-primary)'
-                }}>
-                  {step.title}
-                </h3>
-                <p style={{ 
-                  color: 'var(--text-secondary)',
-                  marginBottom: 'var(--space-4)',
-                  lineHeight: 1.6
-                }}>
-                  {step.description}
-                </p>
-                <div style={{
-                  padding: 'var(--space-3)',
-                  backgroundColor: 'var(--surface)',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--border)'
-                }}>
-                  <div style={{ 
-                    fontSize: '0.75rem', 
-                    fontWeight: '600',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    color: 'var(--text-muted)',
-                    marginBottom: 'var(--space-2)'
-                  }}>
-                    Key Deliverables
+              <div key={index} className="card">
+                <div className="card-content">
+                  <div className="card-main">
+                    <div style={{
+                      width: '4rem',
+                      height: '4rem',
+                      backgroundColor: 'var(--primary)',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      margin: '0 auto var(--space-6)',
+                      fontSize: '1.25rem',
+                      fontWeight: '700',
+                      color: 'white'
+                    }}>
+                      {step.step}
+                    </div>
+                    <h3 style={{ 
+                      fontSize: '1.25rem', 
+                      fontWeight: '600', 
+                      marginBottom: 'var(--space-4)',
+                      color: 'var(--text-primary)',
+                      textAlign: 'center'
+                    }}>
+                      {step.title}
+                    </h3>
+                    <p style={{ 
+                      color: 'var(--text-secondary)',
+                      marginBottom: 'var(--space-4)',
+                      lineHeight: 1.6,
+                      textAlign: 'center'
+                    }}>
+                      {step.description}
+                    </p>
                   </div>
-                  <div style={{ 
-                    fontSize: '0.875rem',
-                    color: 'var(--text-secondary)',
-                    lineHeight: 1.4
-                  }}>
-                    {step.deliverables}
+                  
+                  <div className="process-card-deliverables">
+                    <div style={{
+                      padding: 'var(--space-3)',
+                      backgroundColor: 'var(--surface)',
+                      borderRadius: 'var(--radius-md)',
+                      border: '1px solid var(--border)',
+                      textAlign: 'center'
+                    }}>
+                      <div style={{ 
+                        fontSize: '0.75rem', 
+                        fontWeight: '600',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        color: 'var(--text-muted)',
+                        marginBottom: 'var(--space-2)'
+                      }}>
+                        Key Deliverables
+                      </div>
+                      <div style={{ 
+                        fontSize: '0.875rem',
+                        color: 'var(--text-secondary)',
+                        lineHeight: 1.4
+                      }}>
+                        {step.deliverables}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
