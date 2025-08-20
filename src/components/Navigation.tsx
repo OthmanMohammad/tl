@@ -117,8 +117,9 @@ export default function Navigation() {
               alt="TransformerLabs"
               width={180}
               height={36}
-              className="logo-image"
+              className="logo-image interactive"
               priority
+              draggable={false}
             />
           </Link>
 
@@ -186,6 +187,7 @@ export default function Navigation() {
                   alt="TransformerLabs"
                   width={32}
                   height={32}
+                  draggable={false}
                 />
                 <span>TransformerLabs</span>
               </Link>
