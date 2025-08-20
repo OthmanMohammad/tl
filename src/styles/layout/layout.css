@@ -63,7 +63,7 @@ body {
   max-width: 800px;
 }
 
-/* Section Headers */
+/* Section Headers - Fixed text cut-off */
 .section-header {
   text-align: center;
   margin-bottom: var(--space-16);
@@ -73,6 +73,8 @@ body {
   position: relative;
   padding: 0 var(--space-4);
   box-sizing: border-box;
+  /* Ensure no text cut-off */
+  overflow: visible;
 }
 
 .section-header::after {
@@ -97,16 +99,23 @@ body {
   letter-spacing: -0.03em;
   word-wrap: break-word;
   hyphens: auto;
+  /* Fix text cut-off issues */
+  line-height: 1.25; /* Increased from 1.15 */
+  overflow: visible;
+  padding-bottom: 0.125rem; /* Add small padding for descenders */
 }
 
 .section-subtitle {
   color: var(--text-secondary);
   font-size: 1.25rem;
-  line-height: 1.6;
+  line-height: 1.65; /* Increased for better readability */
   margin-bottom: 0;
   font-weight: var(--font-weight-normal);
   letter-spacing: -0.02em;
   word-wrap: break-word;
+  /* Ensure no text cut-off */
+  overflow: visible;
+  padding-bottom: 0.125rem;
 }
 
 .section-label {
@@ -121,6 +130,7 @@ body {
   background: rgba(255, 54, 33, 0.1);
   border-radius: var(--radius-full);
   font-family: var(--font-display);
+  overflow: visible;
 }
 
 /* Hero Section - Adjusted for Fixed Navigation */
@@ -180,10 +190,13 @@ body {
 .hero-title {
   margin-bottom: var(--space-8);
   text-shadow: 0 4px 8px rgba(27, 49, 57, 0.1);
-  line-height: 1.1;
+  line-height: 1.15;
   letter-spacing: -0.04em;
   word-wrap: break-word;
   hyphens: auto;
+  /* Ensure no text cut-off */
+  overflow: visible;
+  padding-bottom: 0.125rem;
 }
 
 .hero-subtitle {
@@ -197,6 +210,9 @@ body {
   margin-left: auto;
   margin-right: auto;
   word-wrap: break-word;
+  /* Ensure no text cut-off */
+  overflow: visible;
+  padding-bottom: 0.125rem;
 }
 
 .hero-buttons {
@@ -225,40 +241,52 @@ body {
   gap: var(--space-2);
 }
 
-/* CTA Section */
+/* CTA Section - REMOVED GREY BORDERS, KEPT ORANGE LINE */
 .cta-section {
   background: var(--surface);
   border-radius: var(--radius-2xl);
   padding: var(--space-16);
   text-align: center;
   margin: var(--space-16) 0;
-  border: 1px solid var(--border);
+  /* REMOVED: border: 1px solid var(--border); */
   position: relative;
-  overflow: hidden;
+  overflow: visible; /* Changed from hidden to prevent text cut-off */
   max-width: 100%;
   box-sizing: border-box;
+  /* Add subtle shadow to replace border */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
 }
 
+/* Keep the orange top line */
 .cta-section::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 2px;
+  height: 3px; /* Slightly thicker for better visibility */
   background: var(--gradient-primary);
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
 }
 
 .cta-section h2 {
   color: var(--text-primary);
   margin-bottom: var(--space-6);
   word-wrap: break-word;
+  /* Fix text cut-off issues */
+  line-height: 1.25;
+  overflow: visible;
+  padding-bottom: 0.125rem;
 }
 
 .cta-section p {
   font-size: 1.125rem;
   margin-bottom: var(--space-8);
   word-wrap: break-word;
+  /* Ensure no text cut-off */
+  line-height: 1.65;
+  overflow: visible;
+  padding-bottom: 0.125rem;
 }
 
 /* Grid Layouts */
@@ -553,7 +581,7 @@ body {
   
   .hero h1 {
     font-size: clamp(1.75rem, 8vw, 2.5rem);
-    line-height: 1.1;
+    line-height: 1.2; /* Adjusted for better visibility */
   }
   
   .hero-subtitle {
@@ -599,6 +627,7 @@ body {
   
   .hero h1 {
     font-size: 1.5rem;
+    line-height: 1.2;
   }
   
   .hero-subtitle {
@@ -642,6 +671,7 @@ img, video, iframe, embed, object {
   overflow-wrap: break-word;
   word-wrap: break-word;
   hyphens: auto;
+  overflow: visible; /* Ensure text isn't cut off */
 }
 
 /* Page load optimization */
