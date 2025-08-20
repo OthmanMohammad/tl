@@ -57,6 +57,9 @@
   flex-shrink: 0;
   z-index: 2;
   position: relative;
+  /* Remove focus outline but keep it accessible */
+  outline: none;
+  border: none;
 }
 
 .logo:hover {
@@ -66,7 +69,8 @@
   text-decoration: none;
 }
 
-.logo:focus {
+/* Focus visible for accessibility - only show when navigating with keyboard */
+.logo:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 4px;
   border-radius: var(--radius-md);
@@ -102,8 +106,21 @@
   transition: all var(--duration-fast) var(--ease);
   position: relative;
   letter-spacing: -0.011em;
+  /* Remove all outlines and borders */
+  outline: none;
+  border: none;
+  background: none;
+  /* Prevent tap highlight on mobile */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
+/* Active page underline indicator */
 .nav-link::after {
   content: '';
   position: absolute;
@@ -124,12 +141,25 @@
   text-decoration: none;
 }
 
+/* Show underline on hover and active states */
 .nav-link:hover::after,
 .nav-link.active::after {
   width: 80%;
 }
 
-.nav-link:focus {
+/* Enhanced active state for current page */
+.nav-link.active {
+  color: var(--primary);
+  background-color: rgba(255, 54, 33, 0.05);
+}
+
+.nav-link.active::after {
+  width: 100%;
+  background: var(--primary);
+}
+
+/* Focus visible for accessibility - only show when navigating with keyboard */
+.nav-link:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
   color: var(--text-primary);
@@ -140,6 +170,9 @@
   margin-left: var(--space-4);
   padding: var(--space-2) var(--space-4);
   font-size: 0.875rem;
+  /* Remove focus outline, handled by button styles */
+  outline: none;
+  border: none;
 }
 
 /* Mobile menu toggle - Always accessible */
@@ -159,13 +192,23 @@
   transition: all var(--duration-fast) var(--ease);
   position: relative;
   color: var(--text-primary);
+  /* Remove all outlines and borders */
+  outline: none;
+  /* Prevent tap highlight on mobile */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .nav-toggle:hover {
   background-color: var(--surface);
 }
 
-.nav-toggle:focus {
+.nav-toggle:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
   border-radius: var(--radius-md);
@@ -228,6 +271,16 @@
   color: var(--text-primary);
   font-weight: var(--font-weight-semibold);
   font-size: 1.125rem;
+  /* Remove focus outline */
+  outline: none;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-menu-logo:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
 }
 
 .mobile-menu-close {
@@ -242,11 +295,23 @@
   border-radius: var(--radius-lg);
   transition: all var(--duration-fast) var(--ease);
   color: var(--text-secondary);
+  /* Remove all outlines and borders */
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .mobile-menu-close:hover {
   background-color: var(--surface);
   color: var(--text-primary);
+}
+
+.mobile-menu-close:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 .mobile-menu-nav {
@@ -269,6 +334,13 @@
   border: 1px solid transparent;
   text-align: center;
   background: var(--surface);
+  /* Remove all outlines and borders */
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .mobile-menu-link:hover {
@@ -285,7 +357,7 @@
   border-color: var(--primary);
 }
 
-.mobile-menu-link:focus {
+.mobile-menu-link:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
@@ -422,25 +494,15 @@
     background: var(--background);
   }
   
-  .nav-link:focus,
-  .nav-toggle:focus,
-  .mobile-menu-link:focus {
+  .nav-link:focus-visible,
+  .nav-toggle:focus-visible,
+  .mobile-menu-link:focus-visible {
     outline: 3px solid var(--text-primary);
   }
   
   .mobile-menu-backdrop {
     background: rgba(0, 0, 0, 0.8);
   }
-}
-
-/* Prevent text selection on navigation */
-.nav-toggle,
-.nav-link,
-.mobile-menu-link {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 
 /* Ensure body padding for fixed nav */

@@ -18,6 +18,14 @@ export default function Navigation() {
     { name: 'Contact', href: '/contact' },
   ]
 
+  // Enhanced active state detection
+  const isActiveLink = useCallback((href: string): boolean => {
+    if (href === '/') {
+      return pathname === '/'
+    }
+    return pathname.startsWith(href)
+  }, [pathname])
+
   // Handle scroll detection for nav styling
   useEffect(() => {
     const handleScroll = () => {
@@ -117,12 +125,13 @@ export default function Navigation() {
           {/* Desktop Navigation */}
           <div className="nav-links-desktop">
             {navigation.map((item) => {
-              const isActive = pathname === item.href
+              const isActive = isActiveLink(item.href)
               return (
                 <Link
                   key={item.name}
                   href={item.href}
                   className={`nav-link ${isActive ? 'active' : ''}`}
+                  aria-current={isActive ? 'page' : undefined}
                 >
                   {item.name}
                 </Link>
@@ -193,13 +202,14 @@ export default function Navigation() {
             
             <nav className="mobile-menu-nav">
               {navigation.map((item) => {
-                const isActive = pathname === item.href
+                const isActive = isActiveLink(item.href)
                 return (
                   <Link
                     key={item.name}
                     href={item.href}
                     className={`mobile-menu-link ${isActive ? 'active' : ''}`}
                     onClick={handleLinkClick}
+                    aria-current={isActive ? 'page' : undefined}
                   >
                     {item.name}
                   </Link>
