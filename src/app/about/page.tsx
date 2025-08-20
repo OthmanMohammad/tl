@@ -1,4 +1,3 @@
-// src/app/about/page.tsx - Improved About Page
 import Link from 'next/link'
 import { Metadata } from 'next'
 

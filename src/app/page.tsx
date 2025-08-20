@@ -1,4 +1,3 @@
-// src/app/page.tsx - Improved Professional Homepage
 import Link from 'next/link'
 
 export default function Home() {
@@ -9,14 +8,13 @@ export default function Home() {
         <div className="container">
           <div className="hero-content">
             <h1>
-              AI Solutions That Actually Work<br />
-              <span style={{ color: 'var(--primary)' }}>For Your Business</span>
+              AI Solutions That Actually Work
             </h1>
             
             <p className="hero-subtitle">
-              We build practical AI applications that solve real business problems. 
-              Chatbots, data analytics, workflow automation, and custom AI solutions 
-              that deliver measurable results.
+              We build practical AI applications for businesses worldwide. 
+              Chatbots, data analytics, workflow automation, and custom solutions 
+              that deliver real results.
             </p>
 
             <div className="hero-buttons">
@@ -24,40 +22,20 @@ export default function Home() {
                 Start a Project
               </Link>
               <Link href="/services" className="btn btn-secondary btn-lg">
-                What We Build
+                Our Services
               </Link>
-            </div>
-
-            {/* Stats */}
-            <div className="stats-grid">
-              <div className="stat-item">
-                <span className="stat-number">2+</span>
-                <span className="stat-label">Years Experience</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-number">25+</span>
-                <span className="stat-label">Projects Delivered</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-number">100%</span>
-                <span className="stat-label">Client Satisfaction</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-number">Global</span>
-                <span className="stat-label">Reach</span>
-              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* What We Build */}
+      {/* Services Overview */}
       <section className="section">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">AI Solutions We Build</h2>
+            <h2 className="section-title">What We Build</h2>
             <p className="section-subtitle">
-              Practical AI applications that integrate with your existing business processes
+              AI solutions that integrate seamlessly with your business operations
             </p>
           </div>
           
@@ -65,32 +43,32 @@ export default function Home() {
             {[
               {
                 title: "AI Chatbots & Assistants",
-                description: "Customer service bots that handle real conversations, internal assistants for employee support, and specialized AI agents for specific business functions.",
-                icon: "💬"
+                description: "Intelligent chatbots for customer service, support tickets, and internal operations that understand context and handle complex conversations.",
+                icon: "🤖"
               },
               {
-                title: "Smart Document Processing", 
-                description: "AI systems that read, understand, and extract insights from your documents, contracts, reports, and data files automatically.",
-                icon: "📄"
-              },
-              {
-                title: "Workflow Automation",
-                description: "Automate repetitive tasks, streamline business processes, and eliminate manual work with intelligent automation systems.",
-                icon: "⚡"
-              },
-              {
-                title: "Data Analytics & Insights",
-                description: "Transform your business data into actionable insights with automated reporting, trend analysis, and predictive analytics.",
+                title: "Data Analytics & Insights", 
+                description: "Transform your business data into actionable insights with automated reporting, predictive analytics, and intelligent dashboards.",
                 icon: "📊"
               },
               {
-                title: "Knowledge Management",
-                description: "AI that searches through your company knowledge base, documents, and databases to answer questions instantly.",
+                title: "Workflow Automation",
+                description: "Streamline business processes with intelligent automation that handles repetitive tasks and complex decision-making workflows.",
+                icon: "⚡"
+              },
+              {
+                title: "Document Processing",
+                description: "AI that reads, understands, and extracts insights from documents, contracts, and reports automatically.",
+                icon: "📄"
+              },
+              {
+                title: "Knowledge Systems",
+                description: "Searchable AI systems that provide instant answers from your company's knowledge base and documentation.",
                 icon: "🔍"
               },
               {
-                title: "Custom AI Applications",
-                description: "Purpose-built AI solutions designed specifically for your industry, use case, and technical requirements.",
+                title: "Custom AI Solutions",
+                description: "Tailored AI applications designed specifically for your industry requirements and business processes.",
                 icon: "🛠️"
               }
             ].map((service, index) => (
@@ -114,135 +92,58 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How We Work */}
+      {/* Why Choose Us */}
       <section className="section" style={{ backgroundColor: 'var(--surface)' }}>
         <div className="container">
-          <div className="grid-2" style={{ alignItems: 'center' }}>
-            <div>
-              <h2 style={{ marginBottom: 'var(--space-6)' }}>
-                How We Partner With You
-              </h2>
-              
-              <div className="space-y-6">
-                {[
-                  {
-                    title: "Fixed-Scope Projects",
-                    description: "Clear deliverables, timeline, and budget. Perfect for well-defined AI implementations.",
-                    icon: "📋"
-                  },
-                  {
-                    title: "Ongoing Development",
-                    description: "Long-term partnership as your dedicated AI development team with flexible monthly arrangements.",
-                    icon: "🤝"
-                  },
-                  {
-                    title: "Strategic Consulting",
-                    description: "AI planning, technical architecture review, and strategic guidance for your AI initiatives.",
-                    icon: "💡"
-                  },
-                  {
-                    title: "Maintenance & Support",
-                    description: "Keep your AI systems running smoothly with ongoing monitoring, updates, and improvements.",
-                    icon: "🛡️"
-                  }
-                ].map((feature, index) => (
-                  <div key={index} style={{ marginBottom: 'var(--space-6)' }}>
-                    <div className="flex items-start gap-4">
-                      <div style={{
-                        fontSize: '1.5rem',
-                        flexShrink: 0,
-                        marginTop: 'var(--space-1)'
-                      }}>
-                        {feature.icon}
-                      </div>
-                      <div>
-                        <h3 style={{ 
-                          fontSize: '1.125rem',
-                          fontWeight: '600',
-                          marginBottom: 'var(--space-2)',
-                          color: 'var(--text-primary)'
-                        }}>
-                          {feature.title}
-                        </h3>
-                        <p style={{ 
-                          color: 'var(--text-secondary)',
-                          lineHeight: 1.6,
-                          fontSize: '1rem'
-                        }}>
-                          {feature.description}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <div style={{
-                backgroundColor: 'var(--background)',
-                border: '1px solid var(--border)',
-                borderRadius: 'var(--radius-xl)',
-                padding: 'var(--space-8)',
-                position: 'relative'
-              }}>
-                <h3 style={{ 
-                  color: 'var(--text-primary)', 
-                  marginBottom: 'var(--space-6)',
-                  fontSize: '1.25rem',
-                  fontWeight: '600'
-                }}>
-                  Why Choose TransformerLabs
-                </h3>
-                
-                <div className="space-y-4">
-                  {[
-                    "✅ Proven track record of successful AI implementations",
-                    "✅ Clear communication throughout every project", 
-                    "✅ Business-focused approach, not just technical solutions",
-                    "✅ Flexible work arrangements to fit your budget and timeline",
-                    "✅ Ongoing support to ensure long-term success",
-                    "✅ Global reach with local expertise in MENA markets"
-                  ].map((point, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <span style={{ 
-                        color: 'var(--text-secondary)',
-                        fontSize: '1rem',
-                        lineHeight: 1.6
-                      }}>
-                        {point}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                
+          <div className="section-header">
+            <h2 className="section-title">Why Choose TransformerLabs</h2>
+          </div>
+          
+          <div className="grid-3">
+            {[
+              {
+                title: "Proven Results",
+                description: "Track record of successful AI implementations across multiple industries with measurable business impact.",
+                icon: "✅"
+              },
+              {
+                title: "Business-First Approach",
+                description: "We focus on solving real business problems, not just implementing cool technology.",
+                icon: "🎯"
+              },
+              {
+                title: "End-to-End Service",
+                description: "From strategy and development to deployment and ongoing support - we handle everything.",
+                icon: "🔄"
+              }
+            ].map((feature, index) => (
+              <div key={index} className="card">
                 <div style={{
-                  marginTop: 'var(--space-6)',
-                  paddingTop: 'var(--space-4)',
-                  borderTop: '1px solid var(--border)'
+                  fontSize: '2.5rem',
+                  marginBottom: 'var(--space-4)',
+                  textAlign: 'center'
                 }}>
-                  <p style={{
-                    fontSize: '0.875rem',
-                    color: 'var(--text-muted)',
-                    fontStyle: 'italic',
-                    textAlign: 'center'
-                  }}>
-                    "We deliver working solutions, not just demos"
-                  </p>
+                  {feature.icon}
                 </div>
+                <h3 className="card-title" style={{ textAlign: 'center', marginBottom: 'var(--space-3)' }}>
+                  {feature.title}
+                </h3>
+                <p className="card-description" style={{ textAlign: 'center' }}>
+                  {feature.description}
+                </p>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Social Proof */}
+      {/* Industries */}
       <section className="section">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Trusted By Businesses Worldwide</h2>
+            <h2 className="section-title">Industries We Serve</h2>
             <p className="section-subtitle">
-              From startups to established enterprises across multiple industries
+              AI solutions tailored for your industry's specific needs
             </p>
           </div>
           
@@ -250,38 +151,39 @@ export default function Home() {
             {[
               {
                 industry: "E-commerce & Retail",
-                description: "AI chatbots for customer support, inventory management automation, and personalized product recommendations."
+                description: "Customer service automation, inventory management, and personalized shopping experiences."
               },
               {
                 industry: "Healthcare & Medical",
-                description: "Patient data analysis, appointment scheduling automation, and medical document processing systems."
+                description: "Patient data analysis, appointment systems, and medical document processing."
               },
               {
                 industry: "Financial Services",
-                description: "Fraud detection systems, automated report generation, and customer service AI assistants."
+                description: "Fraud detection, automated reporting, and customer service optimization."
               },
               {
                 industry: "Manufacturing",
-                description: "Quality control automation, predictive maintenance systems, and supply chain optimization."
-              },
-              {
-                industry: "Education & Training",
-                description: "Student support chatbots, automated grading systems, and personalized learning platforms."
+                description: "Quality control automation, predictive maintenance, and supply chain optimization."
               },
               {
                 industry: "Professional Services",
-                description: "Document analysis, client communication automation, and business process optimization."
+                description: "Document analysis, client management, and business process automation."
+              },
+              {
+                industry: "Education",
+                description: "Student support systems, automated grading, and personalized learning platforms."
               }
             ].map((item, index) => (
               <div key={index} className="card">
                 <h3 className="card-title" style={{ 
-                  fontSize: '1.125rem', 
+                  fontSize: '1.25rem', 
                   marginBottom: 'var(--space-3)',
-                  color: 'var(--primary)'
+                  color: 'var(--primary)',
+                  textAlign: 'center'
                 }}>
                   {item.industry}
                 </h3>
-                <p className="card-description">
+                <p className="card-description" style={{ textAlign: 'center' }}>
                   {item.description}
                 </p>
               </div>
@@ -290,67 +192,34 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Get Started */}
+      {/* CTA Section */}
       <section className="section" style={{ backgroundColor: 'var(--surface)' }}>
         <div className="container">
           <div className="cta-section">
             <h2 style={{ marginBottom: 'var(--space-6)' }}>
-              Ready to Transform Your Business with AI?
+              Ready to Transform Your Business?
             </h2>
             <p style={{ 
               fontSize: '1.25rem', 
               color: 'var(--text-secondary)', 
               marginBottom: 'var(--space-8)',
-              maxWidth: '700px',
+              maxWidth: '600px',
               margin: '0 auto var(--space-8)'
             }}>
-              Let's discuss your project. We'll provide honest feedback on what's possible, 
-              realistic timelines, and how AI can actually benefit your business.
+              Let's discuss how AI can solve your specific business challenges. 
+              We provide honest assessments and realistic timelines.
             </p>
             
             <div className="flex gap-4 justify-center flex-wrap">
               <Link href="/contact" className="btn btn-primary btn-lg">
-                Start Your AI Project
+                Get Started
               </Link>
               <a 
                 href="mailto:Mo@MohammadOthman.com" 
                 className="btn btn-secondary btn-lg"
               >
-                Email Us Directly
+                Email Us
               </a>
-            </div>
-
-            <div style={{
-              marginTop: 'var(--space-10)',
-              paddingTop: 'var(--space-6)',
-              borderTop: '1px solid var(--border)',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: 'var(--space-8)',
-              flexWrap: 'wrap',
-              fontSize: '0.875rem',
-              color: 'var(--text-secondary)'
-            }}>
-              <div className="contact-item">
-                <svg className="contact-icon" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                </svg>
-                <span>Mo@MohammadOthman.com</span>
-              </div>
-              <div className="contact-item">
-                <svg className="contact-icon" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                </svg>
-                <span>Palestine & United Kingdom</span>
-              </div>
-              <div className="contact-item">
-                <svg className="contact-icon" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                </svg>
-                <span>24-hour response time</span>
-              </div>
             </div>
           </div>
         </div>

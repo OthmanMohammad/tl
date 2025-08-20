@@ -1,4 +1,3 @@
-// src/components/Navigation.tsx - Fixed Professional Navigation
 'use client'
 
 import Link from 'next/link'
@@ -27,16 +26,11 @@ export default function Navigation() {
             height={40}
             className="logo-image"
             priority
-            style={{
-              height: '2.5rem',
-              width: 'auto',
-              objectFit: 'contain'
-            }}
           />
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="nav-links flex">
+        <div className="nav-links">
           {navigation.map((item) => {
             const isActive = pathname === item.href
             return (
@@ -53,7 +47,7 @@ export default function Navigation() {
 
         {/* CTA Button */}
         <Link href="/contact" className="btn btn-primary">
-          <span>Get Started</span>
+          Get Started
         </Link>
       </div>
     </nav>

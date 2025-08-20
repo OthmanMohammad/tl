@@ -1,4 +1,3 @@
-// src/app/contact/page.tsx - Contact Page
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {

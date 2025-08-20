@@ -1,139 +1,237 @@
-// src/components/Footer.tsx - Improved Professional Footer
 import Link from 'next/link'
 import Image from 'next/image'
 
 export default function Footer() {
-  const services = [
-    { name: 'AI Chatbots & Assistants', href: '/services' },
-    { name: 'Data Analytics', href: '/services' },
-    { name: 'Workflow Automation', href: '/services' },
-    { name: 'Knowledge Systems', href: '/services' },
-    { name: 'Custom AI Development', href: '/services' },
-  ]
-
-  const company = [
-    { name: 'About Us', href: '/about' },
+  const navigation = [
+    { name: 'Home', href: '/' },
     { name: 'Services', href: '/services' },
+    { name: 'About', href: '/about' },
     { name: 'Contact', href: '/contact' },
   ]
 
-  const resources = [
-    { name: 'Privacy Policy', href: '/privacy' },
-    { name: 'Terms of Service', href: '/terms' },
+  const services = [
+    'AI Chatbots & Assistants',
+    'Data Analytics & Insights',
+    'Workflow Automation', 
+    'Document Processing',
+    'Knowledge Systems',
+    'Custom AI Solutions'
+  ]
+
+  const industries = [
+    'E-commerce & Retail',
+    'Healthcare & Medical',
+    'Financial Services',
+    'Manufacturing',
+    'Professional Services',
+    'Education'
   ]
 
   return (
     <footer className="footer">
-      <div className="footer-content">
-        {/* Brand Section - Wider */}
-        <div className="footer-brand" style={{ gridColumn: 'span 2' }}>
-          <Image
-            src="/Logo_only_Transparent.svg"
-            alt="TransformerLabs"
-            width={32}
-            height={32}
-            className="footer-logo"
-          />
-          
-          <p className="footer-description">
-            TransformerLabs builds practical AI solutions for businesses worldwide. 
-            We specialize in chatbots, data analytics, workflow automation, and 
-            custom AI applications that deliver real results.
-          </p>
-
-          <div className="contact-info">
-            <a 
-              href="mailto:Mo@MohammadOthman.com" 
-              className="contact-item"
-            >
-              <svg className="contact-icon" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-              </svg>
-              Mo@MohammadOthman.com
-            </a>
+      <div className="container">
+        {/* Main Footer Content */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '2fr 1fr 1fr 1fr',
+          gap: 'var(--space-12)',
+          marginBottom: 'var(--space-12)',
+          maxWidth: '1000px',
+          margin: '0 auto var(--space-12)'
+        }}>
+          {/* Company Info */}
+          <div>
+            <Image
+              src="/Logo_only_Transparent.svg"
+              alt="TransformerLabs"
+              width={40}
+              height={40}
+              style={{ marginBottom: 'var(--space-4)' }}
+            />
             
-            <div className="contact-item">
-              <svg className="contact-icon" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-              </svg>
-              Palestine & United Kingdom
+            <p style={{
+              color: 'var(--text-secondary)',
+              marginBottom: 'var(--space-6)',
+              lineHeight: 1.6,
+              fontSize: '1rem'
+            }}>
+              TransformerLabs builds practical AI solutions for businesses worldwide. 
+              We specialize in chatbots, data analytics, workflow automation, and 
+              custom AI applications.
+            </p>
+
+            <div style={{ marginBottom: 'var(--space-4)' }}>
+              <a 
+                href="mailto:Mo@MohammadOthman.com" 
+                className="footer-link"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 'var(--space-2)',
+                  color: 'var(--text-secondary)',
+                  textDecoration: 'none',
+                  fontSize: '0.875rem',
+                  marginBottom: 'var(--space-2)'
+                }}
+              >
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z"/>
+                  <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z"/>
+                </svg>
+                Mo@MohammadOthman.com
+              </a>
+              
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 'var(--space-2)',
+                color: 'var(--text-secondary)',
+                fontSize: '0.875rem'
+              }}>
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                </svg>
+                Aberdeen, Scotland & Nablus, Palestine
+              </div>
             </div>
+          </div>
+
+          {/* Navigation */}
+          <div>
+            <h3 style={{
+              color: 'var(--text-primary)',
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              marginBottom: 'var(--space-4)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em'
+            }}>
+              Company
+            </h3>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+              {navigation.map((item) => (
+                <li key={item.name}>
+                  <Link 
+                    href={item.href}
+                    className="footer-link"
+                    style={{
+                      color: 'var(--text-secondary)',
+                      textDecoration: 'none',
+                      fontSize: '0.875rem'
+                    }}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Services */}
+          <div>
+            <h3 style={{
+              color: 'var(--text-primary)',
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              marginBottom: 'var(--space-4)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em'
+            }}>
+              Services
+            </h3>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+              {services.map((service) => (
+                <li key={service}>
+                  <span style={{
+                    color: 'var(--text-secondary)',
+                    fontSize: '0.875rem',
+                    display: 'block'
+                  }}>
+                    {service}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Industries */}
+          <div>
+            <h3 style={{
+              color: 'var(--text-primary)',
+              fontSize: '0.875rem',
+              fontWeight: '600',
+              marginBottom: 'var(--space-4)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em'
+            }}>
+              Industries
+            </h3>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+              {industries.map((industry) => (
+                <li key={industry}>
+                  <span style={{
+                    color: 'var(--text-secondary)',
+                    fontSize: '0.875rem',
+                    display: 'block'
+                  }}>
+                    {industry}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        {/* Services */}
-        <div className="footer-section">
-          <h3>Services</h3>
-          <ul className="footer-links">
-            {services.map((service) => (
-              <li key={service.name}>
-                <Link href={service.href} className="footer-link">
-                  {service.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {/* Footer Bottom */}
+        <div style={{
+          borderTop: '1px solid var(--border)',
+          paddingTop: 'var(--space-6)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 'var(--space-4)',
+          maxWidth: '1000px',
+          margin: '0 auto'
+        }}>
+          <div style={{
+            color: 'var(--text-muted)',
+            fontSize: '0.875rem'
+          }}>
+            © 2025 TransformerLabs. Building the future with AI.
+          </div>
 
-        {/* Company & Resources Combined */}
-        <div className="footer-section">
-          <h3>Company</h3>
-          <ul className="footer-links">
-            {company.map((item) => (
-              <li key={item.name}>
-                <Link href={item.href} className="footer-link">
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          
-          <h3 style={{ marginTop: 'var(--space-6)', marginBottom: 'var(--space-4)' }}>
-            Resources
-          </h3>
-          <ul className="footer-links">
-            {resources.map((item) => (
-              <li key={item.name}>
-                <Link href={item.href} className="footer-link">
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      {/* Footer Bottom */}
-      <div className="footer-bottom">
-        <div className="footer-copyright">
-          © 2025 TransformerLabs. Building the future with AI.
-        </div>
-
-        <div className="social-links">
-          <a 
-            href="https://www.linkedin.com/company/transformer-labs" 
-            className="social-link"
-            aria-label="LinkedIn"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <svg className="social-icon" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-          </a>
-          
-          <a 
-            href="https://github.com/transformerlabs" 
-            className="social-link"
-            aria-label="GitHub"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <svg className="social-icon" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-          </a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
+            <a 
+              href="https://www.linkedin.com/company/transformer-labs" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="social-link"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '2rem',
+                height: '2rem',
+                borderRadius: 'var(--radius-md)',
+                backgroundColor: 'var(--surface)',
+                color: 'var(--text-secondary)',
+                textDecoration: 'none',
+                border: '1px solid var(--border)'
+              }}
+            >
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+            </a>
+            
+            <div style={{
+              fontSize: '0.875rem',
+              color: 'var(--text-muted)'
+            }}>
+              🏴󐁧󐁢󐁳󐁣󐁴󐁿 Scotland & 🇵🇸 Palestine
+            </div>
+          </div>
         </div>
       </div>
     </footer>
