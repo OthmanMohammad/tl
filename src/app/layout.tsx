@@ -1,4 +1,3 @@
-// src/app/layout.tsx - Clean Professional Layout
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
@@ -15,26 +14,20 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL('https://transformerlabs.io'),
   title: {
-    default: 'TransformerLabs - AI Development & Data Analytics Services',
+    default: 'TransformerLabs | AI Development & Consulting Services',
     template: '%s | TransformerLabs'
   },
-  description: 'We build AI solutions for businesses worldwide, specializing in MENA and Gulf markets - chatbots, data analytics, workflow automation, and generative AI applications.',
+  description: 'Professional AI development services for businesses worldwide. We build chatbots, data analytics, workflow automation, and custom AI solutions that deliver real results.',
   keywords: [
     'AI consulting',
-    'AI development services',
+    'AI development services', 
     'custom AI solutions',
-    'LLM integration',
-    'artificial intelligence consulting',
-    'machine learning development',
-    'AI strategy consulting',
+    'chatbot development',
+    'data analytics AI',
     'workflow automation',
-    'RAG systems',
-    'AI implementation',
-    'Middle East AI services',
-    'enterprise AI solutions',
-    'AI partnership',
-    'business intelligence',
-    'AI transformation'
+    'Scotland AI services',
+    'Palestine AI services',
+    'business AI solutions'
   ],
   authors: [{ name: 'Mohammad Othman', url: 'https://MohammadOthman.com' }],
   creator: 'TransformerLabs',
@@ -44,156 +37,38 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://transformerlabs.io',
     siteName: 'TransformerLabs',
-    title: 'TransformerLabs - AI Consulting & Development Services',
-    description: 'Professional AI consulting and development services for businesses across the Middle East. Custom AI solutions that deliver real results.',
+    title: 'TransformerLabs | Professional AI Development & Consulting',
+    description: 'We build practical AI solutions for businesses worldwide. From intelligent chatbots to advanced data analytics.',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'TransformerLabs - AI Consulting Services',
+        alt: 'TransformerLabs - AI Development Services',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'TransformerLabs - AI Consulting & Development Services',
-    description: 'Professional AI consulting and development services for businesses across the Middle East.',
-    images: ['/twitter-image.jpg'],
-    creator: '@transformerlabs',
+    title: 'TransformerLabs | AI Development Services',
+    description: 'Professional AI solutions that solve real business problems.',
+    images: ['/twitter-image.png'],
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
   },
-  verification: {
-    google: 'deSo6Vlgg1JO3UF_wLjJHmfMyImof4tpOf9B_ekRowI',
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
-  alternates: {
-    canonical: 'https://transformerlabs.io',
-  },
-  category: 'business',
-}
-
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'ProfessionalService',
-  name: 'TransformerLabs',
-  alternateName: 'Transformer Labs',
-  url: 'https://transformerlabs.io',
-  logo: 'https://transformerlabs.io/logo.png',
-  description: 'Professional AI consulting and development services for businesses across the Middle East.',
-  foundingDate: '2023-12',
-  founder: {
-    '@type': 'Person',
-    name: 'Mohammad Othman',
-    email: 'Mo@MohammadOthman.com',
-    jobTitle: 'CEO & AI Consultant',
-    url: 'https://MohammadOthman.com'
-  },
-  address: [
-    {
-      '@type': 'PostalAddress',
-      addressLocality: 'Nablus',
-      addressRegion: 'West Bank',
-      addressCountry: 'PS'
-    },
-    {
-      '@type': 'PostalAddress',
-      addressLocality: 'London',
-      addressCountry: 'GB'
-    }
-  ],
-  areaServed: [
-    {
-      '@type': 'Place',
-      name: 'Worldwide'
-    },
-    {
-      '@type': 'Place',
-      name: 'MENA Region'
-    },
-    {
-      '@type': 'Place',
-      name: 'Gulf States'
-    },
-    {
-      '@type': 'Country',
-      name: 'Palestine'
-    },
-    {
-      '@type': 'Country',
-      name: 'United Kingdom'
-    }
-  ],
-  serviceType: [
-    'AI Consulting',
-    'Custom AI Development',
-    'LLM Integration',
-    'Machine Learning Development',
-    'AI Strategy Consulting',
-    'Workflow Automation',
-    'RAG Systems Development',
-    'AI Implementation Services'
-  ],
-  hasOfferCatalog: {
-    '@type': 'OfferCatalog',
-    name: 'AI Services',
-    itemListElement: [
-      {
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Service',
-          name: 'AI Strategy & Consulting',
-          description: 'Comprehensive AI strategy development and consulting services'
-        }
-      },
-      {
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Service',
-          name: 'Custom AI Development',
-          description: 'Custom AI solutions development tailored to business needs'
-        }
-      },
-      {
-        '@type': 'Offer',
-        itemOffered: {
-          '@type': 'Service',
-          name: 'LLM Integration',
-          description: 'Large Language Model integration and customization services'
-        }
-      }
-    ]
-  },
-  contactPoint: {
-    '@type': 'ContactPoint',
-    contactType: 'Business',
-    email: 'Mo@MohammadOthman.com',
-    availableLanguage: ['English', 'Arabic']
-  },
-  sameAs: [
-    'https://www.linkedin.com/company/transformer-labs',
-    'https://twitter.com/transformerlabs',
-    'https://github.com/transformerlabs'
-  ],
-  knowsAbout: [
-    'Artificial Intelligence',
-    'Machine Learning',
-    'Large Language Models',
-    'Natural Language Processing',
-    'AI Strategy',
-    'Business Intelligence',
-    'Workflow Automation',
-    'Custom Software Development'
-  ]
+  manifest: '/site.webmanifest',
 }
 
 export default function RootLayout({
@@ -204,18 +79,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="manifest" href="/manifest.json" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#EB1600" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-        <meta name="format-detection" content="telephone=no" />
       </head>
       <body className={inter.className}>
         <Navigation />
