@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
+import CookieConsentBanner from '@/components/CookieConsentBanner'
+import Analytics from '@/components/Analytics'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -60,9 +62,7 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      // Use your existing logo SVG as favicon!
       { url: '/Logo_only_Transparent.svg', type: 'image/svg+xml' },
-      // Keep existing PNG fallbacks
       { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
       { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
       { url: '/favicon.ico', sizes: 'any' },
@@ -87,9 +87,15 @@ export default function RootLayout({
         <meta name="theme-color" content="#EB1600" />
       </head>
       <body className={inter.className}>
+        {/* Google Analytics - Only loads with user consent */}
+        <Analytics />
+        
         <Navigation />
         <main>{children}</main>
         <Footer />
+        
+        {/* TransformerLabs Cookie Consent Banner */}
+        <CookieConsentBanner />
       </body>
     </html>
   )
