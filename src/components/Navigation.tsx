@@ -218,16 +218,6 @@ export default function Navigation() {
                 )
               })}
             </nav>
-            
-            <div className="mobile-menu-footer">
-              <Link 
-                href="/contact" 
-                className="btn btn-primary btn-lg w-full"
-                onClick={handleLinkClick}
-              >
-                Get Started
-              </Link>
-            </div>
           </div>
         </div>
       )}
