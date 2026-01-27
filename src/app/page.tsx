@@ -23,9 +23,7 @@ export default function Home() {
             </h1>
 
             <p className="hero-subtitle">
-              We build AI-powered applications and custom software for businesses worldwide.
-              From intelligent chatbots to modern web platforms – technology
-              that delivers real results.
+              We build AI-powered applications, custom software, and modern websites for businesses worldwide. Practical solutions that deliver real results.
             </p>
 
             <div className="hero-buttons">
@@ -59,7 +57,7 @@ export default function Home() {
               },
               {
                 title: "Software Development",
-                description: "Custom web and mobile applications built with modern technologies. Scalable backends, APIs, and full-stack solutions tailored to your needs.",
+                description: "Custom web applications built with modern technologies. Scalable backends, APIs, and full-stack solutions tailored to your business needs.",
                 icon: <Code size={48} className="text-primary" />
               },
               {

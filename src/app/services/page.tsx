@@ -12,12 +12,14 @@ import {
   Lightbulb,
   CheckCircle,
   Clock,
-  Building2
+  Building2,
+  Globe,
+  Code
 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'AI Development Services - TransformerLabs',
-  description: 'Professional AI development services including chatbots, data analytics, workflow automation, and custom AI solutions. Clear pricing and reliable delivery.',
+  title: 'Services - TransformerLabs',
+  description: 'Professional AI development, software engineering, and web design services. Chatbots, data analytics, workflow automation, custom websites, and more.',
 }
 
 export default function Services() {
@@ -28,13 +30,11 @@ export default function Services() {
         <div className="container">
           <div className="hero-content">
             <h1>
-              AI Development Services
+              Our Services
             </h1>
-            
+
             <p className="hero-subtitle">
-              We build practical AI solutions that work reliably in real business environments. 
-              From intelligent chatbots to advanced data analytics, we handle the complexity 
-              so you can focus on growing your business.
+              We build AI solutions, custom software, and modern websites that work reliably in real business environments. We handle the complexity so you can focus on growing your business.
             </p>
             
             <div className="hero-buttons">
@@ -133,6 +133,34 @@ export default function Services() {
                   "Usage analytics and optimization"
                 ],
                 examples: "Marketing copy, product descriptions, social media content, technical documentation"
+              },
+              {
+                title: "Web Design & Development",
+                category: "WEB SOLUTIONS",
+                icon: <Globe size={48} className="text-primary" />,
+                description: "Professional websites and web applications that look great and perform even better. Responsive designs, fast loading times, and built for conversions.",
+                features: [
+                  "Custom website design tailored to your brand",
+                  "Responsive layouts for all devices",
+                  "SEO optimization and performance tuning",
+                  "Content management systems (CMS)",
+                  "E-commerce and booking integrations"
+                ],
+                examples: "Business websites, landing pages, portfolios, e-commerce stores, web applications"
+              },
+              {
+                title: "Software Development",
+                category: "CUSTOM SOFTWARE",
+                icon: <Code size={48} className="text-primary" />,
+                description: "Custom web applications built with modern technologies. Scalable backends, APIs, and full-stack solutions designed for your specific business requirements.",
+                features: [
+                  "Full-stack web application development",
+                  "REST and GraphQL API development",
+                  "Database design and optimization",
+                  "Third-party integrations and webhooks",
+                  "Cloud deployment and DevOps"
+                ],
+                examples: "Internal tools, customer portals, SaaS applications, API services, admin dashboards"
               },
               {
                 title: "Custom AI Solutions",
@@ -468,18 +496,16 @@ export default function Services() {
         <div className="container">
           <div className="cta-section">
             <h2 style={{ marginBottom: 'var(--space-6)' }}>
-              Ready to Build Your AI Solution?
+              Ready to Start Your Project?
             </h2>
-            <p style={{ 
-              fontSize: '1.125rem', 
-              color: 'var(--text-secondary)', 
+            <p style={{
+              fontSize: '1.125rem',
+              color: 'var(--text-secondary)',
               marginBottom: 'var(--space-8)',
               maxWidth: '700px',
               margin: '0 auto var(--space-8)'
             }}>
-              Let&apos;s discuss your project requirements. We&apos;ll provide honest feedback 
-              on what&apos;s possible, realistic timelines, and how AI can actually benefit 
-              your specific business situation.
+              Let&apos;s discuss your project requirements. We&apos;ll provide honest feedback on what&apos;s possible, realistic timelines, and how we can help your business.
             </p>
             
             <div className="flex gap-4 justify-center flex-wrap">
