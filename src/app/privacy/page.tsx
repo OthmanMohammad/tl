@@ -66,7 +66,7 @@ export default function PrivacyPolicy() {
               {/* Introduction */}
               <section>
                 <h2 style={{ marginBottom: 'var(--space-4)' }}>1. Introduction</h2>
-                <p>TransformerLabs ("we," "our," or "us") respects your privacy and is committed to protecting your personal data. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, use our services, or engage with us professionally.</p>
+                <p>TransformerLabs (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;) respects your privacy and is committed to protecting your personal data. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, use our services, or engage with us professionally.</p>
                 <p>This policy applies to all users of our website and clients of our AI development and software engineering services.</p>
               </section>
 
@@ -146,9 +146,9 @@ export default function PrivacyPolicy() {
                 <h3 style={{ fontSize: '1.25rem', marginTop: 'var(--space-6)', marginBottom: 'var(--space-3)' }}>3.4 Legal Basis for Processing</h3>
                 <p>We process your data based on:</p>
                 <ul style={{ marginLeft: 'var(--space-6)' }}>
-                  <li><strong>Contract Performance:</strong> To deliver services you've contracted for</li>
+                  <li><strong>Contract Performance:</strong> To deliver services you&apos;ve contracted for</li>
                   <li><strong>Legitimate Interest:</strong> To operate our business and improve services</li>
-                  <li><strong>Consent:</strong> Where you've explicitly agreed to specific uses</li>
+                  <li><strong>Consent:</strong> Where you&apos;ve explicitly agreed to specific uses</li>
                   <li><strong>Legal Obligation:</strong> To comply with applicable laws</li>
                 </ul>
               </section>
@@ -259,7 +259,7 @@ export default function PrivacyPolicy() {
                   <a href="mailto:Mo@MohammadOthman.com?subject=Data Protection Request" style={{ color: 'var(--primary)' }}>
                     Mo@MohammadOthman.com
                   </a>
-                  {' '}with "Data Protection Request" in the subject line.
+                  {' '}with &ldquo;Data Protection Request&rdquo; in the subject line.
                 </p>
               </section>
 
@@ -292,7 +292,7 @@ export default function PrivacyPolicy() {
 
               {/* Children's Privacy */}
               <section>
-                <h2 style={{ marginBottom: 'var(--space-4)' }}>10. Children's Privacy</h2>
+                <h2 style={{ marginBottom: 'var(--space-4)' }}>10. Children&apos;s Privacy</h2>
                 <p>Our services are not directed to individuals under 18 years of age. We do not knowingly collect personal information from children. If we become aware that we have collected personal data from a child, we will take steps to delete such information promptly.</p>
               </section>
 

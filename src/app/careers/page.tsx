@@ -1,10 +1,10 @@
 import { Metadata } from 'next'
-import { 
-  Code, 
-  Brain, 
-  Globe, 
-  Clock, 
-  Users, 
+import {
+  Code,
+  Brain,
+  Globe,
+  Clock,
+  Users,
   Lightbulb,
   Target,
   Zap,
@@ -12,7 +12,6 @@ import {
   CheckCircle,
   Mail,
   Send,
-  MapPin,
   Laptop,
   Calendar,
   TrendingUp
@@ -35,7 +34,7 @@ export default function Careers() {
             </h1>
             
             <p className="hero-subtitle">
-              We're building the future of AI applications for businesses worldwide. 
+              We&apos;re building the future of AI applications for businesses worldwide.
               Join a team that values expertise, creativity, and work-life balance.
             </p>
             
@@ -60,7 +59,7 @@ export default function Careers() {
           <div className="section-header">
             <h2 className="section-title">Why Work With Us</h2>
             <p className="section-subtitle">
-              We're not just building AI solutions – we're creating the future of how 
+              We&apos;re not just building AI solutions – we&apos;re creating the future of how
               businesses work, and we want the best people to help us get there.
             </p>
           </div>
@@ -240,7 +239,7 @@ export default function Careers() {
           <div className="section-header">
             <h2 className="section-title">Open Roles</h2>
             <p className="section-subtitle">
-              We're always looking for exceptional engineers to join our team
+              We&apos;re always looking for exceptional engineers to join our team
             </p>
           </div>
           
@@ -442,13 +441,13 @@ export default function Careers() {
               </div>
               
               <div style={{ marginBottom: 'var(--space-6)' }}>
-                <p style={{ 
-                  color: 'var(--text-secondary)', 
+                <p style={{
+                  color: 'var(--text-secondary)',
                   marginBottom: 'var(--space-4)',
                   fontSize: '1.125rem',
                   lineHeight: 1.6
                 }}>
-                  We'd love to hear from you! Send us an email with:
+                  We&apos;d love to hear from you! Send us an email with:
                 </p>
                 
                 <ul style={{ 
@@ -546,18 +545,18 @@ export default function Careers() {
         <div className="container">
           <div className="cta-section">
             <h2 style={{ marginBottom: 'var(--space-6)' }}>
-              Don't See Your Role?
+              Don&apos;t See Your Role?
             </h2>
-            <p style={{ 
-              fontSize: '1.125rem', 
-              color: 'var(--text-secondary)', 
+            <p style={{
+              fontSize: '1.125rem',
+              color: 'var(--text-secondary)',
               marginBottom: 'var(--space-8)',
               maxWidth: '600px',
               margin: '0 auto var(--space-8)'
             }}>
-              We're always interested in hearing from exceptional engineers, even if 
-              we don't have an open position that matches your background exactly. 
-              Send us your details and we'll keep you in mind for future opportunities.
+              We&apos;re always interested in hearing from exceptional engineers, even if
+              we don&apos;t have an open position that matches your background exactly.
+              Send us your details and we&apos;ll keep you in mind for future opportunities.
             </p>
             
             <div className="flex justify-center">

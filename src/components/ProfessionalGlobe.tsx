@@ -13,11 +13,11 @@ interface Office {
 }
 
 const ProfessionalGlobe: React.FC = () => {
-  const [animateGlobe, setAnimateGlobe] = useState(false);
   const [hoveredOffice, setHoveredOffice] = useState<string | null>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => setAnimateGlobe(true), 300);
+    // Animation trigger for entrance effects
+    const timer = setTimeout(() => {}, 300);
     return () => clearTimeout(timer);
   }, []);
 

@@ -1,16 +1,15 @@
 import Link from 'next/link'
 import { Metadata } from 'next'
-import { 
-  Bot, 
-  BarChart3, 
-  FileText, 
-  Zap, 
-  Sparkles, 
+import {
+  Bot,
+  BarChart3,
+  FileText,
+  Zap,
+  Sparkles,
   Settings,
   ClipboardList,
   Handshake,
   Lightbulb,
-  Shield,
   CheckCircle,
   Clock,
   Building2

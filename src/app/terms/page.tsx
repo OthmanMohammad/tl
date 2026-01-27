@@ -91,12 +91,12 @@ export default function TermsOfService() {
                 <h2 style={{ marginBottom: 'var(--space-4)' }}>2. Definitions</h2>
                 <p>In these Terms of Service:</p>
                 <ul style={{ marginLeft: 'var(--space-6)' }}>
-                  <li><strong>"Company," "we," "us," "our"</strong> refers to TransformerLabs</li>
-                  <li><strong>"Client," "you," "your"</strong> refers to the individual or entity engaging our services</li>
-                  <li><strong>"Services"</strong> refers to AI development, software engineering, consulting, and related professional services</li>
-                  <li><strong>"Deliverables"</strong> refers to work products, code, documentation, and other materials created for you</li>
-                  <li><strong>"Agreement"</strong> refers to these Terms plus any project-specific contracts or statements of work</li>
-                  <li><strong>"Confidential Information"</strong> refers to non-public information disclosed by either party</li>
+                  <li><strong>&ldquo;Company,&rdquo; &ldquo;we,&rdquo; &ldquo;us,&rdquo; &ldquo;our&rdquo;</strong> refers to TransformerLabs</li>
+                  <li><strong>&ldquo;Client,&rdquo; &ldquo;you,&rdquo; &ldquo;your&rdquo;</strong> refers to the individual or entity engaging our services</li>
+                  <li><strong>&ldquo;Services&rdquo;</strong> refers to AI development, software engineering, consulting, and related professional services</li>
+                  <li><strong>&ldquo;Deliverables&rdquo;</strong> refers to work products, code, documentation, and other materials created for you</li>
+                  <li><strong>&ldquo;Agreement&rdquo;</strong> refers to these Terms plus any project-specific contracts or statements of work</li>
+                  <li><strong>&ldquo;Confidential Information&rdquo;</strong> refers to non-public information disclosed by either party</li>
                 </ul>
               </section>
 
@@ -215,7 +215,7 @@ export default function TermsOfService() {
                 </ul>
 
                 <h3 style={{ fontSize: '1.25rem', marginTop: 'var(--space-6)', marginBottom: 'var(--space-3)' }}>5.3 Third-Party Rights</h3>
-                <p>We ensure our deliverables don't infringe third-party rights, but you're responsible for:</p>
+                <p>We ensure our deliverables don&apos;t infringe third-party rights, but you&apos;re responsible for:</p>
                 <ul style={{ marginLeft: 'var(--space-6)' }}>
                   <li>Content and data you provide</li>
                   <li>Third-party services and APIs you choose to integrate</li>
@@ -267,8 +267,8 @@ export default function TermsOfService() {
                     color: 'var(--text-primary)',
                     margin: 0
                   }}>
-                    EXCEPT AS EXPRESSLY STATED, WE PROVIDE SERVICES "AS IS" WITHOUT WARRANTIES OF ANY KIND. 
-                    WE DISCLAIM ALL IMPLIED WARRANTIES INCLUDING MERCHANTABILITY, FITNESS FOR PURPOSE, AND NON-INFRINGEMENT. 
+                    EXCEPT AS EXPRESSLY STATED, WE PROVIDE SERVICES &ldquo;AS IS&rdquo; WITHOUT WARRANTIES OF ANY KIND. 
+                    WE DISCLAIM ALL IMPLIED WARRANTIES INCLUDING MERCHANTABILITY, FITNESS FOR PURPOSE, AND NON-INFRINGEMENT.
                     WE DO NOT WARRANT THAT SERVICES WILL BE UNINTERRUPTED, ERROR-FREE, OR MEET ALL YOUR REQUIREMENTS.
                   </p>
                 </div>
@@ -314,7 +314,7 @@ export default function TermsOfService() {
                 </div>
 
                 <h3 style={{ fontSize: '1.25rem', marginTop: 'var(--space-6)', marginBottom: 'var(--space-3)' }}>7.3 Exceptions</h3>
-                <p>These limitations don't apply to:</p>
+                <p>These limitations don&apos;t apply to:</p>
                 <ul style={{ marginLeft: 'var(--space-6)' }}>
                   <li>Our breach of confidentiality obligations</li>
                   <li>Intentional misconduct or gross negligence</li>
@@ -337,7 +337,7 @@ export default function TermsOfService() {
                 </ul>
 
                 <h3 style={{ fontSize: '1.25rem', marginTop: 'var(--space-6)', marginBottom: 'var(--space-3)' }}>8.2 Exceptions</h3>
-                <p>Confidentiality obligations don't apply to information that:</p>
+                <p>Confidentiality obligations don&apos;t apply to information that:</p>
                 <ul style={{ marginLeft: 'var(--space-6)' }}>
                   <li>Is publicly available or becomes public through no breach</li>
                   <li>Was known before disclosure</li>
@@ -351,7 +351,7 @@ export default function TermsOfService() {
                 <h2 style={{ marginBottom: 'var(--space-4)' }}>9. Termination</h2>
 
                 <h3 style={{ fontSize: '1.25rem', marginTop: 'var(--space-6)', marginBottom: 'var(--space-3)' }}>9.1 Termination for Convenience</h3>
-                <p>Either party may terminate with 30 days' written notice. You will pay for:</p>
+                <p>Either party may terminate with 30 days&apos; written notice. You will pay for:</p>
                 <ul style={{ marginLeft: 'var(--space-6)', marginBottom: 'var(--space-4)' }}>
                   <li>All work completed before termination</li>
                   <li>Costs incurred for ongoing work</li>
@@ -464,7 +464,7 @@ export default function TermsOfService() {
                 <p>You may not assign these terms without our written consent. We may assign to affiliates or in connection with business transfers.</p>
 
                 <h3 style={{ fontSize: '1.25rem', marginTop: 'var(--space-6)', marginBottom: 'var(--space-3)' }}>13.5 Independent Contractors</h3>
-                <p>We are independent contractors. These terms don't create partnership, joint venture, or agency relationships.</p>
+                <p>We are independent contractors. These terms don&apos;t create partnership, joint venture, or agency relationships.</p>
 
                 <h3 style={{ fontSize: '1.25rem', marginTop: 'var(--space-6)', marginBottom: 'var(--space-3)' }}>13.6 Notices</h3>
                 <p>Legal notices must be sent via email to <a href="mailto:Mo@MohammadOthman.com" style={{ color: 'var(--primary)' }}>Mo@MohammadOthman.com</a> and are effective upon receipt acknowledgment.</p>

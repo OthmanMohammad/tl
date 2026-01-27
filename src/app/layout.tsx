@@ -1,17 +1,9 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import CookieConsentBanner from '@/components/CookieConsentBanner'
 import Analytics from '@/components/Analytics'
-
-const inter = Inter({ 
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-  preload: true
-})
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://transformerlabs.io'),
@@ -61,16 +53,9 @@ export const metadata: Metadata = {
     follow: true,
   },
   icons: {
-    icon: [
-      { url: '/Logo_only_Transparent.svg', type: 'image/svg+xml' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon.ico', sizes: 'any' },
-    ],
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
-    shortcut: '/favicon.ico',
+    icon: { url: '/Logo_only_Transparent.svg', type: 'image/svg+xml' },
+    apple: { url: '/Logo_only_Transparent.svg', type: 'image/svg+xml' },
+    shortcut: '/Logo_only_Transparent.svg',
   },
   manifest: '/site.webmanifest',
 }
@@ -81,12 +66,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#EB1600" />
       </head>
-      <body className={inter.className}>
+      <body>
         {/* Google Analytics - Only loads with user consent */}
         <Analytics />
         

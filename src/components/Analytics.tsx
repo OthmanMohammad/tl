@@ -100,7 +100,7 @@ export default function Analytics() {
 }
 
 // Utility functions for tracking TransformerLabs events
-export const trackEvent = (eventName: string, parameters?: Record<string, any>) => {
+export const trackEvent = (eventName: string, parameters?: Record<string, string | number | boolean>) => {
   if (typeof window !== 'undefined' && window.gtag) {
     const cookieManager = CookieManager.getInstance()
     const preferences = cookieManager.getPreferences()
@@ -135,7 +135,7 @@ export const trackServicePageView = (serviceName: string) => {
 export const trackDownload = (downloadType: string, fileName?: string) => {
   trackEvent('file_download', {
     download_type: downloadType,
-    file_name: fileName,
+    ...(fileName && { file_name: fileName }),
     category: 'engagement'
   })
 }

@@ -331,8 +331,8 @@ export default function Footer() {
             </Link>
             
             <p className="footer-description" style={styles.description}>
-              AI solutions that solve real business problems. We build practical 
-              applications for businesses worldwide.
+              AI-powered software and web solutions that solve real business problems.
+              We build practical applications for businesses worldwide.
             </p>
           </div>
 
@@ -415,7 +415,7 @@ export default function Footer() {
             </div>
             
             <p className="footer-copyright-text" style={styles.copyrightText}>
-              © 2025 TransformerLabs. Building the future with AI.
+              © 2026 TransformerLabs. Building the future with AI.
             </p>
           </div>
         </div>

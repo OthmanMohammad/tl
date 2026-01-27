@@ -146,8 +146,8 @@ export class CookieManager {
 
         // Initialize gtag
         window.dataLayer = window.dataLayer || []
-        function gtag(...args: any[]) {
-          window.dataLayer.push(args)
+        function gtag(command: string, ...args: (string | Date | GtagParams)[]) {
+          window.dataLayer.push([command, ...args])
         }
         window.gtag = gtag
 
@@ -197,11 +197,14 @@ export class CookieManager {
   }
 }
 
+// Gtag parameter types
+type GtagParams = Record<string, string | number | boolean | undefined>
+
 // Global type declarations
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void
-    dataLayer: any[]
+    gtag: (command: string, ...args: (string | Date | GtagParams)[]) => void
+    dataLayer: unknown[][]
   }
 }
 

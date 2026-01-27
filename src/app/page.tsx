@@ -1,14 +1,14 @@
 import Link from 'next/link'
-import { 
-  Bot, 
-  BarChart3, 
-  Zap, 
-  FileText, 
-  Search, 
+import {
+  Bot,
+  BarChart3,
+  Zap,
+  Code,
+  Globe,
   Settings,
   Target,
   RotateCcw,
-  Award
+  Sparkles
 } from 'lucide-react'
 
 export default function Home() {
@@ -19,13 +19,13 @@ export default function Home() {
         <div className="container">
           <div className="hero-content">
             <h1>
-              AI Solutions That Actually Work
+              Technology Solutions That Actually Work
             </h1>
-            
+
             <p className="hero-subtitle">
-              We build practical AI applications for businesses worldwide. 
-              Chatbots, data analytics, workflow automation, and custom solutions 
-              that deliver real results.
+              We build AI-powered applications and custom software for businesses worldwide.
+              From intelligent chatbots to modern web platforms – technology
+              that delivers real results.
             </p>
 
             <div className="hero-buttons">
@@ -58,7 +58,17 @@ export default function Home() {
                 icon: <Bot size={48} className="text-primary" />
               },
               {
-                title: "Data Analytics & Insights", 
+                title: "Software Development",
+                description: "Custom web and mobile applications built with modern technologies. Scalable backends, APIs, and full-stack solutions tailored to your needs.",
+                icon: <Code size={48} className="text-primary" />
+              },
+              {
+                title: "Web Design & Development",
+                description: "Professional websites and web applications that look great and perform even better. Responsive, fast, and built for conversions.",
+                icon: <Globe size={48} className="text-primary" />
+              },
+              {
+                title: "Data Analytics & Insights",
                 description: "Transform your business data into actionable insights with automated reporting, predictive analytics, and intelligent dashboards.",
                 icon: <BarChart3 size={48} className="text-primary" />
               },
@@ -66,16 +76,6 @@ export default function Home() {
                 title: "Workflow Automation",
                 description: "Streamline business processes with intelligent automation that handles repetitive tasks and complex decision-making workflows.",
                 icon: <Zap size={48} className="text-primary" />
-              },
-              {
-                title: "Document Processing",
-                description: "AI that reads, understands, and extracts insights from documents, contracts, and reports automatically.",
-                icon: <FileText size={48} className="text-primary" />
-              },
-              {
-                title: "Knowledge Systems",
-                description: "Searchable AI systems that provide instant answers from your company&apos;s knowledge base and documentation.",
-                icon: <Search size={48} className="text-primary" />
               },
               {
                 title: "Custom AI Solutions",
@@ -112,18 +112,18 @@ export default function Home() {
           <div className="grid-3">
             {[
               {
-                title: "Proven Results",
-                description: "Track record of successful AI implementations across multiple industries with measurable business impact.",
-                icon: <Award size={48} className="text-primary" />
+                title: "Quality-First Approach",
+                description: "We build solutions that last. Clean code, modern architecture, and thorough testing ensure your investment pays off.",
+                icon: <Sparkles size={48} className="text-primary" />
               },
               {
-                title: "Business-First Approach",
-                description: "We focus on solving real business problems, not just implementing cool technology.",
+                title: "Business-Focused",
+                description: "We focus on solving real business problems, not just implementing cool technology. Your goals drive our solutions.",
                 icon: <Target size={48} className="text-primary" />
               },
               {
                 title: "End-to-End Service",
-                description: "From strategy and development to deployment and ongoing support - we handle everything.",
+                description: "From strategy and development to deployment and ongoing support – we handle everything so you can focus on your business.",
                 icon: <RotateCcw size={48} className="text-primary" />
               }
             ].map((feature, index) => (
