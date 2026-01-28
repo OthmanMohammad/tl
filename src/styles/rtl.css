@@ -1,0 +1,400 @@
+/* =================================================================
+   RTL (Right-to-Left) Support for Arabic
+   Enterprise-grade i18n implementation
+   ================================================================= */
+
+/* =====================================================
+   Language Switcher Styles
+   ===================================================== */
+
+.language-switcher {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  transition: all var(--duration-fast) var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.language-switcher:hover {
+  background: var(--background);
+  border-color: var(--primary);
+  color: var(--text-primary);
+}
+
+.language-switcher:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.language-switcher:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Desktop nav right side */
+.nav-right-desktop {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* Mobile language switcher in footer */
+.mobile-menu-footer .language-switcher {
+  width: 100%;
+  justify-content: center;
+}
+
+/* =====================================================
+   RTL Base Rules
+   Using CSS Logical Properties for automatic RTL support
+   ===================================================== */
+
+/* Direction attribute on body */
+body.rtl,
+html[dir="rtl"] body {
+  direction: rtl;
+  text-align: right;
+}
+
+body.ltr,
+html[dir="ltr"] body {
+  direction: ltr;
+  text-align: left;
+}
+
+/* =====================================================
+   RTL Typography
+   ===================================================== */
+
+[dir="rtl"] {
+  /* Font adjustments for Arabic */
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6 {
+  text-align: right;
+  letter-spacing: 0; /* Arabic doesn't use letter-spacing */
+}
+
+[dir="rtl"] p,
+[dir="rtl"] li,
+[dir="rtl"] span {
+  text-align: right;
+}
+
+/* Center-aligned elements stay centered in both directions */
+[dir="rtl"] .text-center,
+[dir="rtl"] .hero-content,
+[dir="rtl"] .section-header,
+[dir="rtl"] .cta-section {
+  text-align: center;
+}
+
+/* =====================================================
+   RTL Navigation
+   ===================================================== */
+
+[dir="rtl"] .nav-container {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .nav-links-desktop {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .nav-right-desktop {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .nav-link::after {
+  /* Underline animation works same in RTL */
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Mobile menu RTL */
+[dir="rtl"] .mobile-menu-header {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .mobile-menu-logo {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .mobile-menu-nav {
+  text-align: right;
+}
+
+/* =====================================================
+   RTL Layout & Grid
+   ===================================================== */
+
+[dir="rtl"] .grid-2,
+[dir="rtl"] .grid-3,
+[dir="rtl"] .grid-4 {
+  /* Grid items flow RTL automatically in RTL documents */
+  direction: rtl;
+}
+
+/* Flex containers that need RTL reversal */
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+/* Card content RTL */
+[dir="rtl"] .card {
+  text-align: right;
+}
+
+[dir="rtl"] .card-content {
+  text-align: right;
+}
+
+/* =====================================================
+   RTL Icons & Elements with Directional Meaning
+   ===================================================== */
+
+/* Flip icons that have directional meaning */
+[dir="rtl"] .icon-arrow-right,
+[dir="rtl"] .icon-chevron-right,
+[dir="rtl"] .icon-arrow-left,
+[dir="rtl"] .icon-chevron-left {
+  transform: scaleX(-1);
+}
+
+/* Don't flip these - they're universal */
+[dir="rtl"] .icon-check,
+[dir="rtl"] .icon-close,
+[dir="rtl"] .icon-menu,
+[dir="rtl"] .icon-globe {
+  transform: none;
+}
+
+/* List item markers */
+[dir="rtl"] ul {
+  padding-right: var(--space-6);
+  padding-left: 0;
+}
+
+[dir="rtl"] ol {
+  padding-right: var(--space-6);
+  padding-left: 0;
+}
+
+/* =====================================================
+   RTL Form Elements
+   ===================================================== */
+
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] select {
+  text-align: right;
+}
+
+[dir="rtl"] input[type="email"],
+[dir="rtl"] input[type="url"] {
+  /* Keep LTR for email and URLs */
+  direction: ltr;
+  text-align: left;
+}
+
+/* =====================================================
+   RTL Buttons
+   ===================================================== */
+
+[dir="rtl"] .btn {
+  /* Buttons with icons need flex-direction reversed */
+}
+
+[dir="rtl"] .btn svg {
+  margin-left: var(--space-2);
+  margin-right: 0;
+}
+
+/* =====================================================
+   RTL Footer
+   ===================================================== */
+
+[dir="rtl"] .footer-main-content {
+  direction: rtl;
+}
+
+[dir="rtl"] .footer-brand-section {
+  text-align: center;
+}
+
+[dir="rtl"] .footer-nav-list {
+  text-align: center;
+}
+
+[dir="rtl"] .footer-offices-list {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .footer-office-location {
+  flex-direction: row-reverse;
+}
+
+/* =====================================================
+   RTL Spacing Utilities (Logical Properties)
+   ===================================================== */
+
+/* These use CSS logical properties for automatic RTL */
+.ms-auto { margin-inline-start: auto; }
+.me-auto { margin-inline-end: auto; }
+.ps-0 { padding-inline-start: 0; }
+.pe-0 { padding-inline-end: 0; }
+.ms-2 { margin-inline-start: var(--space-2); }
+.me-2 { margin-inline-end: var(--space-2); }
+.ms-4 { margin-inline-start: var(--space-4); }
+.me-4 { margin-inline-end: var(--space-4); }
+.ps-4 { padding-inline-start: var(--space-4); }
+.pe-4 { padding-inline-end: var(--space-4); }
+
+/* =====================================================
+   RTL Border Utilities
+   ===================================================== */
+
+.border-start { border-inline-start: 1px solid var(--border); }
+.border-end { border-inline-end: 1px solid var(--border); }
+
+/* =====================================================
+   RTL Position Utilities
+   ===================================================== */
+
+.start-0 { inset-inline-start: 0; }
+.end-0 { inset-inline-end: 0; }
+
+/* =====================================================
+   RTL Contact Page Specifics
+   ===================================================== */
+
+[dir="rtl"] .contact-item {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .office-card {
+  text-align: right;
+}
+
+/* =====================================================
+   RTL Legal Pages (Privacy, Terms)
+   ===================================================== */
+
+[dir="rtl"] .legal-content ul,
+[dir="rtl"] .legal-content ol {
+  padding-right: var(--space-6);
+  padding-left: 0;
+}
+
+[dir="rtl"] .legal-section {
+  text-align: right;
+}
+
+/* =====================================================
+   RTL Careers Page
+   ===================================================== */
+
+[dir="rtl"] .role-requirements li,
+[dir="rtl"] .role-bonus li {
+  flex-direction: row-reverse;
+}
+
+/* =====================================================
+   RTL Services Page
+   ===================================================== */
+
+[dir="rtl"] .service-features li {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+[dir="rtl"] .process-step {
+  text-align: right;
+}
+
+/* =====================================================
+   RTL About Page
+   ===================================================== */
+
+[dir="rtl"] .leadership-section {
+  text-align: right;
+}
+
+/* =====================================================
+   RTL Responsive Overrides
+   ===================================================== */
+
+@media (max-width: 768px) {
+  [dir="rtl"] .nav-container {
+    flex-direction: row-reverse;
+  }
+
+  [dir="rtl"] .mobile-menu-portal {
+    text-align: right;
+  }
+
+  [dir="rtl"] .footer-nav-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* =====================================================
+   RTL Animations
+   Flip horizontal animations for RTL
+   ===================================================== */
+
+[dir="rtl"] .slide-in-left {
+  animation: slideInRight 0.3s ease-out;
+}
+
+[dir="rtl"] .slide-in-right {
+  animation: slideInLeft 0.3s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* =====================================================
+   Print Styles for RTL
+   ===================================================== */
+
+@media print {
+  [dir="rtl"] {
+    direction: rtl;
+  }
+}

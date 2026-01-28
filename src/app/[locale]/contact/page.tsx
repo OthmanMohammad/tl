@@ -1,8 +1,8 @@
-import { Metadata } from 'next'
-import { 
-  Mail, 
-  MapPin, 
-  Clock, 
+import { getTranslations, setRequestLocale } from 'next-intl/server'
+import {
+  Mail,
+  MapPin,
+  Clock,
   Zap,
   ClipboardList,
   FileText,
@@ -14,12 +14,102 @@ import {
   Linkedin
 } from 'lucide-react'
 
-export const metadata: Metadata = {
-  title: 'Contact TransformerLabs',
-  description: 'Get in touch with TransformerLabs for AI development projects, partnerships, or consulting. Based in Aberdeen, Scotland and Nablus, Palestine, serving clients worldwide.',
+type Props = {
+  params: Promise<{ locale: string }>
 }
 
-export default function Contact() {
+export async function generateMetadata({ params }: Props) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'contact' })
+
+  return {
+    title: t('meta.title'),
+    description: t('meta.description'),
+  }
+}
+
+export default async function Contact({ params }: Props) {
+  const { locale } = await params
+  setRequestLocale(locale)
+
+  const t = await getTranslations('contact')
+  const tCommon = await getTranslations('common')
+
+  const inquiryItems = [
+    {
+      title: t('inquiry.projectOverview.title'),
+      description: t('inquiry.projectOverview.description'),
+      icon: <ClipboardList size={20} className="text-primary" />
+    },
+    {
+      title: t('inquiry.currentSituation.title'),
+      description: t('inquiry.currentSituation.description'),
+      icon: <FileText size={20} className="text-primary" />
+    },
+    {
+      title: t('inquiry.timeline.title'),
+      description: t('inquiry.timeline.description'),
+      icon: <Clock size={20} className="text-primary" />
+    },
+    {
+      title: t('inquiry.budget.title'),
+      description: t('inquiry.budget.description'),
+      icon: <DollarSign size={20} className="text-primary" />
+    },
+    {
+      title: t('inquiry.companyInfo.title'),
+      description: t('inquiry.companyInfo.description'),
+      icon: <Building2 size={20} className="text-primary" />
+    }
+  ]
+
+  const workTypes = [
+    {
+      type: t('workTypes.fixedProjects.type'),
+      title: t('workTypes.fixedProjects.title'),
+      description: t('workTypes.fixedProjects.description'),
+      examples: t.raw('workTypes.fixedProjects.examples') as string[],
+      icon: <ClipboardList size={32} className="text-primary" />
+    },
+    {
+      type: t('workTypes.ongoing.type'),
+      title: t('workTypes.ongoing.title'),
+      description: t('workTypes.ongoing.description'),
+      examples: t.raw('workTypes.ongoing.examples') as string[],
+      icon: <Handshake size={32} className="text-primary" />
+    },
+    {
+      type: t('workTypes.consulting.type'),
+      title: t('workTypes.consulting.title'),
+      description: t('workTypes.consulting.description'),
+      examples: t.raw('workTypes.consulting.examples') as string[],
+      icon: <Lightbulb size={32} className="text-primary" />
+    }
+  ]
+
+  const faqs = [
+    {
+      question: t('faq.q1.question'),
+      answer: t('faq.q1.answer')
+    },
+    {
+      question: t('faq.q2.question'),
+      answer: t('faq.q2.answer')
+    },
+    {
+      question: t('faq.q3.question'),
+      answer: t('faq.q3.answer')
+    },
+    {
+      question: t('faq.q4.question'),
+      answer: t('faq.q4.answer')
+    },
+    {
+      question: t('faq.q5.question'),
+      answer: t('faq.q5.answer')
+    }
+  ]
+
   return (
     <main>
       {/* Hero Section */}
@@ -27,11 +117,11 @@ export default function Contact() {
         <div className="container">
           <div className="hero-content">
             <h1>
-              Get in Touch
+              {t('hero.title')}
             </h1>
-            
+
             <p className="hero-subtitle">
-              Ready to discuss your AI project? We respond to all inquiries within 24 hours.
+              {t('hero.subtitle')}
             </p>
           </div>
         </div>
@@ -44,14 +134,14 @@ export default function Contact() {
             {/* Contact Information */}
             <div>
               <h2 style={{ marginBottom: 'var(--space-8)' }}>
-                Contact Information
+                {t('info.title')}
               </h2>
-              
+
               <div className="space-y-6">
                 <div>
-                  <h3 style={{ 
-                    fontSize: '1.125rem', 
-                    fontWeight: '600', 
+                  <h3 style={{
+                    fontSize: '1.125rem',
+                    fontWeight: '600',
                     marginBottom: 'var(--space-3)',
                     color: 'var(--text-primary)',
                     display: 'flex',
@@ -59,9 +149,9 @@ export default function Contact() {
                     gap: 'var(--space-2)'
                   }}>
                     <Mail size={20} className="text-primary" />
-                    Email
+                    {t('info.email')}
                   </h3>
-                  <a 
+                  <a
                     href="mailto:Mo@MohammadOthman.com"
                     style={{
                       fontSize: '1.125rem',
@@ -74,19 +164,19 @@ export default function Contact() {
                   >
                     Mo@MohammadOthman.com
                   </a>
-                  <p style={{ 
-                    fontSize: '0.875rem', 
+                  <p style={{
+                    fontSize: '0.875rem',
                     color: 'var(--text-secondary)',
                     marginTop: 'var(--space-2)'
                   }}>
-                    Best for project inquiries and detailed discussions
+                    {t('info.emailDescription')}
                   </p>
                 </div>
 
                 <div>
-                  <h3 style={{ 
-                    fontSize: '1.125rem', 
-                    fontWeight: '600', 
+                  <h3 style={{
+                    fontSize: '1.125rem',
+                    fontWeight: '600',
                     marginBottom: 'var(--space-3)',
                     color: 'var(--text-primary)',
                     display: 'flex',
@@ -94,9 +184,9 @@ export default function Contact() {
                     gap: 'var(--space-2)'
                   }}>
                     <Linkedin size={20} className="text-primary" />
-                    LinkedIn
+                    {t('info.linkedIn')}
                   </h3>
-                  <a 
+                  <a
                     href="https://www.linkedin.com/company/transformer-labs"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -106,25 +196,25 @@ export default function Contact() {
                       textDecoration: 'none'
                     }}
                   >
-                    TransformerLabs Company Page
+                    {t('info.linkedInPage')}
                   </a>
-                  <p style={{ 
-                    fontSize: '0.875rem', 
+                  <p style={{
+                    fontSize: '0.875rem',
                     color: 'var(--text-secondary)',
                     marginTop: 'var(--space-2)'
                   }}>
-                    Connect with us professionally
+                    {t('info.linkedInDescription')}
                   </p>
                 </div>
 
                 <div>
-                  <h3 style={{ 
-                    fontSize: '1.125rem', 
-                    fontWeight: '600', 
+                  <h3 style={{
+                    fontSize: '1.125rem',
+                    fontWeight: '600',
                     marginBottom: 'var(--space-3)',
                     color: 'var(--text-primary)'
                   }}>
-                    Our Offices
+                    {t('info.offices')}
                   </h3>
                   <div className="space-y-4">
                     <div style={{
@@ -133,64 +223,62 @@ export default function Contact() {
                       borderRadius: 'var(--radius-lg)',
                       border: '1px solid var(--border)'
                     }}>
-                      <div style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
                         gap: 'var(--space-2)',
-                        marginBottom: 'var(--space-2)' 
+                        marginBottom: 'var(--space-2)'
                       }}>
                         <MapPin size={20} className="text-primary" />
                         <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>
-                          Scotland Office
+                          {t('info.scotlandOffice')}
                         </span>
                       </div>
                       <div style={{ color: 'var(--text-secondary)' }}>
-                        Aberdeen, Scotland<br />
-                        United Kingdom
+                        {t('info.scotlandAddress')}
                       </div>
                     </div>
-                    
+
                     <div style={{
                       padding: 'var(--space-4)',
                       backgroundColor: 'var(--surface)',
                       borderRadius: 'var(--radius-lg)',
                       border: '1px solid var(--border)'
                     }}>
-                      <div style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
                         gap: 'var(--space-2)',
-                        marginBottom: 'var(--space-2)' 
+                        marginBottom: 'var(--space-2)'
                       }}>
                         <MapPin size={20} className="text-primary" />
                         <span style={{ fontWeight: '600', color: 'var(--text-primary)' }}>
-                          Palestine Office
+                          {t('info.palestineOffice')}
                         </span>
                       </div>
                       <div style={{ color: 'var(--text-secondary)' }}>
-                        Nablus, West Bank<br />
-                        Palestine
+                        {t('info.palestineAddress')}
                       </div>
                     </div>
                   </div>
-                  <p style={{ 
-                    fontSize: '0.875rem', 
+                  <p style={{
+                    fontSize: '0.875rem',
                     color: 'var(--text-muted)',
                     marginTop: 'var(--space-3)',
                     fontStyle: 'italic'
                   }}>
-                    Serving clients worldwide from our offices in Scotland and Palestine
+                    {t('info.servingClients')}
                   </p>
                 </div>
 
                 <div>
-                  <h3 style={{ 
-                    fontSize: '1.125rem', 
-                    fontWeight: '600', 
+                  <h3 style={{
+                    fontSize: '1.125rem',
+                    fontWeight: '600',
                     marginBottom: 'var(--space-3)',
                     color: 'var(--text-primary)'
                   }}>
-                    Response Time
+                    {t('info.responseTime')}
                   </h3>
                   <div style={{
                     display: 'flex',
@@ -214,10 +302,10 @@ export default function Contact() {
                     </div>
                     <div>
                       <div style={{ fontWeight: '600', color: 'var(--text-primary)' }}>
-                        24-Hour Response Guarantee
+                        {t('info.responseGuarantee')}
                       </div>
                       <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                        We respond to all project inquiries within 24 hours
+                        {t('info.responseDescription')}
                       </div>
                     </div>
                   </div>
@@ -228,52 +316,26 @@ export default function Contact() {
             {/* Project Inquiry Guide */}
             <div>
               <h2 style={{ marginBottom: 'var(--space-8)' }}>
-                Project Inquiries
+                {t('inquiry.title')}
               </h2>
-              
+
               <div style={{
                 backgroundColor: 'var(--surface)',
                 border: '1px solid var(--border)',
                 borderRadius: 'var(--radius-xl)',
                 padding: 'var(--space-8)'
               }}>
-                <h3 style={{ 
-                  fontSize: '1.25rem', 
-                  fontWeight: '600', 
+                <h3 style={{
+                  fontSize: '1.25rem',
+                  fontWeight: '600',
                   marginBottom: 'var(--space-6)',
                   color: 'var(--text-primary)'
                 }}>
-                  What to Include in Your Message
+                  {t('inquiry.whatToInclude')}
                 </h3>
-                
+
                 <div className="space-y-6">
-                  {[
-                    {
-                      title: "Project Overview",
-                      description: "Brief description of what you're looking to build or achieve",
-                      icon: <ClipboardList size={20} className="text-primary" />
-                    },
-                    {
-                      title: "Current Situation", 
-                      description: "What systems or processes you currently have in place",
-                      icon: <FileText size={20} className="text-primary" />
-                    },
-                    {
-                      title: "Timeline",
-                      description: "When you'd like to start and any important deadlines",
-                      icon: <Clock size={20} className="text-primary" />
-                    },
-                    {
-                      title: "Budget Range",
-                      description: "Approximate budget or budget range for the project",
-                      icon: <DollarSign size={20} className="text-primary" />
-                    },
-                    {
-                      title: "Company Information",
-                      description: "Brief info about your company and industry",
-                      icon: <Building2 size={20} className="text-primary" />
-                    }
-                  ].map((item, index) => (
+                  {inquiryItems.map((item, index) => (
                     <div key={index} style={{
                       display: 'flex',
                       gap: 'var(--space-3)',
@@ -283,16 +345,16 @@ export default function Contact() {
                         {item.icon}
                       </div>
                       <div>
-                        <h4 style={{ 
-                          fontSize: '1rem', 
-                          fontWeight: '600', 
+                        <h4 style={{
+                          fontSize: '1rem',
+                          fontWeight: '600',
                           marginBottom: 'var(--space-2)',
                           color: 'var(--text-primary)'
                         }}>
                           {item.title}
                         </h4>
-                        <p style={{ 
-                          fontSize: '0.875rem', 
+                        <p style={{
+                          fontSize: '0.875rem',
                           color: 'var(--text-secondary)',
                           lineHeight: 1.6,
                           margin: 0
@@ -303,24 +365,23 @@ export default function Contact() {
                     </div>
                   ))}
                 </div>
-                
+
                 <div style={{
                   marginTop: 'var(--space-8)',
                   paddingTop: 'var(--space-6)',
                   borderTop: '1px solid var(--border)',
                   textAlign: 'center'
                 }}>
-                  <p style={{ 
-                    fontSize: '0.875rem', 
+                  <p style={{
+                    fontSize: '0.875rem',
                     color: 'var(--text-secondary)',
                     fontStyle: 'italic',
                     marginBottom: 'var(--space-4)'
                   }}>
-                    Don&apos;t worry if you don&apos;t have all these details yet. 
-                    We can help you figure out the specifics during our initial discussion.
+                    {t('inquiry.noWorry')}
                   </p>
-                  
-                  <a 
+
+                  <a
                     href="mailto:Mo@MohammadOthman.com?subject=AI Project Inquiry"
                     className="btn btn-primary"
                     style={{
@@ -330,7 +391,7 @@ export default function Contact() {
                     }}
                   >
                     <Mail size={16} />
-                    Send Project Inquiry
+                    {tCommon('emailUs')}
                   </a>
                 </div>
               </div>
@@ -343,33 +404,11 @@ export default function Contact() {
       <section className="section" style={{ backgroundColor: 'var(--surface)' }}>
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Types of Work We Take On</h2>
+            <h2 className="section-title">{t('workTypes.title')}</h2>
           </div>
-          
+
           <div className="grid-3">
-            {[
-              {
-                type: "FIXED PROJECTS",
-                title: "Defined Scope Projects",
-                description: "Projects with clear requirements, timeline, and deliverables.",
-                examples: ["Chatbot development", "Data analysis system", "Process automation"],
-                icon: <ClipboardList size={32} className="text-primary" />
-              },
-              {
-                type: "ONGOING WORK",
-                title: "Development Partnerships",
-                description: "Long-term collaboration as your AI development team.",
-                examples: ["Monthly development", "Feature additions", "System expansion"],
-                icon: <Handshake size={32} className="text-primary" />
-              },
-              {
-                type: "CONSULTING",
-                title: "Strategic Guidance",
-                description: "AI planning, technical review, and strategic advice.",
-                examples: ["AI strategy", "Technical assessment", "Architecture review"],
-                icon: <Lightbulb size={32} className="text-primary" />
-              }
-            ].map((workType, index) => (
+            {workTypes.map((workType, index) => (
               <div key={index} className="card">
                 <div className="card-content">
                   <div className="card-main">
@@ -393,8 +432,8 @@ export default function Contact() {
                     <h3 className="card-title" style={{ textAlign: 'center' }}>
                       {workType.title}
                     </h3>
-                    <p style={{ 
-                      color: 'var(--text-secondary)', 
+                    <p style={{
+                      color: 'var(--text-secondary)',
                       marginBottom: 'var(--space-4)',
                       fontSize: '0.875rem',
                       textAlign: 'center'
@@ -402,7 +441,7 @@ export default function Contact() {
                       {workType.description}
                     </p>
                   </div>
-                  
+
                   <div className="card-footer-content">
                     <div style={{
                       padding: 'var(--space-4)',
@@ -410,8 +449,8 @@ export default function Contact() {
                       borderRadius: 'var(--radius-lg)',
                       border: '1px solid var(--border)'
                     }}>
-                      <h4 style={{ 
-                        fontSize: '0.75rem', 
+                      <h4 style={{
+                        fontSize: '0.75rem',
                         fontWeight: '600',
                         textTransform: 'uppercase',
                         letterSpacing: '0.05em',
@@ -419,7 +458,7 @@ export default function Contact() {
                         marginBottom: 'var(--space-3)',
                         textAlign: 'center'
                       }}>
-                        Examples:
+                        {t('workTypes.examples')}:
                       </h4>
                       <div style={{
                         display: 'flex',
@@ -428,8 +467,8 @@ export default function Contact() {
                         alignItems: 'center'
                       }}>
                         {workType.examples.map((example, idx) => (
-                          <span key={idx} style={{ 
-                            color: 'var(--text-secondary)', 
+                          <span key={idx} style={{
+                            color: 'var(--text-secondary)',
                             fontSize: '0.875rem',
                             textAlign: 'center'
                           }}>
@@ -450,40 +489,19 @@ export default function Contact() {
       <section className="section">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Common Questions</h2>
+            <h2 className="section-title">{t('faq.title')}</h2>
           </div>
-          
+
           <div className="max-w-4xl mx-auto">
             <div className="space-y-8">
-              {[
-                {
-                  question: "How do you handle projects across different time zones?",
-                  answer: "We work with clients globally and are flexible with meeting times. Most communication happens via email and scheduled video calls at mutually convenient times. Our offices in Scotland and Palestine allow us to provide coverage across multiple time zones."
-                },
-                {
-                  question: "Do you work with startups or only established companies?",
-                  answer: "We work with companies of all sizes, from startups to large enterprises. Our approach adapts to your company's stage and requirements."
-                },
-                {
-                  question: "What's your typical project timeline?",
-                  answer: "It depends on the scope, but most projects range from 2-12 weeks. We provide detailed timelines during the planning phase."
-                },
-                {
-                  question: "Do you provide ongoing support after project completion?",
-                  answer: "Yes, we offer various support arrangements including maintenance, updates, and expansion of existing systems."
-                },
-                {
-                  question: "Can you work with our existing development team?",
-                  answer: "Absolutely. We often collaborate with internal teams and can provide training and knowledge transfer as needed."
-                }
-              ].map((faq, index) => (
+              {faqs.map((faq, index) => (
                 <div key={index} style={{
                   borderBottom: '1px solid var(--border)',
                   paddingBottom: 'var(--space-6)'
                 }}>
-                  <h3 style={{ 
-                    fontSize: '1.125rem', 
-                    fontWeight: '600', 
+                  <h3 style={{
+                    fontSize: '1.125rem',
+                    fontWeight: '600',
                     marginBottom: 'var(--space-3)',
                     color: 'var(--text-primary)',
                     display: 'flex',
@@ -501,10 +519,10 @@ export default function Contact() {
                     }}></div>
                     <span>{faq.question}</span>
                   </h3>
-                  <p style={{ 
+                  <p style={{
                     color: 'var(--text-secondary)',
                     lineHeight: 1.6,
-                    marginLeft: 'calc(0.5rem + var(--space-3))' // Align with question text
+                    marginLeft: 'calc(0.5rem + var(--space-3))'
                   }}>
                     {faq.answer}
                   </p>
@@ -520,21 +538,20 @@ export default function Contact() {
         <div className="container">
           <div className="cta-section">
             <h2 style={{ marginBottom: 'var(--space-6)' }}>
-              Ready to Start?
+              {t('cta.title')}
             </h2>
-            <p style={{ 
-              fontSize: '1.125rem', 
-              color: 'var(--text-secondary)', 
+            <p style={{
+              fontSize: '1.125rem',
+              color: 'var(--text-secondary)',
               marginBottom: 'var(--space-8)',
               maxWidth: '600px',
               margin: '0 auto var(--space-8)'
             }}>
-              Send us an email with your project details and we&apos;ll get back to you 
-              within 24 hours with next steps.
+              {t('cta.subtitle')}
             </p>
-            
+
             <div className="flex justify-center">
-              <a 
+              <a
                 href="mailto:Mo@MohammadOthman.com?subject=AI Project Inquiry"
                 className="btn btn-primary btn-lg"
                 style={{
@@ -544,7 +561,7 @@ export default function Contact() {
                 }}
               >
                 <Mail size={20} />
-                Send Project Inquiry
+                {tCommon('emailUs')}
               </a>
             </div>
 
@@ -560,9 +577,9 @@ export default function Contact() {
               gap: 'var(--space-4)',
               flexWrap: 'wrap'
             }}>
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
                 gap: 'var(--space-2)',
                 padding: 'var(--space-2) var(--space-3)',
                 backgroundColor: 'var(--surface)',
@@ -572,11 +589,11 @@ export default function Contact() {
                 whiteSpace: 'nowrap'
               }}>
                 <CheckCircle size={16} className="text-green-600" />
-                <span>Free initial consultation</span>
+                <span>{tCommon('freeConsultation')}</span>
               </div>
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
                 gap: 'var(--space-2)',
                 padding: 'var(--space-2) var(--space-3)',
                 backgroundColor: 'var(--surface)',
@@ -586,11 +603,11 @@ export default function Contact() {
                 whiteSpace: 'nowrap'
               }}>
                 <CheckCircle size={16} className="text-green-600" />
-                <span>No-obligation assessment</span>
+                <span>{tCommon('noObligation')}</span>
               </div>
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
                 gap: 'var(--space-2)',
                 padding: 'var(--space-2) var(--space-3)',
                 backgroundColor: 'var(--surface)',
@@ -600,7 +617,7 @@ export default function Contact() {
                 whiteSpace: 'nowrap'
               }}>
                 <CheckCircle size={16} className="text-green-600" />
-                <span>24-hour response time</span>
+                <span>{tCommon('response24h')}</span>
               </div>
             </div>
           </div>

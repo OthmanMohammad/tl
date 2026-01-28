@@ -1,0 +1,1220 @@
+{
+  "common": {
+    "companyName": "TransformerLabs",
+    "companyTagline": "Building the future with AI.",
+    "email": "Mo@MohammadOthman.com",
+    "getStarted": "Get Started",
+    "learnMore": "Learn More",
+    "contactUs": "Contact Us",
+    "emailUs": "Email Us",
+    "viewServices": "View Our Services",
+    "startProject": "Start a Project",
+    "sendInquiry": "Send Project Inquiry",
+    "applyNow": "Apply Now",
+    "freeConsultation": "Free consultation",
+    "noObligation": "No obligation",
+    "response24h": "24-hour response",
+    "readMore": "Read More"
+  },
+  "navigation": {
+    "home": "Home",
+    "services": "Services",
+    "about": "About",
+    "contact": "Contact",
+    "careers": "Careers",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu"
+  },
+  "footer": {
+    "description": "AI-powered software and web solutions that solve real business problems. We build practical applications for businesses worldwide.",
+    "navigation": "Navigation",
+    "contactTitle": "Contact",
+    "connect": "Connect",
+    "legal": "Legal",
+    "linkedIn": "LinkedIn",
+    "scotlandOffice": "Aberdeen, Scotland United Kingdom",
+    "palestineOffice": "Nablus, West Bank, Palestine",
+    "copyright": "2026 TransformerLabs. Building the future with AI."
+  },
+  "home": {
+    "hero": {
+      "title": "Technology Solutions That Actually Work",
+      "subtitle": "We build AI-powered applications, custom software, and modern websites for businesses worldwide. Practical solutions that deliver real results.",
+      "cta1": "Start a Project",
+      "cta2": "Our Services"
+    },
+    "services": {
+      "title": "What We Build",
+      "subtitle": "AI solutions that integrate seamlessly with your business operations",
+      "chatbots": {
+        "title": "AI Chatbots & Assistants",
+        "description": "Intelligent chatbots for customer service, support tickets, and internal operations that understand context and handle complex conversations."
+      },
+      "software": {
+        "title": "Software Development",
+        "description": "Custom web applications built with modern technologies. Scalable backends, APIs, and full-stack solutions tailored to your business needs."
+      },
+      "webDesign": {
+        "title": "Web Design & Development",
+        "description": "Professional websites and web applications that look great and perform even better. Responsive, fast, and built for conversions."
+      },
+      "analytics": {
+        "title": "Data Analytics & Insights",
+        "description": "Transform your business data into actionable insights with automated reporting, predictive analytics, and intelligent dashboards."
+      },
+      "automation": {
+        "title": "Workflow Automation",
+        "description": "Streamline business processes with intelligent automation that handles repetitive tasks and complex decision-making workflows."
+      },
+      "custom": {
+        "title": "Custom AI Solutions",
+        "description": "Tailored AI applications designed specifically for your industry requirements and business processes."
+      }
+    },
+    "whyChoose": {
+      "title": "Why Choose TransformerLabs",
+      "quality": {
+        "title": "Quality-First Approach",
+        "description": "We build solutions that last. Clean code, modern architecture, and thorough testing ensure your investment pays off."
+      },
+      "business": {
+        "title": "Business-Focused",
+        "description": "We focus on solving real business problems, not just implementing cool technology. Your goals drive our solutions."
+      },
+      "endToEnd": {
+        "title": "End-to-End Service",
+        "description": "From strategy and development to deployment and ongoing support – we handle everything so you can focus on your business."
+      }
+    },
+    "industries": {
+      "title": "Industries We Serve",
+      "subtitle": "AI solutions tailored for your industry's specific needs",
+      "ecommerce": {
+        "title": "E-commerce & Retail",
+        "description": "Customer service automation, inventory management, and personalized shopping experiences."
+      },
+      "healthcare": {
+        "title": "Healthcare & Medical",
+        "description": "Patient data analysis, appointment systems, and medical document processing."
+      },
+      "financial": {
+        "title": "Financial Services",
+        "description": "Fraud detection, automated reporting, and customer service optimization."
+      },
+      "manufacturing": {
+        "title": "Manufacturing",
+        "description": "Quality control automation, predictive maintenance, and supply chain optimization."
+      },
+      "professional": {
+        "title": "Professional Services",
+        "description": "Document analysis, client management, and business process automation."
+      },
+      "education": {
+        "title": "Education",
+        "description": "Student support systems, automated grading, and personalized learning platforms."
+      }
+    },
+    "cta": {
+      "title": "Ready to Transform Your Business?",
+      "subtitle": "Let's discuss how AI can solve your specific business challenges. We provide honest assessments and realistic timelines."
+    }
+  },
+  "about": {
+    "meta": {
+      "title": "About TransformerLabs",
+      "description": "Learn about TransformerLabs - AI development company specializing in practical business solutions. Based in Palestine and UK."
+    },
+    "hero": {
+      "title": "About TransformerLabs",
+      "subtitle": "We build AI solutions that solve real business problems. Founded in 2023, we work with companies worldwide to implement practical AI applications that deliver measurable results."
+    },
+    "story": {
+      "title": "Our Story",
+      "p1": "TransformerLabs was founded with a simple mission: make AI accessible and practical for businesses of all sizes. We saw too many companies struggling with experimental AI projects that never delivered real value.",
+      "p2": "Our approach is different. We focus on proven AI technologies and practical implementations that integrate seamlessly with existing business processes. No hype, no unrealistic promises – just reliable AI solutions that work.",
+      "p3": "Based in Palestine and the United Kingdom, we serve clients globally, with particular expertise in Middle Eastern and European markets."
+    },
+    "focus": {
+      "title": "Our Focus",
+      "practical": {
+        "title": "Practical AI",
+        "description": "Solutions that solve real business problems, not experimental tech"
+      },
+      "reliable": {
+        "title": "Reliable Delivery",
+        "description": "Proven track record of on-time, on-budget project completion"
+      },
+      "communication": {
+        "title": "Clear Communication",
+        "description": "No technical jargon – we explain everything in business terms"
+      },
+      "support": {
+        "title": "Ongoing Support",
+        "description": "We stick around to ensure your AI solutions continue working"
+      }
+    },
+    "global": {
+      "title": "Our Global Presence",
+      "subtitle": "Strategic locations in Scotland and Palestine enable us to serve clients across Europe, the Middle East, and beyond"
+    },
+    "specialize": {
+      "title": "What We Specialize In",
+      "subtitle": "We focus on AI applications with proven business value",
+      "conversational": {
+        "title": "Conversational AI",
+        "description": "Customer service chatbots, internal assistants, and AI agents that handle real conversations with customers and employees."
+      },
+      "dataAnalytics": {
+        "title": "Data & Analytics",
+        "description": "Automated reporting, predictive analytics, and intelligent insights that help you make better business decisions."
+      },
+      "processAutomation": {
+        "title": "Process Automation",
+        "description": "Streamline workflows, automate repetitive tasks, and optimize business processes using intelligent automation."
+      },
+      "knowledge": {
+        "title": "Knowledge Systems",
+        "description": "AI that searches through your documents and data to provide instant answers to questions from your team or customers."
+      },
+      "generative": {
+        "title": "Generative AI",
+        "description": "Content generation, writing assistance, and creative AI tools customized for your specific business needs."
+      },
+      "customSolutions": {
+        "title": "Custom Solutions",
+        "description": "Purpose-built AI applications designed specifically for your industry, use case, and technical requirements."
+      }
+    },
+    "howWeWork": {
+      "title": "How We Work",
+      "businessFirst": {
+        "title": "Business-First Approach",
+        "description": "We start by understanding your business goals, not the technology. Our AI solutions are designed to integrate with your existing processes and deliver measurable improvements to your operations."
+      },
+      "transparent": {
+        "title": "Transparent Communication",
+        "description": "We keep you informed every step of the way. No technical jargon, no hidden costs, no surprises. You'll always know what we're building, why we're building it, and when it will be ready."
+      },
+      "flexible": {
+        "title": "Flexible Partnership",
+        "description": "Whether you need a one-off project, ongoing development support, or strategic consulting, we adapt our services to your needs and timeline."
+      },
+      "longTerm": {
+        "title": "Long-term Success",
+        "description": "We build solutions that grow with your business and provide ongoing support to ensure they continue delivering value as your needs evolve."
+      }
+    },
+    "leadership": {
+      "title": "Leadership",
+      "name": "Mohammad Othman",
+      "role": "Founder & Lead AI Engineer",
+      "bio": "AI engineer with deep expertise in building practical business applications. Focused on delivering reliable solutions that solve real problems rather than experimental technology. Based between Palestine and the UK.",
+      "contactDirectly": "Contact Directly"
+    },
+    "cta": {
+      "title": "Ready to Work Together?",
+      "subtitle": "Whether you have a specific AI project in mind or want to explore how AI can benefit your business, let's start a conversation.",
+      "getInTouch": "Get in Touch"
+    }
+  },
+  "services": {
+    "meta": {
+      "title": "Services - TransformerLabs",
+      "description": "Professional AI development, software engineering, and web design services. Chatbots, data analytics, workflow automation, custom websites, and more."
+    },
+    "hero": {
+      "title": "Our Services",
+      "subtitle": "We build AI solutions, custom software, and modern websites that work reliably in real business environments. We handle the complexity so you can focus on growing your business.",
+      "cta1": "Discuss Your Project",
+      "cta2": "Email Directly"
+    },
+    "core": {
+      "title": "What We Build",
+      "subtitle": "Proven AI applications that integrate seamlessly with your business",
+      "chatbots": {
+        "category": "CONVERSATIONAL AI",
+        "title": "AI Chatbots & Virtual Assistants",
+        "description": "Intelligent chatbots that handle customer inquiries, support tickets, and internal requests. Our bots understand context, manage complex conversations, and escalate to humans when needed.",
+        "features": [
+          "Natural language understanding and responses",
+          "Integration with your existing systems (CRM, databases, etc.)",
+          "Multi-language support for global businesses",
+          "Analytics dashboard to track performance",
+          "Seamless handoff to human agents"
+        ],
+        "examples": "Customer support, FAQ automation, lead qualification, appointment scheduling"
+      },
+      "analytics": {
+        "category": "SMART ANALYTICS",
+        "title": "Data Analytics & Business Intelligence",
+        "description": "Transform your raw data into actionable insights with automated reporting, trend analysis, and predictive analytics that help you make better business decisions.",
+        "features": [
+          "Automated report generation and scheduling",
+          "Predictive analytics and forecasting",
+          "Interactive data visualization dashboards",
+          "Anomaly detection and alerting",
+          "Real-time monitoring and KPI tracking"
+        ],
+        "examples": "Sales forecasting, inventory optimization, customer behavior analysis, financial reporting"
+      },
+      "documents": {
+        "category": "INTELLIGENT AUTOMATION",
+        "title": "Document Processing & Knowledge Systems",
+        "description": "AI that reads, understands, and extracts information from your documents, contracts, reports, and files. Build searchable knowledge bases that answer questions instantly.",
+        "features": [
+          "Automated document classification and tagging",
+          "Information extraction from PDFs, images, and text",
+          "Intelligent search across all your content",
+          "Question-answering systems for employees/customers",
+          "Compliance and audit trail features"
+        ],
+        "examples": "Contract analysis, invoice processing, research assistance, policy Q&A systems"
+      },
+      "workflow": {
+        "category": "PROCESS AUTOMATION",
+        "title": "Workflow Automation & Process Optimization",
+        "description": "Streamline repetitive business processes with intelligent automation that handles data entry, approvals, routing, and decision-making workflows.",
+        "features": [
+          "Business process analysis and optimization",
+          "Automated data entry and validation",
+          "Intelligent routing and approval workflows",
+          "Integration with existing business tools",
+          "Error handling and exception management"
+        ],
+        "examples": "Order processing, employee onboarding, expense approvals, inventory management"
+      },
+      "content": {
+        "category": "GENERATIVE AI",
+        "title": "Content Generation & Creative AI",
+        "description": "AI-powered content creation tools that generate marketing copy, product descriptions, reports, and other business content while maintaining your brand voice.",
+        "features": [
+          "Custom content generation for your industry",
+          "Brand voice and style consistency",
+          "Multi-format content creation (text, images, videos)",
+          "Quality control and approval workflows",
+          "Usage analytics and optimization"
+        ],
+        "examples": "Marketing copy, product descriptions, social media content, technical documentation"
+      },
+      "webDesign": {
+        "category": "WEB SOLUTIONS",
+        "title": "Web Design & Development",
+        "description": "Professional websites and web applications that look great and perform even better. Responsive designs, fast loading times, and built for conversions.",
+        "features": [
+          "Custom website design tailored to your brand",
+          "Responsive layouts for all devices",
+          "SEO optimization and performance tuning",
+          "Content management systems (CMS)",
+          "E-commerce and booking integrations"
+        ],
+        "examples": "Business websites, landing pages, portfolios, e-commerce stores, web applications"
+      },
+      "software": {
+        "category": "CUSTOM SOFTWARE",
+        "title": "Software Development",
+        "description": "Custom web applications built with modern technologies. Scalable backends, APIs, and full-stack solutions designed for your specific business requirements.",
+        "features": [
+          "Full-stack web application development",
+          "REST and GraphQL API development",
+          "Database design and optimization",
+          "Third-party integrations and webhooks",
+          "Cloud deployment and DevOps"
+        ],
+        "examples": "Internal tools, customer portals, SaaS applications, API services, admin dashboards"
+      },
+      "custom": {
+        "category": "SPECIALIZED DEVELOPMENT",
+        "title": "Custom AI Solutions",
+        "description": "Purpose-built AI applications designed specifically for your unique business requirements, industry constraints, and technical environment.",
+        "features": [
+          "Detailed requirements analysis and planning",
+          "Custom machine learning model development",
+          "Seamless integration with existing systems",
+          "Performance optimization and scaling",
+          "Comprehensive testing and quality assurance"
+        ],
+        "examples": "Industry-specific AI tools, custom prediction models, specialized automation systems"
+      },
+      "keyFeatures": "Key Features:",
+      "commonUseCases": "Common Use Cases:"
+    },
+    "workArrangements": {
+      "title": "How We Work With You",
+      "subtitle": "Flexible arrangements designed to fit your needs, timeline, and budget",
+      "fixedPrice": {
+        "title": "Fixed-Price Projects",
+        "description": "Clearly defined scope, timeline, and deliverables. Perfect for well-understood requirements with specific outcomes.",
+        "timeline": "2-12 weeks",
+        "bestFor": "Specific AI implementations, chatbot development, automation projects"
+      },
+      "ongoing": {
+        "title": "Ongoing Development Partnership",
+        "description": "Continuous development as your dedicated AI team. Flexible monthly arrangements that scale with your needs.",
+        "timeline": "3+ months",
+        "bestFor": "Growing AI capabilities, iterative development, long-term projects"
+      },
+      "consulting": {
+        "title": "Strategic AI Consulting",
+        "description": "AI strategy planning, technical architecture review, and guidance for your internal teams.",
+        "timeline": "1-4 weeks",
+        "bestFor": "AI strategy development, technical reviews, team guidance"
+      },
+      "timelineLabel": "Timeline",
+      "bestForLabel": "Best For"
+    },
+    "process": {
+      "title": "Our Development Process",
+      "subtitle": "Proven methodology that ensures successful AI implementations",
+      "discovery": {
+        "step": "01",
+        "title": "Discovery & Planning",
+        "description": "We start by understanding your business goals, current processes, and technical requirements. Together, we define success metrics and create a detailed project roadmap.",
+        "deliverables": "Requirements document, technical architecture, project timeline"
+      },
+      "development": {
+        "step": "02",
+        "title": "Development & Testing",
+        "description": "Our team builds your AI solution with regular check-ins and testing phases. You'll see progress weekly and can provide feedback throughout the development process.",
+        "deliverables": "Working prototypes, regular demos, testing reports"
+      },
+      "deployment": {
+        "step": "03",
+        "title": "Deployment & Support",
+        "description": "We deploy your solution to your environment, provide comprehensive training for your team, and offer ongoing support to ensure long-term success.",
+        "deliverables": "Live system, user training, documentation, support plan"
+      },
+      "keyDeliverables": "Key Deliverables"
+    },
+    "cta": {
+      "title": "Ready to Start Your Project?",
+      "subtitle": "Let's discuss your project requirements. We'll provide honest feedback on what's possible, realistic timelines, and how we can help your business.",
+      "cta1": "Start Your Project",
+      "cta2": "Email Us Directly",
+      "freeConsultation": "Free initial consultation",
+      "noObligation": "No-obligation project assessment",
+      "response24h": "24-hour response time"
+    }
+  },
+  "contact": {
+    "meta": {
+      "title": "Contact TransformerLabs",
+      "description": "Get in touch with TransformerLabs for AI development projects, partnerships, or consulting. Based in Aberdeen, Scotland and Nablus, Palestine, serving clients worldwide."
+    },
+    "hero": {
+      "title": "Get in Touch",
+      "subtitle": "Ready to discuss your AI project? We respond to all inquiries within 24 hours."
+    },
+    "info": {
+      "title": "Contact Information",
+      "email": "Email",
+      "emailDescription": "Best for project inquiries and detailed discussions",
+      "linkedIn": "LinkedIn",
+      "linkedInPage": "TransformerLabs Company Page",
+      "linkedInDescription": "Connect with us professionally",
+      "offices": "Our Offices",
+      "scotlandOffice": "Scotland Office",
+      "scotlandAddress": "Aberdeen, Scotland",
+      "scotlandCountry": "United Kingdom",
+      "palestineOffice": "Palestine Office",
+      "palestineAddress": "Nablus, West Bank",
+      "palestineCountry": "Palestine",
+      "servingClients": "Serving clients worldwide from our offices in Scotland and Palestine",
+      "responseTime": "Response Time",
+      "responseGuarantee": "24-Hour Response Guarantee",
+      "responseDescription": "We respond to all project inquiries within 24 hours"
+    },
+    "inquiry": {
+      "title": "Project Inquiries",
+      "whatToInclude": "What to Include in Your Message",
+      "projectOverview": {
+        "title": "Project Overview",
+        "description": "Brief description of what you're looking to build or achieve"
+      },
+      "currentSituation": {
+        "title": "Current Situation",
+        "description": "What systems or processes you currently have in place"
+      },
+      "timeline": {
+        "title": "Timeline",
+        "description": "When you'd like to start and any important deadlines"
+      },
+      "budget": {
+        "title": "Budget Range",
+        "description": "Approximate budget or budget range for the project"
+      },
+      "companyInfo": {
+        "title": "Company Information",
+        "description": "Brief info about your company and industry"
+      },
+      "noWorry": "Don't worry if you don't have all these details yet. We can help you figure out the specifics during our initial discussion."
+    },
+    "workTypes": {
+      "title": "Types of Work We Take On",
+      "fixedProjects": {
+        "type": "FIXED PROJECTS",
+        "title": "Defined Scope Projects",
+        "description": "Projects with clear requirements, timeline, and deliverables.",
+        "examples": ["Chatbot development", "Data analysis system", "Process automation"]
+      },
+      "ongoing": {
+        "type": "ONGOING WORK",
+        "title": "Development Partnerships",
+        "description": "Long-term collaboration as your AI development team.",
+        "examples": ["Monthly development", "Feature additions", "System expansion"]
+      },
+      "consulting": {
+        "type": "CONSULTING",
+        "title": "Strategic Guidance",
+        "description": "AI planning, technical review, and strategic advice.",
+        "examples": ["AI strategy", "Technical assessment", "Architecture review"]
+      },
+      "examples": "Examples:"
+    },
+    "faq": {
+      "title": "Common Questions",
+      "q1": {
+        "question": "How do you handle projects across different time zones?",
+        "answer": "We work with clients globally and are flexible with meeting times. Most communication happens via email and scheduled video calls at mutually convenient times. Our offices in Scotland and Palestine allow us to provide coverage across multiple time zones."
+      },
+      "q2": {
+        "question": "Do you work with startups or only established companies?",
+        "answer": "We work with companies of all sizes, from startups to large enterprises. Our approach adapts to your company's stage and requirements."
+      },
+      "q3": {
+        "question": "What's your typical project timeline?",
+        "answer": "It depends on the scope, but most projects range from 2-12 weeks. We provide detailed timelines during the planning phase."
+      },
+      "q4": {
+        "question": "Do you provide ongoing support after project completion?",
+        "answer": "Yes, we offer various support arrangements including maintenance, updates, and expansion of existing systems."
+      },
+      "q5": {
+        "question": "Can you work with our existing development team?",
+        "answer": "Absolutely. We often collaborate with internal teams and can provide training and knowledge transfer as needed."
+      }
+    },
+    "cta": {
+      "title": "Ready to Start?",
+      "subtitle": "Send us an email with your project details and we'll get back to you within 24 hours with next steps."
+    }
+  },
+  "careers": {
+    "meta": {
+      "title": "Careers - Join TransformerLabs",
+      "description": "Join our team of AI engineers and software developers. Remote-first culture with flexible hours. Help build the future of AI applications for businesses worldwide."
+    },
+    "hero": {
+      "title": "Join Our Team",
+      "subtitle": "We're building the future of AI applications for businesses worldwide. Join a team that values expertise, creativity, and work-life balance.",
+      "applyNow": "Apply Now",
+      "viewRoles": "View Open Roles"
+    },
+    "why": {
+      "title": "Why Work With Us",
+      "subtitle": "We're not just building AI solutions – we're creating the future of how businesses work, and we want the best people to help us get there.",
+      "impact": {
+        "title": "Meaningful Impact",
+        "description": "Your work directly shapes how businesses worldwide use AI. Every solution you build solves real problems for real companies."
+      },
+      "technology": {
+        "title": "Cutting-Edge Technology",
+        "description": "Work with the latest AI technologies and frameworks. We invest in the best tools and give you freedom to innovate."
+      },
+      "opportunities": {
+        "title": "Small Team, Big Opportunities",
+        "description": "Shape the direction of the company. Your ideas matter, your voice is heard, and your contributions make a real difference."
+      }
+    },
+    "benefits": {
+      "title": "Benefits & Culture",
+      "subtitle": "We believe great work happens when people have the freedom and support they need",
+      "workLife": {
+        "title": "Work-Life Balance",
+        "flexibleHours": {
+          "title": "Flexible Hours",
+          "description": "Work when you're most productive. Core overlap hours for collaboration, but flexibility to manage your schedule."
+        },
+        "remote": {
+          "title": "Remote-First Culture",
+          "description": "Work from anywhere. Our team spans multiple countries and time zones, and we've built processes that support distributed work."
+        },
+        "pto": {
+          "title": "Unlimited PTO",
+          "description": "Take the time you need to recharge. We trust our team to manage their time responsibly and take care of themselves."
+        }
+      },
+      "growth": {
+        "title": "Growth & Development",
+        "learningBudget": {
+          "title": "Learning Budget",
+          "description": "Annual budget for courses, conferences, books, and certifications. We invest in your professional development."
+        },
+        "innovationTime": {
+          "title": "Innovation Time",
+          "description": "Dedicated time for exploring new technologies, working on side projects, and contributing to open source."
+        },
+        "mentorship": {
+          "title": "Direct Mentorship",
+          "description": "Work directly with experienced engineers and get personalized guidance on your career development."
+        }
+      }
+    },
+    "roles": {
+      "title": "Open Roles",
+      "subtitle": "We're always looking for exceptional engineers to join our team",
+      "aiEngineer": {
+        "title": "AI Engineer",
+        "type": "Part-time - Remote",
+        "description": "Build and deploy AI solutions for enterprise clients. Work with LLMs, computer vision, and custom ML models.",
+        "requirements": [
+          "3+ years experience with Python and ML frameworks",
+          "Experience with LLMs (OpenAI, Anthropic, etc.)",
+          "Knowledge of vector databases and embeddings",
+          "Experience with cloud deployment (AWS, GCP, Azure)"
+        ],
+        "bonus": [
+          "Experience with RAG systems and retrieval workflows",
+          "Production ML deployment experience",
+          "Open source contributions"
+        ]
+      },
+      "fullStack": {
+        "title": "Full-Stack Software Engineer",
+        "type": "Part-time - Remote",
+        "description": "Build web applications and APIs that power our AI solutions. Focus on performance, scalability, and user experience.",
+        "requirements": [
+          "4+ years experience with modern web frameworks",
+          "Strong knowledge of React, Node.js, TypeScript",
+          "Experience with databases and API design",
+          "Understanding of software architecture patterns"
+        ],
+        "bonus": [
+          "Experience with Next.js or Python",
+          "DevOps and cloud infrastructure knowledge",
+          "UI/UX design skills"
+        ]
+      },
+      "requirements": "Requirements:",
+      "bonusPoints": "Bonus Points:",
+      "applyFor": "Apply for"
+    },
+    "howToApply": {
+      "title": "How to Apply",
+      "sendApplication": "Send Your Application",
+      "intro": "We'd love to hear from you! Send us an email with:",
+      "items": [
+        "Your CV/resume attached",
+        "The position you're interested in",
+        "A brief introduction about yourself",
+        "Why you want to work with TransformerLabs",
+        "Any relevant projects or portfolio links"
+      ],
+      "emailLabel": "Email:",
+      "subjectLabel": "Subject:",
+      "subjectExample": "TransformerLabs Application - [Position Name]",
+      "sendButton": "Send Application"
+    },
+    "general": {
+      "title": "Don't See Your Role?",
+      "subtitle": "We're always interested in hearing from exceptional engineers, even if we don't have an open position that matches your background exactly. Send us your details and we'll keep you in mind for future opportunities.",
+      "expressInterest": "Express Interest",
+      "remoteCulture": "Remote-first culture",
+      "workAnywhere": "Work from anywhere",
+      "flexibleHours": "Flexible hours"
+    }
+  },
+  "privacy": {
+    "meta": {
+      "title": "Privacy Policy - TransformerLabs",
+      "description": "TransformerLabs Privacy Policy. Learn how we collect, use, and protect your personal information in compliance with international data protection laws."
+    },
+    "title": "Privacy Policy",
+    "subtitle": "How we collect, use, and protect your personal information",
+    "lastUpdated": "Last updated: January 2025",
+    "companyInfo": {
+      "title": "Company Information",
+      "legalEntity": "Legal Entity:",
+      "legalEntityValue": "Transformer Innovation Co. for Programming and Artificial Intelligence",
+      "commercialName": "Commercial Name:",
+      "commercialNameValue": "TransformerLabs",
+      "companyNumber": "Company Number:",
+      "companyNumberValue": "564007243",
+      "address": "Address:",
+      "addressValue": "Nablus, West Bank, Palestine",
+      "contact": "Contact:"
+    },
+    "sections": {
+      "s1": {
+        "title": "1. Introduction",
+        "p1": "TransformerLabs (\"we,\" \"our,\" or \"us\") respects your privacy and is committed to protecting your personal data. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, use our services, or engage with us professionally.",
+        "p2": "This policy applies to all users of our website and clients of our AI development and software engineering services."
+      },
+      "s2": {
+        "title": "2. Information We Collect",
+        "s2_1": {
+          "title": "2.1 Information You Provide",
+          "items": [
+            "Contact Information: Name, email address, phone number, company name, job title",
+            "Project Information: Requirements, specifications, business needs, technical details",
+            "Communication Records: Emails, messages, meeting notes, project correspondence",
+            "Payment Information: Billing details, payment records (processed securely through third parties)",
+            "Professional Information: CV/resume data for career applications"
+          ]
+        },
+        "s2_2": {
+          "title": "2.2 Information We Collect Automatically",
+          "items": [
+            "Website Usage: IP address, browser type, device information, pages visited, time spent",
+            "Technical Data: Browser settings, operating system, referring websites",
+            "Analytics Data: User interactions, website performance metrics (when analytics are implemented)",
+            "Cookies: Session data, preferences, authentication tokens"
+          ]
+        },
+        "s2_3": {
+          "title": "2.3 Information from Third Parties",
+          "items": [
+            "Professional Networks: LinkedIn and other business platforms",
+            "Client Systems: Data accessed during project delivery (with authorization)",
+            "Reference Checks: Information from professional references"
+          ]
+        }
+      },
+      "s3": {
+        "title": "3. How We Use Your Information",
+        "s3_1": {
+          "title": "3.1 Service Delivery",
+          "items": [
+            "Providing AI development and software engineering services",
+            "Project management, communication, and collaboration",
+            "Technical support and maintenance",
+            "Quality assurance and testing"
+          ]
+        },
+        "s3_2": {
+          "title": "3.2 Business Operations",
+          "items": [
+            "Processing payments and managing accounts",
+            "Responding to inquiries and providing customer support",
+            "Improving our services and website functionality",
+            "Compliance with legal and regulatory requirements"
+          ]
+        },
+        "s3_3": {
+          "title": "3.3 Communication",
+          "items": [
+            "Sending project updates and status reports",
+            "Providing technical documentation and deliverables",
+            "Sharing relevant industry insights (with consent)",
+            "Recruitment and career-related communications"
+          ]
+        },
+        "s3_4": {
+          "title": "3.4 Legal Basis for Processing",
+          "intro": "We process your data based on:",
+          "items": [
+            "Contract Performance: To deliver services you've contracted for",
+            "Legitimate Interest: To operate our business and improve services",
+            "Consent: Where you've explicitly agreed to specific uses",
+            "Legal Obligation: To comply with applicable laws"
+          ]
+        }
+      },
+      "s4": {
+        "title": "4. Information Sharing and Disclosure",
+        "intro": "We do not sell, trade, or rent your personal information. We may share your information in these limited circumstances:",
+        "s4_1": {
+          "title": "4.1 Service Providers",
+          "items": [
+            "Cloud Hosting: GitHub, hosting providers for secure code storage",
+            "Communication: Email providers, video conferencing platforms",
+            "Payment Processing: Financial institutions and payment processors",
+            "Analytics: Website analytics providers (when implemented)"
+          ]
+        },
+        "s4_2": {
+          "title": "4.2 Legal Requirements",
+          "items": [
+            "When required by law or legal process",
+            "To protect our rights, property, or safety",
+            "To prevent fraud or illegal activities",
+            "In connection with business transfers or mergers"
+          ]
+        },
+        "s4_3": {
+          "title": "4.3 International Transfers",
+          "content": "We may transfer your data internationally for business operations. When we do, we ensure appropriate safeguards are in place to protect your information in accordance with applicable data protection laws."
+        }
+      },
+      "s5": {
+        "title": "5. Data Security",
+        "intro": "We implement appropriate technical and organizational measures to protect your personal information:",
+        "items": [
+          "Encryption: Data in transit and at rest",
+          "Access Controls: Limited access on a need-to-know basis",
+          "Secure Systems: Regular security updates and monitoring",
+          "Staff Training: Regular privacy and security awareness training",
+          "Incident Response: Procedures for handling security breaches"
+        ],
+        "disclaimer": "However, no method of transmission over the internet is 100% secure. While we strive to protect your data, we cannot guarantee absolute security."
+      },
+      "s6": {
+        "title": "6. Data Retention",
+        "intro": "We retain your personal information for as long as necessary to:",
+        "items": [
+          "Provide our services and fulfill contractual obligations",
+          "Comply with legal and regulatory requirements",
+          "Resolve disputes and enforce agreements",
+          "Maintain business records for operational purposes"
+        ],
+        "periodsIntro": "Typical retention periods:",
+        "periods": [
+          "Active Projects: Duration of engagement plus 3 years",
+          "Financial Records: 7 years for tax and legal compliance",
+          "Marketing Data: Until you opt-out or 3 years of inactivity",
+          "Website Analytics: 26 months (industry standard)"
+        ]
+      },
+      "s7": {
+        "title": "7. Your Rights",
+        "intro": "You have the following rights regarding your personal information:",
+        "rights": [
+          "Access: Request copies of your personal data",
+          "Correction: Request correction of inaccurate information",
+          "Deletion: Request deletion of your data (subject to legal requirements)",
+          "Portability: Request transfer of your data in a structured format",
+          "Objection: Object to processing based on legitimate interests",
+          "Restriction: Request limitation of processing activities",
+          "Withdrawal: Withdraw consent for consent-based processing"
+        ],
+        "exercise": "To exercise your rights, contact us at",
+        "subjectLine": "with \"Data Protection Request\" in the subject line."
+      },
+      "s8": {
+        "title": "8. Cookies and Tracking",
+        "intro": "Our website may use cookies and similar tracking technologies to:",
+        "items": [
+          "Remember your preferences and settings",
+          "Analyze website usage and performance",
+          "Provide secure access to client areas",
+          "Improve user experience and functionality"
+        ],
+        "control": "You can control cookies through your browser settings. Note that disabling cookies may affect website functionality."
+      },
+      "s9": {
+        "title": "9. International Users",
+        "intro": "We serve clients globally and comply with applicable data protection laws including:",
+        "items": [
+          "GDPR (EU/UK): For European clients and visitors",
+          "CCPA (California): For California residents",
+          "Local Laws: Applicable regulations in client jurisdictions"
+        ],
+        "euRights": "If you are located in the EU or UK, you have additional rights under GDPR, including the right to lodge a complaint with your local data protection authority."
+      },
+      "s10": {
+        "title": "10. Children's Privacy",
+        "content": "Our services are not directed to individuals under 18 years of age. We do not knowingly collect personal information from children. If we become aware that we have collected personal data from a child, we will take steps to delete such information promptly."
+      },
+      "s11": {
+        "title": "11. Changes to This Privacy Policy",
+        "intro": "We may update this Privacy Policy periodically to reflect changes in our practices or applicable laws. We will notify you of material changes by:",
+        "items": [
+          "Posting the updated policy on our website",
+          "Sending email notifications to active clients",
+          "Providing notice during your next interaction with us"
+        ],
+        "acceptance": "Your continued use of our services after changes become effective constitutes acceptance of the updated policy."
+      },
+      "s12": {
+        "title": "12. Contact Us",
+        "intro": "If you have questions about this Privacy Policy or our data practices, please contact us:",
+        "emailLabel": "Email:",
+        "subjectLabel": "Subject Line:",
+        "subjectValue": "Privacy Policy Inquiry",
+        "addressLabel": "Address:",
+        "addressValue": "Nablus, West Bank, Palestine",
+        "responseTime": "We will respond to privacy-related inquiries within 30 days."
+      }
+    }
+  },
+  "terms": {
+    "meta": {
+      "title": "Terms of Service - TransformerLabs",
+      "description": "TransformerLabs Terms of Service. Legal terms and conditions for our AI development and software engineering services."
+    },
+    "title": "Terms of Service",
+    "subtitle": "Legal terms and conditions for our AI development and software engineering services",
+    "lastUpdated": "Last updated: January 2025",
+    "importantNotice": {
+      "title": "Important Legal Agreement",
+      "content": "By accessing our website or engaging our services, you agree to be bound by these Terms of Service. Please read them carefully before proceeding."
+    },
+    "sections": {
+      "s1": {
+        "title": "1. Company Information",
+        "legalEntity": "Legal Entity:",
+        "legalEntityValue": "Transformer Innovation Co. for Programming and Artificial Intelligence",
+        "commercialName": "Commercial Name:",
+        "commercialNameValue": "TransformerLabs",
+        "companyNumber": "Company Number:",
+        "companyNumberValue": "564007243",
+        "registeredAddress": "Registered Address:",
+        "registeredAddressValue": "Nablus, West Bank, Palestine",
+        "contactEmail": "Contact Email:",
+        "governingLaw": "Governing Law:",
+        "governingLawValue": "Laws of Palestine"
+      },
+      "s2": {
+        "title": "2. Definitions",
+        "intro": "In these Terms of Service:",
+        "items": [
+          "\"Company,\" \"we,\" \"us,\" \"our\" refers to TransformerLabs",
+          "\"Client,\" \"you,\" \"your\" refers to the individual or entity engaging our services",
+          "\"Services\" refers to AI development, software engineering, consulting, and related professional services",
+          "\"Deliverables\" refers to work products, code, documentation, and other materials created for you",
+          "\"Agreement\" refers to these Terms plus any project-specific contracts or statements of work",
+          "\"Confidential Information\" refers to non-public information disclosed by either party"
+        ]
+      },
+      "s3": {
+        "title": "3. Services",
+        "s3_1": {
+          "title": "3.1 Service Description",
+          "intro": "We provide professional services including:",
+          "items": [
+            "AI system development and implementation",
+            "Custom software engineering and development",
+            "Machine learning model development and deployment",
+            "Data analytics and business intelligence solutions",
+            "Technical consulting and strategy advisory",
+            "System integration and automation"
+          ]
+        },
+        "s3_2": {
+          "title": "3.2 Service Scope",
+          "intro": "The specific scope, timeline, and deliverables for each project will be defined in:",
+          "items": [
+            "Written proposals and estimates",
+            "Statements of Work (SOW)",
+            "Project contracts and amendments",
+            "Email confirmations of scope changes"
+          ]
+        },
+        "s3_3": {
+          "title": "3.3 Client Responsibilities",
+          "intro": "You agree to:",
+          "items": [
+            "Provide accurate and complete project requirements",
+            "Grant necessary access to systems, data, and personnel",
+            "Respond to requests for information within reasonable timeframes",
+            "Designate authorized representatives for project decisions",
+            "Ensure compliance with applicable laws and regulations",
+            "Maintain confidentiality of our methodologies and processes"
+          ]
+        }
+      },
+      "s4": {
+        "title": "4. Payment Terms",
+        "s4_1": {
+          "title": "4.1 Fees and Payment",
+          "items": [
+            "Fees are specified in project proposals and contracts",
+            "Payment terms are net 30 days from invoice date unless otherwise agreed",
+            "Invoices are sent electronically to your designated contact",
+            "Payment is typically made via bank transfer to our designated account",
+            "All fees are exclusive of applicable taxes, which you are responsible for"
+          ]
+        },
+        "s4_2": {
+          "title": "4.2 Late Payment",
+          "items": [
+            "Late payments incur interest at 2% per month (24% annually)",
+            "We may suspend services for accounts more than 15 days overdue",
+            "Collections costs and legal fees are your responsibility",
+            "No right to offset without our written agreement"
+          ]
+        },
+        "s4_3": {
+          "title": "4.3 Expenses",
+          "intro": "You will reimburse pre-approved expenses including:",
+          "items": [
+            "Third-party software licenses and subscriptions",
+            "Cloud computing and hosting costs",
+            "Travel expenses for on-site work (when approved)",
+            "Specialized hardware or equipment purchases"
+          ]
+        }
+      },
+      "s5": {
+        "title": "5. Intellectual Property Rights",
+        "s5_1": {
+          "title": "5.1 Client Deliverables",
+          "intro": "Upon full payment, you will own:",
+          "items": [
+            "Custom code developed specifically for your project",
+            "Documentation and specifications created for your use",
+            "Final deliverables as defined in the project scope",
+            "Data and content you provide to us"
+          ]
+        },
+        "s5_2": {
+          "title": "5.2 TransformerLabs Retention",
+          "intro": "We retain ownership of:",
+          "items": [
+            "Our general methodologies, frameworks, and processes",
+            "Pre-existing intellectual property and tools",
+            "Reusable code libraries and components we develop",
+            "Know-how and expertise gained during the project",
+            "The right to use de-identified data for service improvement"
+          ]
+        },
+        "s5_3": {
+          "title": "5.3 Third-Party Rights",
+          "intro": "We ensure our deliverables don't infringe third-party rights, but you're responsible for:",
+          "items": [
+            "Content and data you provide",
+            "Third-party services and APIs you choose to integrate",
+            "Compliance with software licenses for tools you select"
+          ]
+        }
+      },
+      "s6": {
+        "title": "6. Warranties and Disclaimers",
+        "s6_1": {
+          "title": "6.1 Our Warranties",
+          "intro": "We warrant that:",
+          "items": [
+            "Services will be performed with professional skill and care",
+            "We have the right to provide the services",
+            "Deliverables will substantially conform to agreed specifications",
+            "We will not knowingly introduce malicious code"
+          ]
+        },
+        "s6_2": {
+          "title": "6.2 Warranty Period",
+          "intro": "We provide a 90-day warranty on deliverables to:",
+          "items": [
+            "Fix defects that prevent substantial conformance to specifications",
+            "Correct errors in functionality as originally delivered",
+            "Address documentation inaccuracies"
+          ],
+          "exclusion": "This warranty excludes issues caused by modifications, third-party integrations, or changes to the operating environment."
+        },
+        "s6_3": {
+          "title": "6.3 DISCLAIMER",
+          "content": "EXCEPT AS EXPRESSLY STATED, WE PROVIDE SERVICES \"AS IS\" WITHOUT WARRANTIES OF ANY KIND. WE DISCLAIM ALL IMPLIED WARRANTIES INCLUDING MERCHANTABILITY, FITNESS FOR PURPOSE, AND NON-INFRINGEMENT. WE DO NOT WARRANT THAT SERVICES WILL BE UNINTERRUPTED, ERROR-FREE, OR MEET ALL YOUR REQUIREMENTS."
+        }
+      },
+      "s7": {
+        "title": "7. Limitation of Liability",
+        "important": "IMPORTANT LIABILITY LIMITATIONS",
+        "s7_1": {
+          "title": "7.1 Damages Cap",
+          "content": "Our total liability for any project will not exceed the fees paid by you for that specific project."
+        },
+        "s7_2": {
+          "title": "7.2 Excluded Damages",
+          "content": "We are not liable for indirect, consequential, incidental, special, or punitive damages, including lost profits, business interruption, or data loss, even if advised of the possibility."
+        },
+        "s7_3": {
+          "title": "7.3 Exceptions",
+          "intro": "These limitations don't apply to:",
+          "items": [
+            "Our breach of confidentiality obligations",
+            "Intentional misconduct or gross negligence",
+            "Violations of intellectual property rights",
+            "Damages that cannot be limited under applicable law"
+          ]
+        }
+      },
+      "s8": {
+        "title": "8. Confidentiality",
+        "s8_1": {
+          "title": "8.1 Mutual Obligations",
+          "intro": "Both parties agree to:",
+          "items": [
+            "Protect confidential information using reasonable care",
+            "Use confidential information only for authorized purposes",
+            "Not disclose confidential information to third parties",
+            "Return or destroy confidential information upon termination"
+          ]
+        },
+        "s8_2": {
+          "title": "8.2 Exceptions",
+          "intro": "Confidentiality obligations don't apply to information that:",
+          "items": [
+            "Is publicly available or becomes public through no breach",
+            "Was known before disclosure",
+            "Is independently developed without using confidential information",
+            "Must be disclosed by law or court order"
+          ]
+        }
+      },
+      "s9": {
+        "title": "9. Termination",
+        "s9_1": {
+          "title": "9.1 Termination for Convenience",
+          "intro": "Either party may terminate with 30 days' written notice. You will pay for:",
+          "items": [
+            "All work completed before termination",
+            "Costs incurred for ongoing work",
+            "Non-cancellable commitments made on your behalf"
+          ]
+        },
+        "s9_2": {
+          "title": "9.2 Termination for Cause",
+          "intro": "Either party may terminate immediately for:",
+          "items": [
+            "Material breach of these terms (if not cured within 15 days of notice)",
+            "Non-payment of undisputed amounts (after 30 days of notice)",
+            "Insolvency or bankruptcy proceedings",
+            "Violation of confidentiality obligations"
+          ]
+        },
+        "s9_3": {
+          "title": "9.3 Effect of Termination",
+          "intro": "Upon termination:",
+          "items": [
+            "We will provide completed deliverables upon payment",
+            "Each party returns or destroys confidential information",
+            "Payment obligations for completed work survive",
+            "Intellectual property provisions remain in effect"
+          ]
+        }
+      },
+      "s10": {
+        "title": "10. Indemnification",
+        "s10_1": {
+          "title": "10.1 Client Indemnification",
+          "intro": "You agree to indemnify us against claims arising from:",
+          "items": [
+            "Your use of deliverables in violation of these terms",
+            "Content, data, or materials you provide",
+            "Your violation of applicable laws or third-party rights",
+            "Modifications you make to our deliverables"
+          ]
+        },
+        "s10_2": {
+          "title": "10.2 Our Indemnification",
+          "intro": "We will indemnify you against claims that our deliverables infringe third-party intellectual property rights, provided you:",
+          "items": [
+            "Notify us promptly of any claims",
+            "Give us control of the defense and settlement",
+            "Cooperate reasonably with our defense"
+          ]
+        }
+      },
+      "s11": {
+        "title": "11. Force Majeure",
+        "intro": "Neither party is liable for delays or failures due to events beyond reasonable control, including:",
+        "items": [
+          "Natural disasters, pandemics, or public health emergencies",
+          "War, terrorism, or civil unrest",
+          "Government actions, sanctions, or regulatory changes",
+          "Internet outages, cyber attacks, or infrastructure failures",
+          "Labor strikes or supplier failures"
+        ],
+        "mitigation": "The affected party must notify the other promptly and use reasonable efforts to mitigate the impact."
+      },
+      "s12": {
+        "title": "12. Governing Law and Disputes",
+        "s12_1": {
+          "title": "12.1 Governing Law",
+          "content": "These terms are governed by the laws of Palestine, without regard to conflict of laws principles."
+        },
+        "s12_2": {
+          "title": "12.2 Dispute Resolution",
+          "items": [
+            "Direct Negotiation: Parties will first attempt to resolve disputes through good faith negotiations",
+            "Mediation: If negotiation fails, disputes will be submitted to mediation",
+            "Arbitration: Unresolved disputes will be settled by binding arbitration",
+            "Court Jurisdiction: Courts in Palestine have exclusive jurisdiction for enforcement"
+          ]
+        },
+        "s12_3": {
+          "title": "12.3 International Enforcement",
+          "content": "For international clients, we agree that this agreement may be enforced in the courts of your jurisdiction for collection purposes, provided Palestine law still governs the interpretation of terms."
+        }
+      },
+      "s13": {
+        "title": "13. General Provisions",
+        "s13_1": {
+          "title": "13.1 Entire Agreement",
+          "content": "These terms, together with project-specific contracts and statements of work, constitute the entire agreement between us."
+        },
+        "s13_2": {
+          "title": "13.2 Modifications",
+          "content": "We may update these terms periodically. Material changes will be communicated via email or website notice. Continued use constitutes acceptance."
+        },
+        "s13_3": {
+          "title": "13.3 Severability",
+          "content": "If any provision is found unenforceable, the remainder of these terms remains in effect."
+        },
+        "s13_4": {
+          "title": "13.4 Assignment",
+          "content": "You may not assign these terms without our written consent. We may assign to affiliates or in connection with business transfers."
+        },
+        "s13_5": {
+          "title": "13.5 Independent Contractors",
+          "content": "We are independent contractors. These terms don't create partnership, joint venture, or agency relationships."
+        },
+        "s13_6": {
+          "title": "13.6 Notices",
+          "content": "Legal notices must be sent via email to"
+        },
+        "s13_6_end": "and are effective upon receipt acknowledgment."
+      },
+      "s14": {
+        "title": "14. Contact Information",
+        "intro": "Questions about these Terms of Service? Contact us:",
+        "emailLabel": "Email:",
+        "subjectLabel": "Subject Line:",
+        "subjectValue": "Terms of Service Inquiry",
+        "addressLabel": "Address:",
+        "addressValue": "Nablus, West Bank, Palestine",
+        "responseTime": "We respond to legal inquiries within 5 business days."
+      }
+    }
+  },
+  "cookies": {
+    "banner": {
+      "title": "We value your privacy",
+      "description": "We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. By clicking \"Accept All\", you consent to our use of cookies.",
+      "preferences": "Preferences",
+      "essentialOnly": "Essential Only",
+      "acceptAll": "Accept All"
+    },
+    "modal": {
+      "title": "Cookie Preferences",
+      "description": "Manage your cookie preferences for TransformerLabs. Choose which types of cookies you want to allow.",
+      "necessary": {
+        "title": "Necessary",
+        "description": "Essential cookies required for the website to function properly. Cannot be disabled."
+      },
+      "analytics": {
+        "title": "Analytics",
+        "description": "Help us understand how visitors interact with our website.",
+        "examples": "Page views, time on site, referral sources"
+      },
+      "functional": {
+        "title": "Functional",
+        "description": "Remember your preferences and settings for a better experience.",
+        "examples": "Language preferences, dark mode settings"
+      },
+      "marketing": {
+        "title": "Marketing",
+        "description": "Used to deliver relevant advertisements and track ad performance.",
+        "examples": "Retargeting ads, conversion tracking"
+      },
+      "examplesLabel": "Examples:",
+      "cancel": "Cancel",
+      "savePreferences": "Save Preferences"
+    }
+  },
+  "languageSwitcher": {
+    "label": "Language",
+    "english": "English",
+    "arabic": "العربية"
+  }
+}

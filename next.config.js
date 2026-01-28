@@ -1,3 +1,7 @@
+const createNextIntlPlugin = require('next-intl/plugin');
+
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
@@ -5,7 +9,6 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
-  // Disable server-side features for static export
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -14,4 +17,4 @@ const nextConfig = {
   }
 }
 
-module.exports = nextConfig
+module.exports = withNextIntl(nextConfig);

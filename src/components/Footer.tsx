@@ -1,19 +1,26 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
 import { Mail, MapPin } from 'lucide-react'
+import { useLocale, useTranslations } from 'next-intl'
 
 export default function Footer() {
+  const t = useTranslations('footer')
+  const tNav = useTranslations('navigation')
+  const locale = useLocale()
+
   const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'Services', href: '/services' },
-    { name: 'About', href: '/about' },
-    { name: 'Contact', href: '/contact' },
-    { name: 'Careers', href: '/careers' },
+    { name: tNav('home'), href: `/${locale}` },
+    { name: tNav('services'), href: `/${locale}/services` },
+    { name: tNav('about'), href: `/${locale}/about` },
+    { name: tNav('contact'), href: `/${locale}/contact` },
+    { name: tNav('careers'), href: `/${locale}/careers` },
   ]
 
   const legalLinks = [
-    { name: 'Privacy Policy', href: '/privacy' },
-    { name: 'Terms of Service', href: '/terms' },
+    { name: tNav('privacyPolicy'), href: `/${locale}/privacy` },
+    { name: tNav('termsOfService'), href: `/${locale}/terms` },
   ]
 
   const styles = {
@@ -41,7 +48,6 @@ export default function Footer() {
       width: '100%',
       boxSizing: 'border-box' as const
     },
-    // Top Section - Company Brand
     brandSection: {
       textAlign: 'center' as const,
       marginBottom: 'var(--space-12)',
@@ -76,7 +82,6 @@ export default function Footer() {
       letterSpacing: '-0.011em',
       margin: 0
     },
-    // Middle Section - Main Content Grid
     mainContent: {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr 1fr 1fr',
@@ -148,7 +153,6 @@ export default function Footer() {
       fontWeight: 'var(--font-weight-medium)',
       transition: 'all var(--duration-fast) var(--ease)'
     },
-    // Bottom Section - Copyright & Offices
     bottomSection: {
       paddingTop: 'var(--space-8)',
       borderTop: '1px solid var(--border)',
@@ -182,7 +186,6 @@ export default function Footer() {
     }
   }
 
-  // Mobile responsive styles
   const mobileStyles = `
     @media (max-width: 1024px) {
       .footer-main-content {
@@ -198,24 +201,24 @@ export default function Footer() {
         gap: var(--space-8) !important;
         text-align: center !important;
       }
-      
+
       .footer-brand-section {
         margin-bottom: var(--space-8) !important;
       }
-      
+
       .footer-nav-list {
         flex-direction: row !important;
         gap: var(--space-4) !important;
         justify-content: center;
         flex-wrap: wrap;
       }
-      
+
       .footer-offices-list {
         flex-direction: column !important;
         gap: var(--space-2) !important;
         align-items: center !important;
       }
-      
+
       .footer-container {
         padding: 0 var(--space-4) !important;
       }
@@ -225,44 +228,44 @@ export default function Footer() {
       .footer {
         padding: var(--space-12) 0 var(--space-4) !important;
       }
-      
+
       .footer-container {
         padding: 0 var(--space-3) !important;
       }
-      
+
       .footer-logo-link {
         font-size: 1.25rem !important;
       }
-      
+
       .footer-logo-image {
         height: 2rem !important;
       }
-      
+
       .footer-description {
         font-size: 1rem !important;
       }
-      
+
       .footer-nav-list {
         gap: var(--space-3) !important;
       }
-      
+
       .footer-nav-item {
         font-size: 0.8rem !important;
       }
-      
+
       .footer-contact-item,
       .footer-linkedin-link {
         font-size: 0.8rem !important;
       }
-      
+
       .footer-copyright-text {
         font-size: 0.75rem !important;
       }
-      
+
       .footer-office-location {
         font-size: 0.75rem !important;
       }
-      
+
       .footer-offices-list {
         margin-bottom: var(--space-4) !important;
       }
@@ -272,19 +275,19 @@ export default function Footer() {
       .footer-container {
         padding: 0 var(--space-2) !important;
       }
-      
+
       .footer-logo-image {
         height: 1.75rem !important;
       }
-      
+
       .footer-description {
         font-size: 0.9rem !important;
       }
-      
+
       .footer-copyright-text {
         font-size: 0.7rem !important;
       }
-      
+
       .footer-office-location {
         font-size: 0.7rem !important;
       }
@@ -298,7 +301,7 @@ export default function Footer() {
       text-decoration: none !important;
       transform: translateY(-1px);
     }
-    
+
     .footer-logo-link:hover {
       color: var(--primary) !important;
       text-decoration: none !important;
@@ -315,7 +318,7 @@ export default function Footer() {
         <div className="footer-container" style={styles.container}>
           {/* Top Section - Company Brand */}
           <div className="footer-brand-section" style={styles.brandSection}>
-            <Link href="/" className="footer-logo-link" style={styles.logoLink}>
+            <Link href={`/${locale}`} className="footer-logo-link" style={styles.logoLink}>
               <Image
                 src="/Logo_only_Transparent.svg"
                 alt="TransformerLabs"
@@ -329,18 +332,17 @@ export default function Footer() {
                 TransformerLabs
               </span>
             </Link>
-            
+
             <p className="footer-description" style={styles.description}>
-              AI-powered software and web solutions that solve real business problems.
-              We build practical applications for businesses worldwide.
+              {t('description')}
             </p>
           </div>
 
-          {/* Middle Section - Three Column Grid */}
+          {/* Middle Section - Four Column Grid */}
           <div className="footer-main-content" style={styles.mainContent}>
             {/* Navigation Column */}
             <div style={styles.contentColumn}>
-              <h3 style={styles.columnTitle}>Navigation</h3>
+              <h3 style={styles.columnTitle}>{t('navigation')}</h3>
               <ul className="footer-nav-list" style={styles.navList}>
                 {navigation.map((item) => (
                   <li key={item.name}>
@@ -354,10 +356,10 @@ export default function Footer() {
 
             {/* Contact Column */}
             <div style={styles.contentColumn}>
-              <h3 style={styles.columnTitle}>Contact</h3>
+              <h3 style={styles.columnTitle}>{t('contactTitle')}</h3>
               <div style={styles.contactList}>
-                <a 
-                  href="mailto:Mo@MohammadOthman.com" 
+                <a
+                  href="mailto:Mo@MohammadOthman.com"
                   className="footer-contact-item"
                   style={styles.contactItem}
                 >
@@ -369,10 +371,10 @@ export default function Footer() {
 
             {/* Social Column */}
             <div style={styles.contentColumn}>
-              <h3 style={styles.columnTitle}>Connect</h3>
+              <h3 style={styles.columnTitle}>{t('connect')}</h3>
               <div style={styles.socialList}>
-                <a 
-                  href="https://www.linkedin.com/company/transformer-labs" 
+                <a
+                  href="https://www.linkedin.com/company/transformer-labs"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="footer-linkedin-link"
@@ -381,14 +383,14 @@ export default function Footer() {
                   <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" style={{ userSelect: 'none', pointerEvents: 'none' }}>
                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                   </svg>
-                  <span>LinkedIn</span>
+                  <span>{t('linkedIn')}</span>
                 </a>
               </div>
             </div>
 
             {/* Legal Column */}
             <div style={styles.contentColumn}>
-              <h3 style={styles.columnTitle}>Legal</h3>
+              <h3 style={styles.columnTitle}>{t('legal')}</h3>
               <ul className="footer-nav-list" style={styles.navList}>
                 {legalLinks.map((item) => (
                   <li key={item.name}>
@@ -406,16 +408,16 @@ export default function Footer() {
             <div className="footer-offices-list" style={styles.officesList}>
               <div className="footer-office-location" style={styles.officeLocation}>
                 <MapPin size={16} style={styles.officeIcon} />
-                <span>Aberdeen, Scotland United Kingdom</span>
+                <span>{t('scotlandOffice')}</span>
               </div>
               <div className="footer-office-location" style={styles.officeLocation}>
                 <MapPin size={16} style={styles.officeIcon} />
-                <span>Nablus, West Bank, Palestine</span>
+                <span>{t('palestineOffice')}</span>
               </div>
             </div>
-            
+
             <p className="footer-copyright-text" style={styles.copyrightText}>
-              © 2026 TransformerLabs. Building the future with AI.
+              &copy; {t('copyright')}
             </p>
           </div>
         </div>

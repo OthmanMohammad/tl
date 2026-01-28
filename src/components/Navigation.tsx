@@ -5,26 +5,31 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useState, useEffect, useCallback } from 'react'
 import { Menu, X } from 'lucide-react'
+import { useLocale, useTranslations } from 'next-intl'
+import LanguageSwitcher from './LanguageSwitcher'
 
 export default function Navigation() {
+  const t = useTranslations('navigation')
+  const tCommon = useTranslations('common')
+  const locale = useLocale()
   const pathname = usePathname()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
   const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'Services', href: '/services' },
-    { name: 'About', href: '/about' },
-    { name: 'Contact', href: '/contact' },
+    { name: t('home'), href: `/${locale}` },
+    { name: t('services'), href: `/${locale}/services` },
+    { name: t('about'), href: `/${locale}/about` },
+    { name: t('contact'), href: `/${locale}/contact` },
   ]
 
   // Enhanced active state detection
   const isActiveLink = useCallback((href: string): boolean => {
-    if (href === '/') {
-      return pathname === '/'
+    if (href === `/${locale}`) {
+      return pathname === `/${locale}` || pathname === `/${locale}/`
     }
     return pathname.startsWith(href)
-  }, [pathname])
+  }, [pathname, locale])
 
   // Handle scroll detection for nav styling
   useEffect(() => {
@@ -57,7 +62,7 @@ export default function Navigation() {
       document.body.style.top = ''
       document.body.style.width = ''
       document.body.style.overflowY = ''
-      
+
       if (scrollY) {
         window.scrollTo(0, parseInt(scrollY || '0') * -1)
       }
@@ -111,7 +116,7 @@ export default function Navigation() {
       <nav className={`nav ${isScrolled ? 'nav-scrolled' : ''}`}>
         <div className="nav-container">
           {/* Logo */}
-          <Link href="/" className="logo" onClick={handleLinkClick}>
+          <Link href={`/${locale}`} className="logo" onClick={handleLinkClick}>
             <Image
               src="/Transformer-Inverted-Color-Transparent-bg.svg"
               alt="TransformerLabs"
@@ -140,17 +145,20 @@ export default function Navigation() {
             })}
           </div>
 
-          {/* Desktop CTA Button */}
-          <Link href="/contact" className="btn btn-primary nav-cta-desktop">
-            Get Started
-          </Link>
+          {/* Desktop Right Side - Language Switcher + CTA */}
+          <div className="nav-right-desktop">
+            <LanguageSwitcher />
+            <Link href={`/${locale}/contact`} className="btn btn-primary nav-cta-desktop">
+              {tCommon('getStarted')}
+            </Link>
+          </div>
 
           {/* Mobile Menu Toggle - Always accessible */}
           <button
             className="nav-toggle"
             onClick={toggleMenu}
             aria-expanded={isMenuOpen}
-            aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-label={isMenuOpen ? t('closeMenu') : t('openMenu')}
             aria-controls="mobile-menu"
             type="button"
           >
@@ -167,21 +175,21 @@ export default function Navigation() {
       {isMenuOpen && (
         <div className="mobile-menu-portal">
           {/* Backdrop */}
-          <div 
+          <div
             className="mobile-menu-backdrop"
             onClick={handleOverlayClick}
             aria-hidden="true"
           />
-          
+
           {/* Mobile Menu Content */}
-          <div 
+          <div
             className="mobile-menu-content"
             id="mobile-menu"
             role="navigation"
             aria-label="Mobile navigation"
           >
             <div className="mobile-menu-header">
-              <Link href="/" className="mobile-menu-logo" onClick={handleLinkClick}>
+              <Link href={`/${locale}`} className="mobile-menu-logo" onClick={handleLinkClick}>
                 <Image
                   src="/Logo_only_Transparent.svg"
                   alt="TransformerLabs"
@@ -191,17 +199,17 @@ export default function Navigation() {
                 />
                 <span>TransformerLabs</span>
               </Link>
-              
+
               <button
                 className="mobile-menu-close"
                 onClick={closeMenu}
-                aria-label="Close menu"
+                aria-label={t('closeMenu')}
                 type="button"
               >
                 <X size={24} aria-hidden="true" />
               </button>
             </div>
-            
+
             <nav className="mobile-menu-nav">
               {navigation.map((item) => {
                 const isActive = isActiveLink(item.href)
@@ -218,6 +226,11 @@ export default function Navigation() {
                 )
               })}
             </nav>
+
+            {/* Mobile Language Switcher */}
+            <div className="mobile-menu-footer">
+              <LanguageSwitcher />
+            </div>
           </div>
         </div>
       )}
