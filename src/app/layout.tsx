@@ -1,5 +1,7 @@
-// Root layout - minimal wrapper, actual layout is in [locale]/layout.tsx
-// This is required for Next.js but the [locale] layout handles everything
+// Root layout - required by Next.js
+// CSS is imported here to ensure it's bundled in static export
+import './globals.css'
+
 export default function RootLayout({
   children,
 }: {
