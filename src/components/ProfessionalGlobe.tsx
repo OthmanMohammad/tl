@@ -21,6 +21,7 @@ const ThreeGlobe: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [hoveredOffice, setHoveredOffice] = useState<string | null>(null)
   const [isLoaded, setIsLoaded] = useState(false)
+  const markersRef = useRef<Map<string, any>>(new Map())
   const t = useTranslations('globe')
 
   const offices: Office[] = [
@@ -62,68 +63,62 @@ const ThreeGlobe: React.FC = () => {
       const width = container.clientWidth
       const height = 400
 
-      // Scene setup with dark space background
+      // Scene setup - transparent background to show page bg
       scene = new THREE.Scene()
-      scene.background = new THREE.Color(0x000810)
 
       // Camera
       camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000)
       camera.position.z = 2.5
 
-      // Renderer
+      // Renderer with alpha for transparent background
       renderer = new THREE.WebGLRenderer({
         antialias: true,
-        alpha: false,
+        alpha: true,
         powerPreference: 'high-performance'
       })
       renderer.setSize(width, height)
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-      renderer.toneMapping = THREE.ACESFilmicToneMapping
-      renderer.toneMappingExposure = 1.2
+      renderer.setClearColor(0x000000, 0)
       container.appendChild(renderer.domElement)
 
       // Texture loader
       const textureLoader = new THREE.TextureLoader()
 
-      // Load all textures
-      const earthDayTexture = textureLoader.load('/textures/earth/earth-day.jpg')
+      // Load night texture (primary) and day texture (subtle)
       const earthNightTexture = textureLoader.load('/textures/earth/earth-night.jpg')
       const earthBumpTexture = textureLoader.load('/textures/earth/earth-bump.jpg')
-      const earthSpecularTexture = textureLoader.load('/textures/earth/earth-specular.jpg')
 
       // Earth group (tilted like real Earth)
       const earthGroup = new THREE.Group()
       earthGroup.rotation.z = -23.4 * Math.PI / 180
       scene.add(earthGroup)
 
-      // Create Earth sphere with real textures
+      // Create Earth sphere - night side primary
       const earthGeometry = new THREE.SphereGeometry(1, 64, 64)
 
-      // Earth material with real textures
+      // Dark earth base with subtle bump
       const earthMaterial = new THREE.MeshPhongMaterial({
-        map: earthDayTexture,
+        color: 0x111122,
         bumpMap: earthBumpTexture,
-        bumpScale: 0.03,
-        specularMap: earthSpecularTexture,
-        specular: new THREE.Color(0x333333),
-        shininess: 25
+        bumpScale: 0.02,
+        shininess: 5
       })
 
       const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial)
       earthGroup.add(earthMesh)
 
-      // City lights layer (night side glow) - using real night texture
+      // City lights layer - this is the main visible layer
       const lightsMaterial = new THREE.MeshBasicMaterial({
         map: earthNightTexture,
         transparent: true,
-        opacity: 0.8,
+        opacity: 1.0,
         blending: THREE.AdditiveBlending
       })
       const lightsMesh = new THREE.Mesh(earthGeometry.clone(), lightsMaterial)
       earthGroup.add(lightsMesh)
 
-      // Atmosphere glow (Fresnel effect)
-      const atmosphereGeometry = new THREE.SphereGeometry(1.015, 64, 64)
+      // Subtle atmosphere glow
+      const atmosphereGeometry = new THREE.SphereGeometry(1.02, 64, 64)
       const atmosphereMaterial = new THREE.ShaderMaterial({
         vertexShader: `
           varying vec3 vNormal;
@@ -135,8 +130,8 @@ const ThreeGlobe: React.FC = () => {
         fragmentShader: `
           varying vec3 vNormal;
           void main() {
-            float intensity = pow(0.65 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
-            gl_FragColor = vec4(0.3, 0.6, 1.0, 1.0) * intensity * 0.8;
+            float intensity = pow(0.6 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
+            gl_FragColor = vec4(0.2, 0.4, 0.8, 1.0) * intensity * 0.4;
           }
         `,
         blending: THREE.AdditiveBlending,
@@ -146,10 +141,7 @@ const ThreeGlobe: React.FC = () => {
       const atmosphereMesh = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial)
       earthGroup.add(atmosphereMesh)
 
-      // Office markers
-      const markerGeometry = new THREE.SphereGeometry(0.025, 16, 16)
-      const markerMaterial = new THREE.MeshBasicMaterial({ color: 0xff3621 })
-
+      // Office pin markers
       offices.forEach(office => {
         // Convert lat/lng to 3D position
         const phi = (90 - office.lat) * (Math.PI / 180)
@@ -159,106 +151,101 @@ const ThreeGlobe: React.FC = () => {
         const y = Math.cos(phi)
         const z = Math.sin(phi) * Math.sin(theta)
 
-        const marker = new THREE.Mesh(markerGeometry, markerMaterial)
-        marker.position.set(x * 1.02, y * 1.02, z * 1.02)
-        marker.userData = { office }
-        earthGroup.add(marker)
+        // Pin base (small sphere)
+        const pinBaseGeometry = new THREE.SphereGeometry(0.018, 16, 16)
+        const pinBaseMaterial = new THREE.MeshBasicMaterial({ color: 0xff3621 })
+        const pinBase = new THREE.Mesh(pinBaseGeometry, pinBaseMaterial)
+        pinBase.position.set(x * 1.01, y * 1.01, z * 1.01)
+        earthGroup.add(pinBase)
 
-        // Add glow ring around marker
-        const ringGeometry = new THREE.RingGeometry(0.035, 0.055, 32)
-        const ringMaterial = new THREE.MeshBasicMaterial({
+        // Pin stem (cylinder pointing outward)
+        const pinStemGeometry = new THREE.CylinderGeometry(0.004, 0.004, 0.05, 8)
+        const pinStemMaterial = new THREE.MeshBasicMaterial({ color: 0xff3621 })
+        const pinStem = new THREE.Mesh(pinStemGeometry, pinStemMaterial)
+
+        // Position and orient the stem
+        const stemPos = new THREE.Vector3(x, y, z).multiplyScalar(1.035)
+        pinStem.position.copy(stemPos)
+        pinStem.lookAt(0, 0, 0)
+        pinStem.rotateX(Math.PI / 2)
+        earthGroup.add(pinStem)
+
+        // Pin head (larger sphere at top)
+        const pinHeadGeometry = new THREE.SphereGeometry(0.025, 16, 16)
+        const pinHeadMaterial = new THREE.MeshBasicMaterial({
           color: 0xff3621,
           transparent: true,
-          opacity: 0.6,
-          side: THREE.DoubleSide
+          opacity: 1.0
         })
-        const ring = new THREE.Mesh(ringGeometry, ringMaterial)
-        ring.position.copy(marker.position)
-        ring.lookAt(0, 0, 0)
-        earthGroup.add(ring)
+        const pinHead = new THREE.Mesh(pinHeadGeometry, pinHeadMaterial)
+        const headPos = new THREE.Vector3(x, y, z).multiplyScalar(1.06)
+        pinHead.position.copy(headPos)
+        pinHead.userData = { officeId: office.id }
+        earthGroup.add(pinHead)
 
-        // Add outer pulsing ring
-        const pulseRingGeometry = new THREE.RingGeometry(0.06, 0.065, 32)
-        const pulseRingMaterial = new THREE.MeshBasicMaterial({
+        // Glow ring (visible on hover)
+        const glowGeometry = new THREE.RingGeometry(0.03, 0.05, 32)
+        const glowMaterial = new THREE.MeshBasicMaterial({
           color: 0xff3621,
           transparent: true,
-          opacity: 0.3,
+          opacity: 0,
           side: THREE.DoubleSide
         })
-        const pulseRing = new THREE.Mesh(pulseRingGeometry, pulseRingMaterial)
-        pulseRing.position.copy(marker.position)
-        pulseRing.lookAt(0, 0, 0)
-        pulseRing.userData = { isPulse: true, baseScale: 1 }
-        earthGroup.add(pulseRing)
+        const glow = new THREE.Mesh(glowGeometry, glowMaterial)
+        glow.position.copy(headPos)
+        glow.lookAt(0, 0, 0)
+        glow.userData = { isGlow: true, officeId: office.id }
+        earthGroup.add(glow)
+
+        // Store references for hover effects
+        markersRef.current.set(office.id, {
+          pinHead,
+          pinHeadMaterial,
+          glow,
+          glowMaterial
+        })
       })
 
-      // Stars background
-      const starsGeometry = new THREE.BufferGeometry()
-      const starsCount = 3000
-      const starsPositions = new Float32Array(starsCount * 3)
-      const starsSizes = new Float32Array(starsCount)
-
-      for (let i = 0; i < starsCount; i++) {
-        const radius = 20 + Math.random() * 30
-        const u = Math.random()
-        const v = Math.random()
-        const theta = 2 * Math.PI * u
-        const phi = Math.acos(2 * v - 1)
-
-        starsPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
-        starsPositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
-        starsPositions[i * 3 + 2] = radius * Math.cos(phi)
-        starsSizes[i] = Math.random() * 1.5 + 0.5
-      }
-
-      starsGeometry.setAttribute('position', new THREE.BufferAttribute(starsPositions, 3))
-      starsGeometry.setAttribute('size', new THREE.BufferAttribute(starsSizes, 1))
-
-      const starsMaterial = new THREE.PointsMaterial({
-        color: 0xffffff,
-        size: 0.08,
-        transparent: true,
-        opacity: 0.9,
-        sizeAttenuation: true
-      })
-      const stars = new THREE.Points(starsGeometry, starsMaterial)
-      scene.add(stars)
-
-      // Lighting - simulating sun
-      const sunLight = new THREE.DirectionalLight(0xffffff, 2.5)
-      sunLight.position.set(-3, 0.5, 1.5)
-      scene.add(sunLight)
-
-      // Subtle fill light
-      const fillLight = new THREE.DirectionalLight(0x4488ff, 0.3)
-      fillLight.position.set(2, 0, -1)
-      scene.add(fillLight)
-
-      // Very subtle ambient
-      const ambientLight = new THREE.AmbientLight(0x222233, 0.3)
+      // Subtle ambient light
+      const ambientLight = new THREE.AmbientLight(0x333344, 0.5)
       scene.add(ambientLight)
 
-      // Animation
+      // Gentle directional light for depth
+      const dirLight = new THREE.DirectionalLight(0x6688aa, 0.3)
+      dirLight.position.set(1, 0.5, 1)
+      scene.add(dirLight)
+
+      // Animation - gentle floating motion
       let time = 0
+      const baseRotation = earthGroup.rotation.y
+
       const animate = () => {
         animationId = requestAnimationFrame(animate)
-        time += 0.016
+        time += 0.01
 
-        // Rotate earth slowly
-        earthMesh.rotation.y += 0.001
-        lightsMesh.rotation.y += 0.001
+        // Gentle oscillating rotation (floating effect)
+        earthMesh.rotation.y = baseRotation + Math.sin(time * 0.5) * 0.15
+        lightsMesh.rotation.y = baseRotation + Math.sin(time * 0.5) * 0.15
 
-        // Pulse effect on markers
-        earthGroup.children.forEach(child => {
-          if (child.userData.isPulse) {
-            const scale = 1 + Math.sin(time * 2) * 0.3
-            child.scale.set(scale, scale, scale)
-            ;(child as any).material.opacity = 0.3 * (1 - (scale - 1) / 0.3)
+        // Update hover effects
+        markersRef.current.forEach((marker, id) => {
+          const isHovered = hoveredOffice === id
+          const targetOpacity = isHovered ? 0.8 : 0
+          const targetScale = isHovered ? 1.3 : 1.0
+
+          // Animate glow
+          marker.glowMaterial.opacity += (targetOpacity - marker.glowMaterial.opacity) * 0.1
+
+          // Animate pin head scale
+          const currentScale = marker.pinHead.scale.x
+          const newScale = currentScale + (targetScale - currentScale) * 0.1
+          marker.pinHead.scale.set(newScale, newScale, newScale)
+
+          // Pulsing glow when hovered
+          if (isHovered) {
+            marker.glow.scale.setScalar(1 + Math.sin(time * 4) * 0.2)
           }
         })
-
-        // Rotate stars very slowly
-        stars.rotation.y -= 0.0001
 
         renderer.render(scene, camera)
       }
@@ -293,28 +280,18 @@ const ThreeGlobe: React.FC = () => {
         renderer.dispose()
       }
     }
-  }, [])
+  }, [hoveredOffice])
 
   return (
     <div className="globe-wrapper">
       <style jsx>{`
         .globe-wrapper {
-          background: linear-gradient(180deg, #000810 0%, #001020 50%, #000810 100%);
+          background: var(--bg-secondary);
           border-radius: var(--radius-2xl);
           padding: var(--space-6);
-          border: 1px solid rgba(100, 149, 237, 0.15);
+          border: 1px solid var(--border);
           position: relative;
           overflow: hidden;
-        }
-
-        .globe-wrapper::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          height: 1px;
-          background: linear-gradient(90deg, transparent, rgba(100, 149, 237, 0.3), transparent);
         }
 
         .globe-header {
@@ -327,12 +304,12 @@ const ThreeGlobe: React.FC = () => {
         .globe-title {
           font-size: 1.25rem;
           font-weight: var(--font-weight-semibold);
-          color: white;
+          color: var(--text-primary);
           margin-bottom: var(--space-2);
         }
 
         .globe-subtitle {
-          color: rgba(148, 163, 184, 1);
+          color: var(--text-secondary);
           font-size: 0.875rem;
           margin: 0;
         }
@@ -357,7 +334,7 @@ const ThreeGlobe: React.FC = () => {
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          color: rgba(148, 163, 184, 0.6);
+          color: var(--text-secondary);
           font-size: 0.875rem;
         }
 
@@ -365,15 +342,15 @@ const ThreeGlobe: React.FC = () => {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: var(--space-4);
-          margin-top: var(--space-6);
+          margin-top: var(--space-8);
+          padding-top: var(--space-4);
           position: relative;
           z-index: 1;
         }
 
         .office-card {
-          background: rgba(20, 30, 50, 0.6);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(100, 149, 237, 0.15);
+          background: var(--bg-primary);
+          border: 1px solid var(--border);
           border-radius: var(--radius-lg);
           padding: var(--space-4);
           text-align: center;
@@ -385,7 +362,7 @@ const ThreeGlobe: React.FC = () => {
         .office-card.active {
           border-color: var(--primary);
           transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(255, 54, 33, 0.15);
+          box-shadow: 0 8px 25px rgba(255, 54, 33, 0.1);
         }
 
         .office-icon {
@@ -402,14 +379,14 @@ const ThreeGlobe: React.FC = () => {
 
         .office-name {
           font-weight: var(--font-weight-semibold);
-          color: white;
+          color: var(--text-primary);
           margin-bottom: var(--space-1);
           font-size: 0.9rem;
         }
 
         .office-tz {
           font-size: 0.75rem;
-          color: rgba(148, 163, 184, 1);
+          color: var(--text-secondary);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -422,7 +399,7 @@ const ThreeGlobe: React.FC = () => {
           gap: var(--space-4);
           padding-top: var(--space-6);
           margin-top: var(--space-6);
-          border-top: 1px solid rgba(100, 149, 237, 0.15);
+          border-top: 1px solid var(--border);
           position: relative;
           z-index: 1;
         }
@@ -432,9 +409,9 @@ const ThreeGlobe: React.FC = () => {
           align-items: flex-start;
           gap: var(--space-3);
           padding: var(--space-3);
-          background: rgba(20, 30, 50, 0.4);
+          background: var(--bg-primary);
           border-radius: var(--radius-lg);
-          border: 1px solid rgba(100, 149, 237, 0.1);
+          border: 1px solid var(--border);
         }
 
         .benefit-icon {
@@ -452,13 +429,13 @@ const ThreeGlobe: React.FC = () => {
         .benefit-title {
           font-size: 0.875rem;
           font-weight: var(--font-weight-semibold);
-          color: white;
+          color: var(--text-primary);
           margin: 0 0 var(--space-1) 0;
         }
 
         .benefit-desc {
           font-size: 0.75rem;
-          color: rgba(148, 163, 184, 1);
+          color: var(--text-secondary);
           margin: 0;
           line-height: 1.4;
         }
