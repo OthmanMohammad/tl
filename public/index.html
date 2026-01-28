@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TransformerLabs - Redirecting...</title>
+  <meta http-equiv="refresh" content="0;url=/en/">
+  <link rel="canonical" href="https://transformerlabs.io/en/">
+  <script>
+    // Detect browser language and redirect appropriately
+    (function() {
+      var userLang = navigator.language || navigator.userLanguage;
+      var targetPath = '/en/';
+
+      // Check if user prefers Arabic
+      if (userLang && userLang.toLowerCase().startsWith('ar')) {
+        targetPath = '/ar/';
+      }
+
+      // Redirect immediately
+      window.location.replace(targetPath);
+    })();
+  </script>
+</head>
+<body>
+  <p>Redirecting to <a href="/en/">TransformerLabs</a>...</p>
+</body>
+</html>
