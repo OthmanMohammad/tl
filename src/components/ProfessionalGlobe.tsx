@@ -54,71 +54,115 @@ const ThreeGlobe: React.FC = () => {
     let camera: any
 
     const initGlobe = async () => {
-      // Dynamically import Three.js to avoid SSR issues
       const THREE = await import('three') as ThreeModule
 
       const container = containerRef.current
       if (!container) return
 
       const width = container.clientWidth
-      const height = 400
+      const height = 500
 
-      // Scene setup - transparent background to show page bg
+      // Scene with dark space background
       scene = new THREE.Scene()
+      scene.background = new THREE.Color(0x000508)
 
-      // Camera
+      // Camera - positioned to show full globe
       camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000)
-      camera.position.z = 2.5
+      camera.position.z = 3.2
 
-      // Renderer with alpha for transparent background
+      // Renderer
       renderer = new THREE.WebGLRenderer({
         antialias: true,
-        alpha: true,
         powerPreference: 'high-performance'
       })
       renderer.setSize(width, height)
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-      renderer.setClearColor(0x000000, 0)
       container.appendChild(renderer.domElement)
 
-      // Texture loader
+      // Texture loader with quality settings
       const textureLoader = new THREE.TextureLoader()
 
-      // Load night texture (primary) and day texture (subtle)
-      const earthNightTexture = textureLoader.load('/textures/earth/earth-night.jpg')
-      const earthBumpTexture = textureLoader.load('/textures/earth/earth-bump.jpg')
-
-      // Earth group (tilted like real Earth)
-      const earthGroup = new THREE.Group()
-      earthGroup.rotation.z = -23.4 * Math.PI / 180
-      scene.add(earthGroup)
-
-      // Create Earth sphere - night side primary
-      const earthGeometry = new THREE.SphereGeometry(1, 64, 64)
-
-      // Dark earth base with subtle bump
-      const earthMaterial = new THREE.MeshPhongMaterial({
-        color: 0x111122,
-        bumpMap: earthBumpTexture,
-        bumpScale: 0.02,
-        shininess: 5
+      // Load textures with quality settings
+      const earthDayTexture = textureLoader.load('/textures/earth/earth-day.jpg', (texture) => {
+        texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
+        texture.minFilter = THREE.LinearMipmapLinearFilter
+        texture.magFilter = THREE.LinearFilter
+        texture.colorSpace = THREE.SRGBColorSpace
       })
 
-      const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial)
-      earthGroup.add(earthMesh)
+      const earthNightTexture = textureLoader.load('/textures/earth/earth-night.jpg', (texture) => {
+        texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
+        texture.minFilter = THREE.LinearMipmapLinearFilter
+        texture.magFilter = THREE.LinearFilter
+      })
 
-      // City lights layer - this is the main visible layer
+      const earthBumpTexture = textureLoader.load('/textures/earth/earth-bump.jpg', (texture) => {
+        texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
+      })
+
+      // Create stars background
+      const starsGeometry = new THREE.BufferGeometry()
+      const starsCount = 2500
+      const starsPositions = new Float32Array(starsCount * 3)
+
+      for (let i = 0; i < starsCount; i++) {
+        const radius = 50 + Math.random() * 100
+        const u = Math.random()
+        const v = Math.random()
+        const theta = 2 * Math.PI * u
+        const phi = Math.acos(2 * v - 1)
+
+        starsPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
+        starsPositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
+        starsPositions[i * 3 + 2] = radius * Math.cos(phi)
+      }
+
+      starsGeometry.setAttribute('position', new THREE.BufferAttribute(starsPositions, 3))
+      const starsMaterial = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 0.15,
+        transparent: true,
+        opacity: 0.8,
+        sizeAttenuation: true
+      })
+      const stars = new THREE.Points(starsGeometry, starsMaterial)
+      scene.add(stars)
+
+      // Earth group
+      const earthGroup = new THREE.Group()
+      // Tilt like real Earth
+      earthGroup.rotation.z = -23.4 * Math.PI / 180
+      // Rotate to show Middle East / Europe region (Aberdeen at -2°, Nablus at 35°)
+      // We want to center roughly between them, around 15-20° longitude
+      earthGroup.rotation.y = -0.5 // Rotate to show Europe/Middle East
+      scene.add(earthGroup)
+
+      // Earth sphere - high detail
+      const earthGeometry = new THREE.SphereGeometry(1, 128, 128)
+
+      // Earth base with day texture (darkened for night look)
+      const earthBaseMaterial = new THREE.MeshPhongMaterial({
+        map: earthDayTexture,
+        bumpMap: earthBumpTexture,
+        bumpScale: 0.015,
+        color: 0x222233, // Darkens the day texture
+        shininess: 8
+      })
+      const earthBaseMesh = new THREE.Mesh(earthGeometry, earthBaseMaterial)
+      earthGroup.add(earthBaseMesh)
+
+      // City lights layer on top
       const lightsMaterial = new THREE.MeshBasicMaterial({
         map: earthNightTexture,
         transparent: true,
-        opacity: 1.0,
+        opacity: 0.95,
         blending: THREE.AdditiveBlending
       })
       const lightsMesh = new THREE.Mesh(earthGeometry.clone(), lightsMaterial)
       earthGroup.add(lightsMesh)
 
-      // Subtle atmosphere glow
-      const atmosphereGeometry = new THREE.SphereGeometry(1.02, 64, 64)
+      // Atmosphere glow
+      const atmosphereGeometry = new THREE.SphereGeometry(1.03, 64, 64)
       const atmosphereMaterial = new THREE.ShaderMaterial({
         vertexShader: `
           varying vec3 vNormal;
@@ -130,8 +174,8 @@ const ThreeGlobe: React.FC = () => {
         fragmentShader: `
           varying vec3 vNormal;
           void main() {
-            float intensity = pow(0.6 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
-            gl_FragColor = vec4(0.2, 0.4, 0.8, 1.0) * intensity * 0.4;
+            float intensity = pow(0.55 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
+            gl_FragColor = vec4(0.3, 0.5, 1.0, 1.0) * intensity * 0.6;
           }
         `,
         blending: THREE.AdditiveBlending,
@@ -143,7 +187,6 @@ const ThreeGlobe: React.FC = () => {
 
       // Office pin markers
       offices.forEach(office => {
-        // Convert lat/lng to 3D position
         const phi = (90 - office.lat) * (Math.PI / 180)
         const theta = (office.lng + 180) * (Math.PI / 180)
 
@@ -151,40 +194,38 @@ const ThreeGlobe: React.FC = () => {
         const y = Math.cos(phi)
         const z = Math.sin(phi) * Math.sin(theta)
 
-        // Pin base (small sphere)
-        const pinBaseGeometry = new THREE.SphereGeometry(0.018, 16, 16)
+        // Pin base on globe surface
+        const pinBaseGeometry = new THREE.SphereGeometry(0.015, 16, 16)
         const pinBaseMaterial = new THREE.MeshBasicMaterial({ color: 0xff3621 })
         const pinBase = new THREE.Mesh(pinBaseGeometry, pinBaseMaterial)
-        pinBase.position.set(x * 1.01, y * 1.01, z * 1.01)
+        pinBase.position.set(x * 1.005, y * 1.005, z * 1.005)
         earthGroup.add(pinBase)
 
-        // Pin stem (cylinder pointing outward)
-        const pinStemGeometry = new THREE.CylinderGeometry(0.004, 0.004, 0.05, 8)
+        // Pin stem
+        const pinStemGeometry = new THREE.CylinderGeometry(0.003, 0.003, 0.04, 8)
         const pinStemMaterial = new THREE.MeshBasicMaterial({ color: 0xff3621 })
         const pinStem = new THREE.Mesh(pinStemGeometry, pinStemMaterial)
-
-        // Position and orient the stem
-        const stemPos = new THREE.Vector3(x, y, z).multiplyScalar(1.035)
+        const stemPos = new THREE.Vector3(x, y, z).multiplyScalar(1.025)
         pinStem.position.copy(stemPos)
         pinStem.lookAt(0, 0, 0)
         pinStem.rotateX(Math.PI / 2)
         earthGroup.add(pinStem)
 
-        // Pin head (larger sphere at top)
-        const pinHeadGeometry = new THREE.SphereGeometry(0.025, 16, 16)
+        // Pin head
+        const pinHeadGeometry = new THREE.SphereGeometry(0.02, 16, 16)
         const pinHeadMaterial = new THREE.MeshBasicMaterial({
           color: 0xff3621,
           transparent: true,
           opacity: 1.0
         })
         const pinHead = new THREE.Mesh(pinHeadGeometry, pinHeadMaterial)
-        const headPos = new THREE.Vector3(x, y, z).multiplyScalar(1.06)
+        const headPos = new THREE.Vector3(x, y, z).multiplyScalar(1.05)
         pinHead.position.copy(headPos)
         pinHead.userData = { officeId: office.id }
         earthGroup.add(pinHead)
 
-        // Glow ring (visible on hover)
-        const glowGeometry = new THREE.RingGeometry(0.03, 0.05, 32)
+        // Glow ring for hover
+        const glowGeometry = new THREE.RingGeometry(0.025, 0.04, 32)
         const glowMaterial = new THREE.MeshBasicMaterial({
           color: 0xff3621,
           transparent: true,
@@ -197,7 +238,6 @@ const ThreeGlobe: React.FC = () => {
         glow.userData = { isGlow: true, officeId: office.id }
         earthGroup.add(glow)
 
-        // Store references for hover effects
         markersRef.current.set(office.id, {
           pinHead,
           pinHeadMaterial,
@@ -207,43 +247,38 @@ const ThreeGlobe: React.FC = () => {
       })
 
       // Subtle ambient light
-      const ambientLight = new THREE.AmbientLight(0x333344, 0.5)
+      const ambientLight = new THREE.AmbientLight(0x333344, 0.4)
       scene.add(ambientLight)
 
-      // Gentle directional light for depth
-      const dirLight = new THREE.DirectionalLight(0x6688aa, 0.3)
-      dirLight.position.set(1, 0.5, 1)
-      scene.add(dirLight)
-
-      // Animation - gentle floating motion
+      // Animation
       let time = 0
-      const baseRotation = earthGroup.rotation.y
+      const baseRotationY = earthBaseMesh.rotation.y
 
       const animate = () => {
         animationId = requestAnimationFrame(animate)
         time += 0.01
 
-        // Gentle oscillating rotation (floating effect)
-        earthMesh.rotation.y = baseRotation + Math.sin(time * 0.5) * 0.15
-        lightsMesh.rotation.y = baseRotation + Math.sin(time * 0.5) * 0.15
+        // Gentle floating oscillation
+        const oscillation = Math.sin(time * 0.4) * 0.12
+        earthBaseMesh.rotation.y = baseRotationY + oscillation
+        lightsMesh.rotation.y = baseRotationY + oscillation
 
-        // Update hover effects
+        // Slow star rotation
+        stars.rotation.y += 0.0001
+
+        // Hover effects
         markersRef.current.forEach((marker, id) => {
           const isHovered = hoveredOffice === id
-          const targetOpacity = isHovered ? 0.8 : 0
-          const targetScale = isHovered ? 1.3 : 1.0
+          const targetOpacity = isHovered ? 0.9 : 0
+          const targetScale = isHovered ? 1.4 : 1.0
 
-          // Animate glow
           marker.glowMaterial.opacity += (targetOpacity - marker.glowMaterial.opacity) * 0.1
-
-          // Animate pin head scale
           const currentScale = marker.pinHead.scale.x
           const newScale = currentScale + (targetScale - currentScale) * 0.1
           marker.pinHead.scale.set(newScale, newScale, newScale)
 
-          // Pulsing glow when hovered
           if (isHovered) {
-            marker.glow.scale.setScalar(1 + Math.sin(time * 4) * 0.2)
+            marker.glow.scale.setScalar(1 + Math.sin(time * 4) * 0.25)
           }
         })
 
@@ -253,7 +288,6 @@ const ThreeGlobe: React.FC = () => {
       animate()
       setIsLoaded(true)
 
-      // Handle resize
       const handleResize = () => {
         if (!container) return
         const newWidth = container.clientWidth
@@ -316,17 +350,18 @@ const ThreeGlobe: React.FC = () => {
 
         .globe-container {
           width: 100%;
-          height: 400px;
+          height: 500px;
           position: relative;
           display: flex;
           align-items: center;
           justify-content: center;
+          border-radius: var(--radius-lg);
+          overflow: hidden;
         }
 
         .globe-canvas {
           width: 100%;
           height: 100%;
-          border-radius: var(--radius-lg);
         }
 
         .loading-placeholder {
@@ -342,8 +377,7 @@ const ThreeGlobe: React.FC = () => {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: var(--space-4);
-          margin-top: var(--space-8);
-          padding-top: var(--space-4);
+          margin-top: var(--space-6);
           position: relative;
           z-index: 1;
         }
@@ -442,7 +476,7 @@ const ThreeGlobe: React.FC = () => {
 
         @media (max-width: 768px) {
           .globe-container {
-            height: 300px;
+            height: 400px;
           }
 
           .offices-grid,
