@@ -1,34 +1,27 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react';
-import { MapPin, Globe, Clock, Users } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import React, { useEffect, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
+import { MapPin, Clock, Globe, Users } from 'lucide-react'
+
+// Types for Three.js (dynamically imported)
+type ThreeModule = typeof import('three')
 
 interface Office {
-  id: string;
-  name: string;
-  country: string;
-  lat: number;
-  lng: number;
-  timezone: string;
-  description: string;
+  id: string
+  name: string
+  country: string
+  lat: number
+  lng: number
+  timezone: string
+  description: string
 }
 
-const ProfessionalGlobe: React.FC = () => {
-  const [hoveredOffice, setHoveredOffice] = useState<string | null>(null);
-  const [rotation, setRotation] = useState(0);
-  const [isHovering, setIsHovering] = useState(false);
-  const t = useTranslations('globe');
-  const globeRef = useRef<SVGSVGElement>(null);
-
-  // Auto-rotate globe when not hovering
-  useEffect(() => {
-    if (isHovering) return;
-    const interval = setInterval(() => {
-      setRotation(prev => (prev + 0.3) % 360);
-    }, 50);
-    return () => clearInterval(interval);
-  }, [isHovering]);
+const ThreeGlobe: React.FC = () => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [hoveredOffice, setHoveredOffice] = useState<string | null>(null)
+  const [isLoaded, setIsLoaded] = useState(false)
+  const t = useTranslations('globe')
 
   const offices: Office[] = [
     {
@@ -49,32 +42,330 @@ const ProfessionalGlobe: React.FC = () => {
       timezone: 'GMT+2',
       description: t('nablusDescription')
     }
-  ];
+  ]
 
-  // Convert lat/lng to 3D sphere coordinates, then project to 2D
-  const latLngTo3D = (lat: number, lng: number, radius: number = 120) => {
-    const adjustedLng = lng + rotation;
-    const phi = (90 - lat) * (Math.PI / 180);
-    const theta = (adjustedLng + 180) * (Math.PI / 180);
+  useEffect(() => {
+    if (!containerRef.current) return
 
-    const x = -(radius * Math.sin(phi) * Math.cos(theta));
-    const y = radius * Math.cos(phi);
-    const z = radius * Math.sin(phi) * Math.sin(theta);
+    let animationId: number
+    let renderer: any
+    let scene: any
+    let camera: any
 
-    // Check if point is on visible side of globe
-    const isVisible = z > -20;
+    const initGlobe = async () => {
+      // Dynamically import Three.js to avoid SSR issues
+      const THREE = await import('three') as ThreeModule
 
-    return { x: x + 150, y: y + 150, z, isVisible };
-  };
+      const container = containerRef.current
+      if (!container) return
+
+      const width = container.clientWidth
+      const height = 400
+
+      // Scene setup
+      scene = new THREE.Scene()
+
+      // Camera
+      camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000)
+      camera.position.z = 2.5
+
+      // Renderer
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        powerPreference: 'high-performance'
+      })
+      renderer.setSize(width, height)
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+      renderer.toneMapping = THREE.ACESFilmicToneMapping
+      container.appendChild(renderer.domElement)
+
+      // Earth group (tilted like real Earth)
+      const earthGroup = new THREE.Group()
+      earthGroup.rotation.z = -23.4 * Math.PI / 180
+      scene.add(earthGroup)
+
+      // Create Earth sphere
+      const earthGeometry = new THREE.SphereGeometry(1, 64, 64)
+
+      // Create procedural earth texture
+      const canvas = document.createElement('canvas')
+      canvas.width = 2048
+      canvas.height = 1024
+      const ctx = canvas.getContext('2d')!
+
+      // Ocean gradient
+      const oceanGradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
+      oceanGradient.addColorStop(0, '#1a365d')
+      oceanGradient.addColorStop(0.5, '#0c4a6e')
+      oceanGradient.addColorStop(1, '#1a365d')
+      ctx.fillStyle = oceanGradient
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      // Draw simplified continents
+      ctx.fillStyle = '#2d5a3d'
+      ctx.strokeStyle = '#3d7a4d'
+      ctx.lineWidth = 2
+
+      // Europe
+      ctx.beginPath()
+      ctx.ellipse(1024, 280, 150, 100, 0, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.stroke()
+
+      // Africa
+      ctx.beginPath()
+      ctx.ellipse(1050, 520, 130, 180, 0, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.stroke()
+
+      // Asia
+      ctx.beginPath()
+      ctx.ellipse(1350, 350, 280, 180, 0, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.stroke()
+
+      // North America
+      ctx.beginPath()
+      ctx.ellipse(400, 300, 200, 150, -0.2, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.stroke()
+
+      // South America
+      ctx.beginPath()
+      ctx.ellipse(550, 620, 100, 180, 0.2, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.stroke()
+
+      // Australia
+      ctx.beginPath()
+      ctx.ellipse(1650, 650, 100, 80, 0, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.stroke()
+
+      // Antarctica
+      ctx.beginPath()
+      ctx.ellipse(1024, 950, 400, 80, 0, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.stroke()
+
+      const earthTexture = new THREE.CanvasTexture(canvas)
+      earthTexture.needsUpdate = true
+
+      const earthMaterial = new THREE.MeshPhongMaterial({
+        map: earthTexture,
+        bumpScale: 0.02,
+        specular: new THREE.Color(0x333333),
+        shininess: 5
+      })
+
+      const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial)
+      earthGroup.add(earthMesh)
+
+      // City lights layer (night side glow)
+      const lightsCanvas = document.createElement('canvas')
+      lightsCanvas.width = 2048
+      lightsCanvas.height = 1024
+      const lightsCtx = lightsCanvas.getContext('2d')!
+
+      // Dark background
+      lightsCtx.fillStyle = 'rgba(0, 0, 0, 0)'
+      lightsCtx.fillRect(0, 0, lightsCanvas.width, lightsCanvas.height)
+
+      // Add city light dots
+      lightsCtx.fillStyle = 'rgba(255, 230, 150, 0.8)'
+
+      // Europe lights
+      for (let i = 0; i < 100; i++) {
+        lightsCtx.beginPath()
+        lightsCtx.arc(
+          950 + Math.random() * 200,
+          250 + Math.random() * 100,
+          1 + Math.random() * 2,
+          0, Math.PI * 2
+        )
+        lightsCtx.fill()
+      }
+
+      // Asia lights
+      for (let i = 0; i < 150; i++) {
+        lightsCtx.beginPath()
+        lightsCtx.arc(
+          1200 + Math.random() * 400,
+          280 + Math.random() * 200,
+          1 + Math.random() * 2,
+          0, Math.PI * 2
+        )
+        lightsCtx.fill()
+      }
+
+      // North America lights
+      for (let i = 0; i < 100; i++) {
+        lightsCtx.beginPath()
+        lightsCtx.arc(
+          300 + Math.random() * 300,
+          280 + Math.random() * 150,
+          1 + Math.random() * 2,
+          0, Math.PI * 2
+        )
+        lightsCtx.fill()
+      }
+
+      const lightsTexture = new THREE.CanvasTexture(lightsCanvas)
+      const lightsMaterial = new THREE.MeshBasicMaterial({
+        map: lightsTexture,
+        transparent: true,
+        opacity: 0.5,
+        blending: THREE.AdditiveBlending
+      })
+      const lightsMesh = new THREE.Mesh(earthGeometry, lightsMaterial)
+      earthGroup.add(lightsMesh)
+
+      // Atmosphere glow (Fresnel effect)
+      const atmosphereGeometry = new THREE.SphereGeometry(1.02, 64, 64)
+      const atmosphereMaterial = new THREE.ShaderMaterial({
+        vertexShader: `
+          varying vec3 vNormal;
+          void main() {
+            vNormal = normalize(normalMatrix * normal);
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          varying vec3 vNormal;
+          void main() {
+            float intensity = pow(0.7 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
+            gl_FragColor = vec4(0.3, 0.6, 1.0, 1.0) * intensity;
+          }
+        `,
+        blending: THREE.AdditiveBlending,
+        side: THREE.BackSide,
+        transparent: true
+      })
+      const atmosphereMesh = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial)
+      earthGroup.add(atmosphereMesh)
+
+      // Office markers
+      const markerGeometry = new THREE.SphereGeometry(0.02, 16, 16)
+      const markerMaterial = new THREE.MeshBasicMaterial({ color: 0xff3621 })
+
+      offices.forEach(office => {
+        // Convert lat/lng to 3D position
+        const phi = (90 - office.lat) * (Math.PI / 180)
+        const theta = (office.lng + 180) * (Math.PI / 180)
+
+        const x = -(Math.sin(phi) * Math.cos(theta))
+        const y = Math.cos(phi)
+        const z = Math.sin(phi) * Math.sin(theta)
+
+        const marker = new THREE.Mesh(markerGeometry, markerMaterial)
+        marker.position.set(x * 1.02, y * 1.02, z * 1.02)
+        marker.userData = { office }
+        earthGroup.add(marker)
+
+        // Add glow ring around marker
+        const ringGeometry = new THREE.RingGeometry(0.03, 0.05, 32)
+        const ringMaterial = new THREE.MeshBasicMaterial({
+          color: 0xff3621,
+          transparent: true,
+          opacity: 0.5,
+          side: THREE.DoubleSide
+        })
+        const ring = new THREE.Mesh(ringGeometry, ringMaterial)
+        ring.position.copy(marker.position)
+        ring.lookAt(0, 0, 0)
+        earthGroup.add(ring)
+      })
+
+      // Stars background
+      const starsGeometry = new THREE.BufferGeometry()
+      const starsCount = 2000
+      const starsPositions = new Float32Array(starsCount * 3)
+
+      for (let i = 0; i < starsCount * 3; i += 3) {
+        const radius = 25 + Math.random() * 25
+        const u = Math.random()
+        const v = Math.random()
+        const theta = 2 * Math.PI * u
+        const phi = Math.acos(2 * v - 1)
+
+        starsPositions[i] = radius * Math.sin(phi) * Math.cos(theta)
+        starsPositions[i + 1] = radius * Math.sin(phi) * Math.sin(theta)
+        starsPositions[i + 2] = radius * Math.cos(phi)
+      }
+
+      starsGeometry.setAttribute('position', new THREE.BufferAttribute(starsPositions, 3))
+      const starsMaterial = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 0.05,
+        transparent: true,
+        opacity: 0.8
+      })
+      const stars = new THREE.Points(starsGeometry, starsMaterial)
+      scene.add(stars)
+
+      // Lighting
+      const sunLight = new THREE.DirectionalLight(0xffffff, 2)
+      sunLight.position.set(-2, 0.5, 1.5)
+      scene.add(sunLight)
+
+      const ambientLight = new THREE.AmbientLight(0x404040, 0.5)
+      scene.add(ambientLight)
+
+      // Animation
+      const animate = () => {
+        animationId = requestAnimationFrame(animate)
+
+        // Rotate earth slowly
+        earthMesh.rotation.y += 0.001
+        lightsMesh.rotation.y += 0.001
+
+        // Rotate stars very slowly in opposite direction
+        stars.rotation.y -= 0.0001
+
+        renderer.render(scene, camera)
+      }
+
+      animate()
+      setIsLoaded(true)
+
+      // Handle resize
+      const handleResize = () => {
+        if (!container) return
+        const newWidth = container.clientWidth
+        camera.aspect = newWidth / height
+        camera.updateProjectionMatrix()
+        renderer.setSize(newWidth, height)
+      }
+
+      window.addEventListener('resize', handleResize)
+
+      return () => {
+        window.removeEventListener('resize', handleResize)
+      }
+    }
+
+    initGlobe()
+
+    return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId)
+      }
+      if (renderer && containerRef.current) {
+        containerRef.current.removeChild(renderer.domElement)
+        renderer.dispose()
+      }
+    }
+  }, [])
 
   return (
     <div className="globe-wrapper">
       <style jsx>{`
         .globe-wrapper {
-          background: linear-gradient(135deg, var(--surface) 0%, var(--background) 100%);
+          background: linear-gradient(180deg, #0a0a1a 0%, #0d1528 50%, #0a0a1a 100%);
           border-radius: var(--radius-2xl);
-          padding: var(--space-8);
-          border: 1px solid var(--border);
+          padding: var(--space-6);
+          border: 1px solid rgba(100, 149, 237, 0.2);
           position: relative;
           overflow: hidden;
         }
@@ -85,136 +376,67 @@ const ProfessionalGlobe: React.FC = () => {
           top: 0;
           left: 0;
           right: 0;
-          height: 3px;
-          background: var(--gradient-primary);
-          border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, var(--primary), transparent);
         }
 
         .globe-header {
           text-align: center;
-          margin-bottom: var(--space-6);
+          margin-bottom: var(--space-4);
+          position: relative;
+          z-index: 1;
         }
 
         .globe-title {
           font-size: 1.25rem;
           font-weight: var(--font-weight-semibold);
-          color: var(--text-primary);
+          color: white;
           margin-bottom: var(--space-2);
         }
 
         .globe-subtitle {
-          color: var(--text-secondary);
+          color: rgba(148, 163, 184, 1);
           font-size: 0.875rem;
           margin: 0;
         }
 
         .globe-container {
+          width: 100%;
+          height: 400px;
+          position: relative;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin: var(--space-6) 0;
-          position: relative;
         }
 
-        .globe-svg {
-          width: 300px;
-          height: 300px;
-          cursor: grab;
+        .globe-canvas {
+          width: 100%;
+          height: 100%;
+          border-radius: var(--radius-lg);
         }
 
-        .globe-svg:active {
-          cursor: grabbing;
-        }
-
-        .globe-ocean {
-          fill: url(#oceanGradient);
-          stroke: var(--border);
-          stroke-width: 1;
-        }
-
-        .globe-land {
-          fill: var(--primary);
-          opacity: 0.2;
-          stroke: var(--primary);
-          stroke-width: 0.5;
-          stroke-opacity: 0.5;
-        }
-
-        .globe-graticule {
-          fill: none;
-          stroke: var(--border);
-          stroke-width: 0.3;
-          opacity: 0.5;
-        }
-
-        .office-pin {
-          cursor: pointer;
-          transition: transform 0.2s ease;
-        }
-
-        .office-pin:hover {
-          transform: scale(1.3);
-        }
-
-        .pin-outer {
-          fill: var(--primary);
-          filter: drop-shadow(0 2px 4px rgba(255, 54, 33, 0.4));
-        }
-
-        .pin-inner {
-          fill: white;
-        }
-
-        .pin-pulse {
-          fill: var(--primary);
-          opacity: 0;
-          animation: pulse 2s ease-out infinite;
-        }
-
-        @keyframes pulse {
-          0% { opacity: 0.6; r: 6; }
-          100% { opacity: 0; r: 20; }
-        }
-
-        .tooltip {
+        .loading-placeholder {
           position: absolute;
-          background: var(--navy-800, #1e293b);
-          color: white;
-          padding: var(--space-2) var(--space-3);
-          border-radius: var(--radius-md);
-          font-size: 0.75rem;
-          pointer-events: none;
-          opacity: 0;
-          transition: opacity 0.2s ease;
-          z-index: 10;
-          white-space: nowrap;
-          box-shadow: var(--shadow-md);
-        }
-
-        .tooltip.visible {
-          opacity: 1;
-        }
-
-        .tooltip::after {
-          content: '';
-          position: absolute;
-          top: 100%;
+          top: 50%;
           left: 50%;
-          transform: translateX(-50%);
-          border: 5px solid transparent;
-          border-top-color: var(--navy-800, #1e293b);
+          transform: translate(-50%, -50%);
+          color: rgba(148, 163, 184, 0.6);
+          font-size: 0.875rem;
         }
 
         .offices-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: var(--space-4);
-          margin-bottom: var(--space-6);
+          margin-top: var(--space-6);
+          position: relative;
+          z-index: 1;
         }
 
         .office-card {
-          background: var(--background);
-          border: 1px solid var(--border);
+          background: rgba(30, 41, 59, 0.5);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(100, 149, 237, 0.15);
           border-radius: var(--radius-lg);
           padding: var(--space-4);
           text-align: center;
@@ -226,7 +448,7 @@ const ProfessionalGlobe: React.FC = () => {
         .office-card.active {
           border-color: var(--primary);
           transform: translateY(-2px);
-          box-shadow: var(--shadow-sm);
+          box-shadow: 0 8px 25px rgba(255, 54, 33, 0.15);
         }
 
         .office-icon {
@@ -243,14 +465,14 @@ const ProfessionalGlobe: React.FC = () => {
 
         .office-name {
           font-weight: var(--font-weight-semibold);
-          color: var(--text-primary);
+          color: white;
           margin-bottom: var(--space-1);
           font-size: 0.9rem;
         }
 
         .office-tz {
           font-size: 0.75rem;
-          color: var(--text-secondary);
+          color: rgba(148, 163, 184, 1);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -262,7 +484,10 @@ const ProfessionalGlobe: React.FC = () => {
           grid-template-columns: repeat(2, 1fr);
           gap: var(--space-4);
           padding-top: var(--space-6);
-          border-top: 1px solid var(--border);
+          margin-top: var(--space-6);
+          border-top: 1px solid rgba(100, 149, 237, 0.15);
+          position: relative;
+          z-index: 1;
         }
 
         .benefit-item {
@@ -270,9 +495,9 @@ const ProfessionalGlobe: React.FC = () => {
           align-items: flex-start;
           gap: var(--space-3);
           padding: var(--space-3);
-          background: rgba(255, 54, 33, 0.03);
+          background: rgba(30, 41, 59, 0.3);
           border-radius: var(--radius-lg);
-          border: 1px solid rgba(255, 54, 33, 0.1);
+          border: 1px solid rgba(100, 149, 237, 0.1);
         }
 
         .benefit-icon {
@@ -290,37 +515,25 @@ const ProfessionalGlobe: React.FC = () => {
         .benefit-title {
           font-size: 0.875rem;
           font-weight: var(--font-weight-semibold);
-          color: var(--text-primary);
+          color: white;
           margin: 0 0 var(--space-1) 0;
         }
 
         .benefit-desc {
           font-size: 0.75rem;
-          color: var(--text-secondary);
+          color: rgba(148, 163, 184, 1);
           margin: 0;
           line-height: 1.4;
         }
 
         @media (max-width: 768px) {
-          .globe-wrapper {
-            padding: var(--space-6);
-          }
-
-          .globe-svg {
-            width: 250px;
-            height: 250px;
+          .globe-container {
+            height: 300px;
           }
 
           .offices-grid,
           .benefits-section {
             grid-template-columns: 1fr;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .globe-svg {
-            width: 200px;
-            height: 200px;
           }
         }
       `}</style>
@@ -331,180 +544,10 @@ const ProfessionalGlobe: React.FC = () => {
       </div>
 
       <div className="globe-container">
-        <svg
-          ref={globeRef}
-          className="globe-svg"
-          viewBox="0 0 300 300"
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
-        >
-          <defs>
-            <radialGradient id="oceanGradient" cx="30%" cy="30%">
-              <stop offset="0%" stopColor="#e0f2fe" />
-              <stop offset="100%" stopColor="#bae6fd" />
-            </radialGradient>
-            <clipPath id="globeClip">
-              <circle cx="150" cy="150" r="120" />
-            </clipPath>
-          </defs>
-
-          {/* Globe base */}
-          <circle cx="150" cy="150" r="120" className="globe-ocean" />
-
-          {/* Graticule lines */}
-          <g className="globe-graticule" clipPath="url(#globeClip)">
-            {/* Latitude lines */}
-            {[-60, -30, 0, 30, 60].map(lat => {
-              const y = 150 - (lat / 90) * 120;
-              const r = Math.cos(lat * Math.PI / 180) * 120;
-              return (
-                <ellipse
-                  key={`lat-${lat}`}
-                  cx="150"
-                  cy={y}
-                  rx={r}
-                  ry={r * 0.3}
-                  style={{ transform: `rotateY(${rotation}deg)`, transformOrigin: '150px 150px' }}
-                />
-              );
-            })}
-            {/* Longitude lines */}
-            {[0, 30, 60, 90, 120, 150].map(lng => (
-              <ellipse
-                key={`lng-${lng}`}
-                cx="150"
-                cy="150"
-                rx={Math.abs(Math.cos((lng + rotation) * Math.PI / 180)) * 120}
-                ry="120"
-                style={{ transform: `rotateZ(${(lng + rotation) % 180}deg)`, transformOrigin: '150px 150px' }}
-              />
-            ))}
-          </g>
-
-          {/* Simplified continent shapes */}
-          <g clipPath="url(#globeClip)">
-            {/* Europe */}
-            <path
-              className="globe-land"
-              d="M 145 90 Q 160 85 175 90 Q 180 100 175 115 Q 165 120 155 118 Q 145 110 145 90"
-              style={{
-                transform: `translateX(${Math.sin(rotation * Math.PI / 180) * 30}px)`,
-                opacity: Math.cos(rotation * Math.PI / 180) > -0.3 ? 0.2 : 0
-              }}
-            />
-            {/* UK */}
-            <path
-              className="globe-land"
-              d="M 135 95 Q 140 90 145 95 Q 145 105 140 108 Q 135 105 135 95"
-              style={{
-                transform: `translateX(${Math.sin(rotation * Math.PI / 180) * 30}px)`,
-                opacity: Math.cos(rotation * Math.PI / 180) > -0.3 ? 0.2 : 0
-              }}
-            />
-            {/* Africa */}
-            <path
-              className="globe-land"
-              d="M 150 130 Q 170 125 180 145 Q 175 180 160 195 Q 145 190 140 165 Q 145 145 150 130"
-              style={{
-                transform: `translateX(${Math.sin(rotation * Math.PI / 180) * 30}px)`,
-                opacity: Math.cos(rotation * Math.PI / 180) > -0.3 ? 0.2 : 0
-              }}
-            />
-            {/* Middle East */}
-            <path
-              className="globe-land"
-              d="M 175 115 Q 195 110 205 125 Q 200 140 185 145 Q 175 135 175 115"
-              style={{
-                transform: `translateX(${Math.sin(rotation * Math.PI / 180) * 30}px)`,
-                opacity: Math.cos(rotation * Math.PI / 180) > -0.3 ? 0.2 : 0
-              }}
-            />
-            {/* Asia */}
-            <path
-              className="globe-land"
-              d="M 190 80 Q 230 70 250 90 Q 255 120 240 150 Q 210 160 190 140 Q 185 110 190 80"
-              style={{
-                transform: `translateX(${Math.sin(rotation * Math.PI / 180) * 30}px)`,
-                opacity: Math.cos((rotation - 40) * Math.PI / 180) > -0.3 ? 0.2 : 0
-              }}
-            />
-            {/* North America */}
-            <path
-              className="globe-land"
-              d="M 50 85 Q 90 70 120 90 Q 125 120 110 145 Q 80 150 55 130 Q 45 105 50 85"
-              style={{
-                transform: `translateX(${Math.sin((rotation + 100) * Math.PI / 180) * 30}px)`,
-                opacity: Math.cos((rotation + 100) * Math.PI / 180) > -0.3 ? 0.2 : 0
-              }}
-            />
-            {/* South America */}
-            <path
-              className="globe-land"
-              d="M 85 155 Q 105 150 115 170 Q 110 210 95 225 Q 80 220 75 190 Q 80 165 85 155"
-              style={{
-                transform: `translateX(${Math.sin((rotation + 80) * Math.PI / 180) * 30}px)`,
-                opacity: Math.cos((rotation + 80) * Math.PI / 180) > -0.3 ? 0.2 : 0
-              }}
-            />
-          </g>
-
-          {/* Office pins */}
-          {offices.map((office) => {
-            const pos = latLngTo3D(office.lat, office.lng);
-            if (!pos.isVisible) return null;
-
-            const scale = (pos.z + 120) / 240; // Depth scaling
-
-            return (
-              <g
-                key={office.id}
-                className="office-pin"
-                transform={`translate(${pos.x}, ${pos.y})`}
-                onMouseEnter={() => setHoveredOffice(office.id)}
-                onMouseLeave={() => setHoveredOffice(null)}
-              >
-                <circle className="pin-pulse" cx="0" cy="0" r="6" />
-                <circle className="pin-outer" cx="0" cy="0" r={8 * scale} />
-                <circle className="pin-inner" cx="0" cy="0" r={3 * scale} />
-              </g>
-            );
-          })}
-
-          {/* Globe edge highlight */}
-          <circle
-            cx="150"
-            cy="150"
-            r="120"
-            fill="none"
-            stroke="var(--border)"
-            strokeWidth="2"
-          />
-        </svg>
-
-        {/* Tooltips */}
-        {offices.map((office) => {
-          const pos = latLngTo3D(office.lat, office.lng);
-          if (!pos.isVisible) return null;
-
-          return (
-            <div
-              key={`tip-${office.id}`}
-              className={`tooltip ${hoveredOffice === office.id ? 'visible' : ''}`}
-              style={{
-                left: `calc(50% + ${pos.x - 150}px)`,
-                top: `calc(50% + ${pos.y - 150 - 35}px)`,
-                transform: 'translateX(-50%)'
-              }}
-            >
-              <strong>{office.name}</strong>
-              <br />
-              {office.timezone}
-            </div>
-          );
-        })}
+        <div ref={containerRef} className="globe-canvas" />
+        {!isLoaded && <div className="loading-placeholder">Loading globe...</div>}
       </div>
 
-      {/* Office cards */}
       <div className="offices-grid">
         {offices.map((office) => (
           <div
@@ -525,7 +568,6 @@ const ProfessionalGlobe: React.FC = () => {
         ))}
       </div>
 
-      {/* Benefits */}
       <div className="benefits-section">
         <div className="benefit-item">
           <div className="benefit-icon">
@@ -547,7 +589,7 @@ const ProfessionalGlobe: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProfessionalGlobe;
+export default ThreeGlobe
