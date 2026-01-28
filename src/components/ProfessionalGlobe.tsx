@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react';
-import { MapPin, Globe, Clock, Users, Plane } from 'lucide-react';
+import { MapPin, Globe, Clock, Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 interface Office {
@@ -16,15 +16,19 @@ interface Office {
 
 const ProfessionalGlobe: React.FC = () => {
   const [hoveredOffice, setHoveredOffice] = useState<string | null>(null);
-  const [isAnimated, setIsAnimated] = useState(false);
+  const [rotation, setRotation] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
   const t = useTranslations('globe');
-  const containerRef = useRef<HTMLDivElement>(null);
+  const globeRef = useRef<SVGSVGElement>(null);
 
+  // Auto-rotate globe when not hovering
   useEffect(() => {
-    // Trigger animations after component mounts
-    const timer = setTimeout(() => setIsAnimated(true), 300);
-    return () => clearTimeout(timer);
-  }, []);
+    if (isHovering) return;
+    const interval = setInterval(() => {
+      setRotation(prev => (prev + 0.3) % 360);
+    }, 50);
+    return () => clearInterval(interval);
+  }, [isHovering]);
 
   const offices: Office[] = [
     {
@@ -47,255 +51,158 @@ const ProfessionalGlobe: React.FC = () => {
     }
   ];
 
-  // Convert lat/lng to SVG coordinates for our map projection
-  const latLngToSvg = (lat: number, lng: number) => {
-    // Mercator-like projection adjusted for our viewBox
-    const x = ((lng + 180) / 360) * 800;
-    const y = ((90 - lat) / 180) * 400;
-    return { x, y };
+  // Convert lat/lng to 3D sphere coordinates, then project to 2D
+  const latLngTo3D = (lat: number, lng: number, radius: number = 120) => {
+    const adjustedLng = lng + rotation;
+    const phi = (90 - lat) * (Math.PI / 180);
+    const theta = (adjustedLng + 180) * (Math.PI / 180);
+
+    const x = -(radius * Math.sin(phi) * Math.cos(theta));
+    const y = radius * Math.cos(phi);
+    const z = radius * Math.sin(phi) * Math.sin(theta);
+
+    // Check if point is on visible side of globe
+    const isVisible = z > -20;
+
+    return { x: x + 150, y: y + 150, z, isVisible };
   };
 
-  const aberdeenPos = latLngToSvg(offices[0].lat, offices[0].lng);
-  const nablusPos = latLngToSvg(offices[1].lat, offices[1].lng);
-
-  // Calculate arc control point for curved connection line
-  const midX = (aberdeenPos.x + nablusPos.x) / 2;
-  const midY = (aberdeenPos.y + nablusPos.y) / 2 - 40; // Curve upward
-
   return (
-    <div className="globe-container" ref={containerRef}>
+    <div className="globe-wrapper">
       <style jsx>{`
-        .globe-container {
-          background: linear-gradient(180deg, #0a192f 0%, #112240 50%, #1a365d 100%);
+        .globe-wrapper {
+          background: linear-gradient(135deg, var(--surface) 0%, var(--background) 100%);
           border-radius: var(--radius-2xl);
           padding: var(--space-8);
-          border: 1px solid rgba(100, 255, 218, 0.1);
+          border: 1px solid var(--border);
           position: relative;
           overflow: hidden;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        .globe-container::before {
+        .globe-wrapper::before {
           content: '';
           position: absolute;
           top: 0;
           left: 0;
           right: 0;
-          height: 2px;
-          background: linear-gradient(90deg, transparent, var(--primary), transparent);
-        }
-
-        .stars {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          pointer-events: none;
-          overflow: hidden;
-        }
-
-        .star {
-          position: absolute;
-          width: 2px;
-          height: 2px;
-          background: white;
-          border-radius: 50%;
-          opacity: 0.3;
-          animation: twinkle 3s ease-in-out infinite;
-        }
-
-        @keyframes twinkle {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 0.8; }
+          height: 3px;
+          background: var(--gradient-primary);
+          border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
         }
 
         .globe-header {
           text-align: center;
           margin-bottom: var(--space-6);
-          position: relative;
-          z-index: 1;
         }
 
         .globe-title {
-          font-size: 1.5rem;
-          font-weight: var(--font-weight-bold);
-          color: white;
+          font-size: 1.25rem;
+          font-weight: var(--font-weight-semibold);
+          color: var(--text-primary);
           margin-bottom: var(--space-2);
-          letter-spacing: -0.02em;
-          font-family: var(--font-display);
         }
 
         .globe-subtitle {
-          color: rgba(148, 163, 184, 1);
-          font-size: 1rem;
+          color: var(--text-secondary);
+          font-size: 0.875rem;
           margin: 0;
-          line-height: 1.6;
         }
 
-        .map-container {
-          position: relative;
+        .globe-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
           margin: var(--space-6) 0;
-          border-radius: var(--radius-xl);
-          overflow: hidden;
-          background: linear-gradient(180deg, rgba(30, 58, 95, 0.3) 0%, rgba(15, 30, 50, 0.5) 100%);
-          border: 1px solid rgba(100, 255, 218, 0.1);
+          position: relative;
         }
 
-        .world-map {
-          width: 100%;
-          height: auto;
-          display: block;
+        .globe-svg {
+          width: 300px;
+          height: 300px;
+          cursor: grab;
         }
 
-        .continent {
-          fill: rgba(100, 255, 218, 0.15);
-          stroke: rgba(100, 255, 218, 0.3);
-          stroke-width: 0.5;
-          transition: all 0.3s ease;
+        .globe-svg:active {
+          cursor: grabbing;
         }
 
-        .continent:hover {
-          fill: rgba(100, 255, 218, 0.25);
+        .globe-ocean {
+          fill: url(#oceanGradient);
+          stroke: var(--border);
+          stroke-width: 1;
         }
 
-        .grid-line {
-          stroke: rgba(100, 255, 218, 0.08);
-          stroke-width: 0.5;
-          fill: none;
-        }
-
-        .connection-arc {
-          fill: none;
-          stroke: url(#arcGradient);
-          stroke-width: 2;
-          stroke-dasharray: 300;
-          stroke-dashoffset: 300;
-          filter: drop-shadow(0 0 6px rgba(255, 54, 33, 0.6));
-        }
-
-        .connection-arc.animated {
-          animation: drawArc 2s ease-out forwards;
-        }
-
-        @keyframes drawArc {
-          to {
-            stroke-dashoffset: 0;
-          }
-        }
-
-        .arc-glow {
-          fill: none;
-          stroke: rgba(255, 54, 33, 0.3);
-          stroke-width: 6;
-          stroke-dasharray: 300;
-          stroke-dashoffset: 300;
-        }
-
-        .arc-glow.animated {
-          animation: drawArc 2s ease-out forwards;
-        }
-
-        .office-marker {
-          cursor: pointer;
-          transition: transform 0.3s ease;
-        }
-
-        .office-marker:hover {
-          transform: scale(1.2);
-        }
-
-        .marker-pulse {
+        .globe-land {
           fill: var(--primary);
-          opacity: 0.4;
-          animation: pulse 2s ease-out infinite;
+          opacity: 0.2;
+          stroke: var(--primary);
+          stroke-width: 0.5;
+          stroke-opacity: 0.5;
         }
 
-        .marker-pulse.animated {
+        .globe-graticule {
+          fill: none;
+          stroke: var(--border);
+          stroke-width: 0.3;
+          opacity: 0.5;
+        }
+
+        .office-pin {
+          cursor: pointer;
+          transition: transform 0.2s ease;
+        }
+
+        .office-pin:hover {
+          transform: scale(1.3);
+        }
+
+        .pin-outer {
+          fill: var(--primary);
+          filter: drop-shadow(0 2px 4px rgba(255, 54, 33, 0.4));
+        }
+
+        .pin-inner {
+          fill: white;
+        }
+
+        .pin-pulse {
+          fill: var(--primary);
+          opacity: 0;
           animation: pulse 2s ease-out infinite;
         }
 
         @keyframes pulse {
-          0% {
-            r: 8;
-            opacity: 0.6;
-          }
-          100% {
-            r: 25;
-            opacity: 0;
-          }
-        }
-
-        .marker-dot {
-          fill: var(--primary);
-          stroke: white;
-          stroke-width: 2;
-          filter: drop-shadow(0 2px 8px rgba(255, 54, 33, 0.5));
-        }
-
-        .marker-inner {
-          fill: white;
-        }
-
-        .floating-plane {
-          animation: flyPlane 4s ease-in-out infinite;
-          opacity: 0;
-        }
-
-        .floating-plane.animated {
-          opacity: 1;
-        }
-
-        @keyframes flyPlane {
-          0% {
-            offset-distance: 0%;
-          }
-          100% {
-            offset-distance: 100%;
-          }
+          0% { opacity: 0.6; r: 6; }
+          100% { opacity: 0; r: 20; }
         }
 
         .tooltip {
           position: absolute;
-          background: rgba(15, 23, 42, 0.95);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(100, 255, 218, 0.2);
+          background: var(--navy-800, #1e293b);
           color: white;
-          padding: var(--space-3) var(--space-4);
-          border-radius: var(--radius-lg);
-          font-size: 0.875rem;
+          padding: var(--space-2) var(--space-3);
+          border-radius: var(--radius-md);
+          font-size: 0.75rem;
           pointer-events: none;
           opacity: 0;
-          transform: translateY(10px);
-          transition: all 0.3s ease;
-          z-index: 100;
-          min-width: 160px;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+          transition: opacity 0.2s ease;
+          z-index: 10;
+          white-space: nowrap;
+          box-shadow: var(--shadow-md);
         }
 
         .tooltip.visible {
           opacity: 1;
-          transform: translateY(0);
         }
 
-        .tooltip-name {
-          font-weight: var(--font-weight-semibold);
-          margin-bottom: var(--space-1);
-          color: white;
-        }
-
-        .tooltip-country {
-          font-size: 0.75rem;
-          color: rgba(100, 255, 218, 0.8);
-          margin-bottom: var(--space-2);
-        }
-
-        .tooltip-timezone {
-          display: flex;
-          align-items: center;
-          gap: var(--space-2);
-          font-size: 0.75rem;
-          color: rgba(148, 163, 184, 1);
+        .tooltip::after {
+          content: '';
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          transform: translateX(-50%);
+          border: 5px solid transparent;
+          border-top-color: var(--navy-800, #1e293b);
         }
 
         .offices-grid {
@@ -303,323 +210,295 @@ const ProfessionalGlobe: React.FC = () => {
           grid-template-columns: repeat(2, 1fr);
           gap: var(--space-4);
           margin-bottom: var(--space-6);
-          position: relative;
-          z-index: 1;
         }
 
         .office-card {
-          background: rgba(30, 41, 59, 0.5);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(100, 255, 218, 0.1);
-          border-radius: var(--radius-xl);
-          padding: var(--space-5);
-          transition: all 0.3s ease;
-          cursor: pointer;
+          background: var(--background);
+          border: 1px solid var(--border);
+          border-radius: var(--radius-lg);
+          padding: var(--space-4);
           text-align: center;
+          transition: all 0.2s ease;
+          cursor: pointer;
         }
 
         .office-card:hover,
-        .office-card.highlighted {
+        .office-card.active {
           border-color: var(--primary);
           transform: translateY(-2px);
-          box-shadow: 0 10px 30px rgba(255, 54, 33, 0.2);
+          box-shadow: var(--shadow-sm);
         }
 
-        .office-icon-wrapper {
-          width: 3rem;
-          height: 3rem;
-          background: linear-gradient(135deg, var(--primary) 0%, #ff6b5b 100%);
+        .office-icon {
+          width: 2.5rem;
+          height: 2.5rem;
+          background: var(--primary);
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           margin: 0 auto var(--space-3);
-          box-shadow: 0 4px 15px rgba(255, 54, 33, 0.4);
-        }
-
-        .office-icon {
           color: white;
         }
 
-        .office-card-name {
-          font-size: 1rem;
+        .office-name {
           font-weight: var(--font-weight-semibold);
-          color: white;
+          color: var(--text-primary);
           margin-bottom: var(--space-1);
+          font-size: 0.9rem;
         }
 
-        .office-card-country {
-          font-size: 0.875rem;
-          color: rgba(148, 163, 184, 1);
-          margin-bottom: var(--space-2);
-        }
-
-        .office-card-timezone {
-          display: inline-flex;
-          align-items: center;
-          gap: var(--space-1);
+        .office-tz {
           font-size: 0.75rem;
-          color: rgba(100, 255, 218, 0.8);
-          background: rgba(100, 255, 218, 0.1);
-          padding: var(--space-1) var(--space-2);
-          border-radius: var(--radius-full);
+          color: var(--text-secondary);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: var(--space-1);
         }
 
-        .benefits-grid {
+        .benefits-section {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: var(--space-4);
           padding-top: var(--space-6);
-          border-top: 1px solid rgba(100, 255, 218, 0.1);
-          position: relative;
-          z-index: 1;
+          border-top: 1px solid var(--border);
         }
 
-        .benefit-card {
+        .benefit-item {
           display: flex;
           align-items: flex-start;
           gap: var(--space-3);
-          padding: var(--space-4);
-          background: rgba(30, 41, 59, 0.3);
+          padding: var(--space-3);
+          background: rgba(255, 54, 33, 0.03);
           border-radius: var(--radius-lg);
-          border: 1px solid rgba(100, 255, 218, 0.05);
-          transition: all 0.3s ease;
-        }
-
-        .benefit-card:hover {
-          background: rgba(30, 41, 59, 0.5);
-          border-color: rgba(100, 255, 218, 0.15);
-        }
-
-        .benefit-icon-wrapper {
-          width: 2.5rem;
-          height: 2.5rem;
-          background: linear-gradient(135deg, var(--primary) 0%, #ff6b5b 100%);
-          border-radius: var(--radius-lg);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
+          border: 1px solid rgba(255, 54, 33, 0.1);
         }
 
         .benefit-icon {
+          width: 2rem;
+          height: 2rem;
+          background: var(--primary);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           color: white;
+          flex-shrink: 0;
         }
 
         .benefit-title {
           font-size: 0.875rem;
           font-weight: var(--font-weight-semibold);
-          color: white;
+          color: var(--text-primary);
           margin: 0 0 var(--space-1) 0;
         }
 
         .benefit-desc {
-          font-size: 0.8rem;
-          color: rgba(148, 163, 184, 1);
+          font-size: 0.75rem;
+          color: var(--text-secondary);
           margin: 0;
-          line-height: 1.5;
+          line-height: 1.4;
         }
 
         @media (max-width: 768px) {
-          .globe-container {
+          .globe-wrapper {
             padding: var(--space-6);
           }
 
-          .offices-grid,
-          .benefits-grid {
-            grid-template-columns: 1fr;
+          .globe-svg {
+            width: 250px;
+            height: 250px;
           }
 
-          .globe-title {
-            font-size: 1.25rem;
+          .offices-grid,
+          .benefits-section {
+            grid-template-columns: 1fr;
           }
         }
 
         @media (max-width: 480px) {
-          .globe-container {
-            padding: var(--space-4);
-          }
-
-          .office-card {
-            padding: var(--space-4);
-          }
-
-          .benefit-card {
-            padding: var(--space-3);
+          .globe-svg {
+            width: 200px;
+            height: 200px;
           }
         }
       `}</style>
-
-      {/* Animated stars background */}
-      <div className="stars">
-        {[...Array(30)].map((_, i) => (
-          <div
-            key={i}
-            className="star"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-            }}
-          />
-        ))}
-      </div>
 
       <div className="globe-header">
         <h3 className="globe-title">{t('title')}</h3>
         <p className="globe-subtitle">{t('subtitle')}</p>
       </div>
 
-      {/* Interactive World Map */}
-      <div className="map-container">
+      <div className="globe-container">
         <svg
-          className="world-map"
-          viewBox="0 0 800 400"
-          xmlns="http://www.w3.org/2000/svg"
+          ref={globeRef}
+          className="globe-svg"
+          viewBox="0 0 300 300"
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
         >
           <defs>
-            <linearGradient id="arcGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="var(--primary)" />
-              <stop offset="50%" stopColor="#ff6b5b" />
-              <stop offset="100%" stopColor="var(--primary)" />
-            </linearGradient>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-              <feMerge>
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
+            <radialGradient id="oceanGradient" cx="30%" cy="30%">
+              <stop offset="0%" stopColor="#e0f2fe" />
+              <stop offset="100%" stopColor="#bae6fd" />
+            </radialGradient>
+            <clipPath id="globeClip">
+              <circle cx="150" cy="150" r="120" />
+            </clipPath>
           </defs>
 
-          {/* Grid lines */}
-          {[...Array(9)].map((_, i) => (
-            <line
-              key={`h-${i}`}
-              x1="0"
-              y1={i * 50}
-              x2="800"
-              y2={i * 50}
-              className="grid-line"
+          {/* Globe base */}
+          <circle cx="150" cy="150" r="120" className="globe-ocean" />
+
+          {/* Graticule lines */}
+          <g className="globe-graticule" clipPath="url(#globeClip)">
+            {/* Latitude lines */}
+            {[-60, -30, 0, 30, 60].map(lat => {
+              const y = 150 - (lat / 90) * 120;
+              const r = Math.cos(lat * Math.PI / 180) * 120;
+              return (
+                <ellipse
+                  key={`lat-${lat}`}
+                  cx="150"
+                  cy={y}
+                  rx={r}
+                  ry={r * 0.3}
+                  style={{ transform: `rotateY(${rotation}deg)`, transformOrigin: '150px 150px' }}
+                />
+              );
+            })}
+            {/* Longitude lines */}
+            {[0, 30, 60, 90, 120, 150].map(lng => (
+              <ellipse
+                key={`lng-${lng}`}
+                cx="150"
+                cy="150"
+                rx={Math.abs(Math.cos((lng + rotation) * Math.PI / 180)) * 120}
+                ry="120"
+                style={{ transform: `rotateZ(${(lng + rotation) % 180}deg)`, transformOrigin: '150px 150px' }}
+              />
+            ))}
+          </g>
+
+          {/* Simplified continent shapes */}
+          <g clipPath="url(#globeClip)">
+            {/* Europe */}
+            <path
+              className="globe-land"
+              d="M 145 90 Q 160 85 175 90 Q 180 100 175 115 Q 165 120 155 118 Q 145 110 145 90"
+              style={{
+                transform: `translateX(${Math.sin(rotation * Math.PI / 180) * 30}px)`,
+                opacity: Math.cos(rotation * Math.PI / 180) > -0.3 ? 0.2 : 0
+              }}
             />
-          ))}
-          {[...Array(17)].map((_, i) => (
-            <line
-              key={`v-${i}`}
-              x1={i * 50}
-              y1="0"
-              x2={i * 50}
-              y2="400"
-              className="grid-line"
+            {/* UK */}
+            <path
+              className="globe-land"
+              d="M 135 95 Q 140 90 145 95 Q 145 105 140 108 Q 135 105 135 95"
+              style={{
+                transform: `translateX(${Math.sin(rotation * Math.PI / 180) * 30}px)`,
+                opacity: Math.cos(rotation * Math.PI / 180) > -0.3 ? 0.2 : 0
+              }}
             />
-          ))}
+            {/* Africa */}
+            <path
+              className="globe-land"
+              d="M 150 130 Q 170 125 180 145 Q 175 180 160 195 Q 145 190 140 165 Q 145 145 150 130"
+              style={{
+                transform: `translateX(${Math.sin(rotation * Math.PI / 180) * 30}px)`,
+                opacity: Math.cos(rotation * Math.PI / 180) > -0.3 ? 0.2 : 0
+              }}
+            />
+            {/* Middle East */}
+            <path
+              className="globe-land"
+              d="M 175 115 Q 195 110 205 125 Q 200 140 185 145 Q 175 135 175 115"
+              style={{
+                transform: `translateX(${Math.sin(rotation * Math.PI / 180) * 30}px)`,
+                opacity: Math.cos(rotation * Math.PI / 180) > -0.3 ? 0.2 : 0
+              }}
+            />
+            {/* Asia */}
+            <path
+              className="globe-land"
+              d="M 190 80 Q 230 70 250 90 Q 255 120 240 150 Q 210 160 190 140 Q 185 110 190 80"
+              style={{
+                transform: `translateX(${Math.sin(rotation * Math.PI / 180) * 30}px)`,
+                opacity: Math.cos((rotation - 40) * Math.PI / 180) > -0.3 ? 0.2 : 0
+              }}
+            />
+            {/* North America */}
+            <path
+              className="globe-land"
+              d="M 50 85 Q 90 70 120 90 Q 125 120 110 145 Q 80 150 55 130 Q 45 105 50 85"
+              style={{
+                transform: `translateX(${Math.sin((rotation + 100) * Math.PI / 180) * 30}px)`,
+                opacity: Math.cos((rotation + 100) * Math.PI / 180) > -0.3 ? 0.2 : 0
+              }}
+            />
+            {/* South America */}
+            <path
+              className="globe-land"
+              d="M 85 155 Q 105 150 115 170 Q 110 210 95 225 Q 80 220 75 190 Q 80 165 85 155"
+              style={{
+                transform: `translateX(${Math.sin((rotation + 80) * Math.PI / 180) * 30}px)`,
+                opacity: Math.cos((rotation + 80) * Math.PI / 180) > -0.3 ? 0.2 : 0
+              }}
+            />
+          </g>
 
-          {/* Simplified continents */}
-          {/* Europe */}
-          <path
-            className="continent"
-            d="M340 80 L380 75 L420 80 L440 100 L430 130 L400 140 L370 135 L350 110 Z"
-          />
-          {/* UK & Ireland */}
-          <path
-            className="continent"
-            d="M335 85 L345 80 L350 90 L345 100 L335 95 Z"
-          />
-          {/* Africa */}
-          <path
-            className="continent"
-            d="M350 150 L400 145 L440 160 L450 220 L430 280 L380 290 L340 260 L330 200 Z"
-          />
-          {/* Middle East */}
-          <path
-            className="continent"
-            d="M440 130 L480 120 L510 140 L500 170 L460 175 L440 160 Z"
-          />
-          {/* Asia */}
-          <path
-            className="continent"
-            d="M500 60 L600 50 L700 70 L720 120 L700 180 L600 200 L520 170 L500 120 Z"
-          />
-          {/* North America */}
-          <path
-            className="continent"
-            d="M80 60 L180 50 L260 70 L280 130 L250 180 L180 190 L100 160 L60 100 Z"
-          />
-          {/* South America */}
-          <path
-            className="continent"
-            d="M200 200 L260 190 L280 250 L260 340 L220 360 L180 320 L190 250 Z"
-          />
-          {/* Australia */}
-          <path
-            className="continent"
-            d="M620 260 L700 250 L720 290 L700 330 L640 340 L610 300 Z"
-          />
+          {/* Office pins */}
+          {offices.map((office) => {
+            const pos = latLngTo3D(office.lat, office.lng);
+            if (!pos.isVisible) return null;
 
-          {/* Connection arc with glow */}
-          <path
-            className={`arc-glow ${isAnimated ? 'animated' : ''}`}
-            d={`M ${aberdeenPos.x} ${aberdeenPos.y} Q ${midX} ${midY} ${nablusPos.x} ${nablusPos.y}`}
-          />
-          <path
-            className={`connection-arc ${isAnimated ? 'animated' : ''}`}
-            d={`M ${aberdeenPos.x} ${aberdeenPos.y} Q ${midX} ${midY} ${nablusPos.x} ${nablusPos.y}`}
-            filter="url(#glow)"
-          />
+            const scale = (pos.z + 120) / 240; // Depth scaling
 
-          {/* Office markers */}
-          {offices.map((office, index) => {
-            const pos = index === 0 ? aberdeenPos : nablusPos;
             return (
               <g
                 key={office.id}
-                className="office-marker"
+                className="office-pin"
+                transform={`translate(${pos.x}, ${pos.y})`}
                 onMouseEnter={() => setHoveredOffice(office.id)}
                 onMouseLeave={() => setHoveredOffice(null)}
-                style={{ transform: `translate(${pos.x}px, ${pos.y}px)` }}
               >
-                <circle
-                  cx="0"
-                  cy="0"
-                  r="8"
-                  className={`marker-pulse ${isAnimated ? 'animated' : ''}`}
-                  style={{ animationDelay: `${index * 0.5}s` }}
-                />
-                <circle
-                  cx="0"
-                  cy="0"
-                  r="8"
-                  className={`marker-pulse ${isAnimated ? 'animated' : ''}`}
-                  style={{ animationDelay: `${index * 0.5 + 1}s` }}
-                />
-                <circle cx="0" cy="0" r="8" className="marker-dot" />
-                <circle cx="0" cy="0" r="3" className="marker-inner" />
+                <circle className="pin-pulse" cx="0" cy="0" r="6" />
+                <circle className="pin-outer" cx="0" cy="0" r={8 * scale} />
+                <circle className="pin-inner" cx="0" cy="0" r={3 * scale} />
               </g>
             );
           })}
+
+          {/* Globe edge highlight */}
+          <circle
+            cx="150"
+            cy="150"
+            r="120"
+            fill="none"
+            stroke="var(--border)"
+            strokeWidth="2"
+          />
         </svg>
 
         {/* Tooltips */}
-        {offices.map((office, index) => {
-          const pos = index === 0 ? aberdeenPos : nablusPos;
-          const mapWidth = containerRef.current?.querySelector('.map-container')?.clientWidth || 800;
-          const scale = mapWidth / 800;
+        {offices.map((office) => {
+          const pos = latLngTo3D(office.lat, office.lng);
+          if (!pos.isVisible) return null;
+
           return (
             <div
-              key={`tooltip-${office.id}`}
+              key={`tip-${office.id}`}
               className={`tooltip ${hoveredOffice === office.id ? 'visible' : ''}`}
               style={{
-                left: `${pos.x * scale}px`,
-                top: `${pos.y * scale - 60}px`,
-                transform: 'translateX(-50%)',
+                left: `calc(50% + ${pos.x - 150}px)`,
+                top: `calc(50% + ${pos.y - 150 - 35}px)`,
+                transform: 'translateX(-50%)'
               }}
             >
-              <div className="tooltip-name">{office.name}</div>
-              <div className="tooltip-country">{office.country}</div>
-              <div className="tooltip-timezone">
-                <Clock size={12} />
-                <span>{office.timezone}</span>
-              </div>
+              <strong>{office.name}</strong>
+              <br />
+              {office.timezone}
             </div>
           );
         })}
@@ -630,37 +509,36 @@ const ProfessionalGlobe: React.FC = () => {
         {offices.map((office) => (
           <div
             key={office.id}
-            className={`office-card ${hoveredOffice === office.id ? 'highlighted' : ''}`}
+            className={`office-card ${hoveredOffice === office.id ? 'active' : ''}`}
             onMouseEnter={() => setHoveredOffice(office.id)}
             onMouseLeave={() => setHoveredOffice(null)}
           >
-            <div className="office-icon-wrapper">
-              <MapPin size={20} className="office-icon" />
+            <div className="office-icon">
+              <MapPin size={16} />
             </div>
-            <div className="office-card-name">{office.name}</div>
-            <div className="office-card-country">{office.country}</div>
-            <div className="office-card-timezone">
+            <div className="office-name">{office.name}</div>
+            <div className="office-tz">
               <Clock size={12} />
-              <span>{office.timezone}</span>
+              {office.timezone}
             </div>
           </div>
         ))}
       </div>
 
       {/* Benefits */}
-      <div className="benefits-grid">
-        <div className="benefit-card">
-          <div className="benefit-icon-wrapper">
-            <Globe size={18} className="benefit-icon" />
+      <div className="benefits-section">
+        <div className="benefit-item">
+          <div className="benefit-icon">
+            <Globe size={14} />
           </div>
           <div>
             <h4 className="benefit-title">{t('worldwideTitle')}</h4>
             <p className="benefit-desc">{t('worldwideDescription')}</p>
           </div>
         </div>
-        <div className="benefit-card">
-          <div className="benefit-icon-wrapper">
-            <Users size={18} className="benefit-icon" />
+        <div className="benefit-item">
+          <div className="benefit-icon">
+            <Users size={14} />
           </div>
           <div>
             <h4 className="benefit-title">{t('crossCulturalTitle')}</h4>
