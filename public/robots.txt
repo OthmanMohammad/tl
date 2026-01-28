@@ -1,0 +1,13 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Explicitly allow Facebook/Meta crawlers
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Facebot
+Allow: /
+
+# Sitemap
+Sitemap: https://transformerlabs.io/sitemap.xml
