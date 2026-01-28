@@ -70,6 +70,7 @@ export default function RootLayout({
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#EB1600" />
+        <meta name="facebook-domain-verification" content="jh1uuo4izvzvyr8e72y3n0pe5vbwri" />
       </head>
       <body>
         {/* Google Analytics - Only loads with user consent */}
