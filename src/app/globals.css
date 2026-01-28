@@ -18,6 +18,9 @@
 /* 5. Utilities last - highest specificity */
 @import '../styles/utilities.css';
 
+/* 6. RTL and i18n support */
+@import '../styles/rtl.css';
+
 /* 6. Image optimization - Apply globally */
 /* Image Optimization - Frontend Best Practices */
 
