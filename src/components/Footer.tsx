@@ -182,7 +182,9 @@ export default function Footer() {
       fontSize: '0.875rem',
       fontWeight: 'var(--font-weight-medium)',
       letterSpacing: '-0.011em',
-      margin: 0
+      margin: 0,
+      textAlign: 'center' as const,
+      width: '100%'
     }
   }
 

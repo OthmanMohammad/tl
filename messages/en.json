@@ -121,6 +121,20 @@
       "subtitle": "Let's discuss how AI can solve your specific business challenges. We provide honest assessments and realistic timelines."
     }
   },
+  "globe": {
+    "title": "Global Operations",
+    "subtitle": "Strategic locations connecting Europe and the Middle East",
+    "aberdeenName": "Aberdeen, Scotland",
+    "aberdeenCountry": "United Kingdom",
+    "aberdeenDescription": "European operations hub",
+    "nablusName": "Nablus, West Bank",
+    "nablusCountry": "Palestine",
+    "nablusDescription": "Middle East headquarters",
+    "worldwideTitle": "Worldwide Service Coverage",
+    "worldwideDescription": "24/7 support across all major time zones with local expertise",
+    "crossCulturalTitle": "Cross-Cultural Teams",
+    "crossCulturalDescription": "Diverse perspectives enabling solutions for global markets"
+  },
   "about": {
     "meta": {
       "title": "About TransformerLabs",

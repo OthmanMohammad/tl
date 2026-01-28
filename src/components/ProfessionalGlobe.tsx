@@ -1,524 +1,670 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
-import { MapPin, Globe, Clock, Users } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { MapPin, Globe, Clock, Users, Plane } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface Office {
   id: string;
   name: string;
   country: string;
-  coordinates: { x: number; y: number };
+  lat: number;
+  lng: number;
   timezone: string;
   description: string;
 }
 
 const ProfessionalGlobe: React.FC = () => {
   const [hoveredOffice, setHoveredOffice] = useState<string | null>(null);
+  const [isAnimated, setIsAnimated] = useState(false);
+  const t = useTranslations('globe');
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Animation trigger for entrance effects
-    const timer = setTimeout(() => {}, 300);
+    // Trigger animations after component mounts
+    const timer = setTimeout(() => setIsAnimated(true), 300);
     return () => clearTimeout(timer);
   }, []);
 
   const offices: Office[] = [
     {
       id: 'uk',
-      name: 'Aberdeen, Scotland',
-      country: 'United Kingdom',
-      coordinates: { x: 180, y: 120 },
+      name: t('aberdeenName'),
+      country: t('aberdeenCountry'),
+      lat: 57.1497,
+      lng: -2.0943,
       timezone: 'GMT+0',
-      description: 'European operations hub'
+      description: t('aberdeenDescription')
     },
     {
       id: 'palestine',
-      name: 'Nablus, West Bank',
-      country: 'Palestine',
-      coordinates: { x: 220, y: 140 },
+      name: t('nablusName'),
+      country: t('nablusCountry'),
+      lat: 32.2211,
+      lng: 35.2544,
       timezone: 'GMT+2',
-      description: 'Middle East headquarters'
+      description: t('nablusDescription')
     }
   ];
 
+  // Convert lat/lng to SVG coordinates for our map projection
+  const latLngToSvg = (lat: number, lng: number) => {
+    // Mercator-like projection adjusted for our viewBox
+    const x = ((lng + 180) / 360) * 800;
+    const y = ((90 - lat) / 180) * 400;
+    return { x, y };
+  };
+
+  const aberdeenPos = latLngToSvg(offices[0].lat, offices[0].lng);
+  const nablusPos = latLngToSvg(offices[1].lat, offices[1].lng);
+
+  // Calculate arc control point for curved connection line
+  const midX = (aberdeenPos.x + nablusPos.x) / 2;
+  const midY = (aberdeenPos.y + nablusPos.y) / 2 - 40; // Curve upward
+
   return (
-    <div className="globe-container">
+    <div className="globe-container" ref={containerRef}>
       <style jsx>{`
         .globe-container {
-          background: linear-gradient(135deg, var(--surface) 0%, var(--background) 100%);
+          background: linear-gradient(180deg, #0a192f 0%, #112240 50%, #1a365d 100%);
           border-radius: var(--radius-2xl);
           padding: var(--space-8);
-          border: 1px solid var(--border);
+          border: 1px solid rgba(100, 255, 218, 0.1);
           position: relative;
           overflow: hidden;
-          box-shadow: var(--shadow-sm);
-          max-width: 100%;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
-        
+
         .globe-container::before {
           content: '';
           position: absolute;
           top: 0;
           left: 0;
           right: 0;
-          height: 3px;
-          background: var(--gradient-primary);
-          border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, var(--primary), transparent);
         }
-        
+
+        .stars {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          pointer-events: none;
+          overflow: hidden;
+        }
+
+        .star {
+          position: absolute;
+          width: 2px;
+          height: 2px;
+          background: white;
+          border-radius: 50%;
+          opacity: 0.3;
+          animation: twinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.8; }
+        }
+
         .globe-header {
           text-align: center;
           margin-bottom: var(--space-6);
+          position: relative;
+          z-index: 1;
         }
-        
+
         .globe-title {
-          font-size: 1.25rem;
-          font-weight: var(--font-weight-semibold);
-          color: var(--text-primary);
+          font-size: 1.5rem;
+          font-weight: var(--font-weight-bold);
+          color: white;
           margin-bottom: var(--space-2);
           letter-spacing: -0.02em;
           font-family: var(--font-display);
         }
-        
+
         .globe-subtitle {
-          color: var(--text-secondary);
-          font-size: 0.875rem;
+          color: rgba(148, 163, 184, 1);
+          font-size: 1rem;
           margin: 0;
           line-height: 1.6;
         }
-        
-        .globe-visual {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin-bottom: var(--space-6);
+
+        .map-container {
           position: relative;
-          height: 280px;
+          margin: var(--space-6) 0;
+          border-radius: var(--radius-xl);
+          overflow: hidden;
+          background: linear-gradient(180deg, rgba(30, 58, 95, 0.3) 0%, rgba(15, 30, 50, 0.5) 100%);
+          border: 1px solid rgba(100, 255, 218, 0.1);
         }
-        
-        .globe-svg {
-          width: 240px;
-          height: 240px;
-          filter: drop-shadow(0 8px 16px rgba(27, 49, 57, 0.1));
+
+        .world-map {
+          width: 100%;
+          height: auto;
+          display: block;
         }
-        
-        .globe-sphere {
-          fill: url(#globeGradient);
-          stroke: var(--border-accent);
-          stroke-width: 1;
-        }
-        
-        .globe-continents {
-          fill: var(--primary);
-          opacity: 0.15;
-          stroke: var(--primary);
+
+        .continent {
+          fill: rgba(100, 255, 218, 0.15);
+          stroke: rgba(100, 255, 218, 0.3);
           stroke-width: 0.5;
-          opacity: 0;
-          animation: fadeInContinents 1.5s ease-in-out forwards;
-          animation-delay: 0.5s;
+          transition: all 0.3s ease;
         }
-        
-        .globe-lines {
-          stroke: var(--border);
+
+        .continent:hover {
+          fill: rgba(100, 255, 218, 0.25);
+        }
+
+        .grid-line {
+          stroke: rgba(100, 255, 218, 0.08);
           stroke-width: 0.5;
           fill: none;
-          opacity: 0.3;
         }
-        
-        .office-pin-globe {
+
+        .connection-arc {
+          fill: none;
+          stroke: url(#arcGradient);
+          stroke-width: 2;
+          stroke-dasharray: 300;
+          stroke-dashoffset: 300;
+          filter: drop-shadow(0 0 6px rgba(255, 54, 33, 0.6));
+        }
+
+        .connection-arc.animated {
+          animation: drawArc 2s ease-out forwards;
+        }
+
+        @keyframes drawArc {
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+
+        .arc-glow {
+          fill: none;
+          stroke: rgba(255, 54, 33, 0.3);
+          stroke-width: 6;
+          stroke-dasharray: 300;
+          stroke-dashoffset: 300;
+        }
+
+        .arc-glow.animated {
+          animation: drawArc 2s ease-out forwards;
+        }
+
+        .office-marker {
           cursor: pointer;
-          transition: all var(--duration-normal) var(--ease);
-          transform-origin: center;
-          opacity: 0;
-          animation: fadeInPin 0.8s ease-out forwards;
+          transition: transform 0.3s ease;
         }
-        
-        .office-pin-globe:nth-child(1) {
-          animation-delay: 1s;
-        }
-        
-        .office-pin-globe:nth-child(2) {
-          animation-delay: 1.2s;
-        }
-        
-        .office-pin-globe:hover {
+
+        .office-marker:hover {
           transform: scale(1.2);
         }
-        
-        .pin-circle-globe {
+
+        .marker-pulse {
           fill: var(--primary);
-          stroke: var(--background);
+          opacity: 0.4;
+          animation: pulse 2s ease-out infinite;
+        }
+
+        .marker-pulse.animated {
+          animation: pulse 2s ease-out infinite;
+        }
+
+        @keyframes pulse {
+          0% {
+            r: 8;
+            opacity: 0.6;
+          }
+          100% {
+            r: 25;
+            opacity: 0;
+          }
+        }
+
+        .marker-dot {
+          fill: var(--primary);
+          stroke: white;
           stroke-width: 2;
-          filter: drop-shadow(0 2px 4px rgba(255, 54, 33, 0.3));
+          filter: drop-shadow(0 2px 8px rgba(255, 54, 33, 0.5));
         }
-        
-        .pin-icon-globe {
-          fill: var(--background);
+
+        .marker-inner {
+          fill: white;
         }
-        
-        .office-tooltip-globe {
-          position: absolute;
-          background: var(--navy-800);
-          color: var(--text-inverse);
-          padding: var(--space-2) var(--space-3);
-          border-radius: var(--radius-md);
-          font-size: 0.75rem;
-          font-weight: var(--font-weight-medium);
-          pointer-events: none;
-          transform: translate(-50%, -120%);
+
+        .floating-plane {
+          animation: flyPlane 4s ease-in-out infinite;
           opacity: 0;
-          transition: all var(--duration-normal) var(--ease);
-          z-index: 10;
-          white-space: nowrap;
-          box-shadow: var(--shadow-md);
         }
-        
-        .office-tooltip-globe::after {
-          content: '';
-          position: absolute;
-          top: 100%;
-          left: 50%;
-          transform: translateX(-50%);
-          border: 4px solid transparent;
-          border-top-color: var(--navy-800);
-        }
-        
-        .office-tooltip-globe.visible {
+
+        .floating-plane.animated {
           opacity: 1;
-          transform: translate(-50%, -140%);
         }
-        
-        .offices-list {
+
+        @keyframes flyPlane {
+          0% {
+            offset-distance: 0%;
+          }
+          100% {
+            offset-distance: 100%;
+          }
+        }
+
+        .tooltip {
+          position: absolute;
+          background: rgba(15, 23, 42, 0.95);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(100, 255, 218, 0.2);
+          color: white;
+          padding: var(--space-3) var(--space-4);
+          border-radius: var(--radius-lg);
+          font-size: 0.875rem;
+          pointer-events: none;
+          opacity: 0;
+          transform: translateY(10px);
+          transition: all 0.3s ease;
+          z-index: 100;
+          min-width: 160px;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .tooltip.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .tooltip-name {
+          font-weight: var(--font-weight-semibold);
+          margin-bottom: var(--space-1);
+          color: white;
+        }
+
+        .tooltip-country {
+          font-size: 0.75rem;
+          color: rgba(100, 255, 218, 0.8);
+          margin-bottom: var(--space-2);
+        }
+
+        .tooltip-timezone {
+          display: flex;
+          align-items: center;
+          gap: var(--space-2);
+          font-size: 0.75rem;
+          color: rgba(148, 163, 184, 1);
+        }
+
+        .offices-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          grid-template-columns: repeat(2, 1fr);
           gap: var(--space-4);
           margin-bottom: var(--space-6);
+          position: relative;
+          z-index: 1;
         }
-        
-        .office-item {
-          background: var(--background);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-lg);
-          padding: var(--space-4);
-          transition: all var(--duration-normal) var(--ease);
+
+        .office-card {
+          background: rgba(30, 41, 59, 0.5);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(100, 255, 218, 0.1);
+          border-radius: var(--radius-xl);
+          padding: var(--space-5);
+          transition: all 0.3s ease;
           cursor: pointer;
           text-align: center;
         }
-        
-        .office-item:hover,
-        .office-item.highlighted {
+
+        .office-card:hover,
+        .office-card.highlighted {
           border-color: var(--primary);
-          transform: translateY(-1px);
-          box-shadow: var(--shadow-sm);
+          transform: translateY(-2px);
+          box-shadow: 0 10px 30px rgba(255, 54, 33, 0.2);
         }
-        
-        .office-flag {
-          width: 1.5rem;
-          height: 1.5rem;
-          background: var(--primary);
+
+        .office-icon-wrapper {
+          width: 3rem;
+          height: 3rem;
+          background: linear-gradient(135deg, var(--primary) 0%, #ff6b5b 100%);
           border-radius: 50%;
-          margin: 0 auto var(--space-2);
           display: flex;
           align-items: center;
           justify-content: center;
-          color: var(--background);
-          font-size: 0.75rem;
+          margin: 0 auto var(--space-3);
+          box-shadow: 0 4px 15px rgba(255, 54, 33, 0.4);
         }
-        
-        .office-name {
-          font-size: 0.875rem;
-          font-weight: var(--font-weight-medium);
-          color: var(--text-primary);
+
+        .office-icon {
+          color: white;
+        }
+
+        .office-card-name {
+          font-size: 1rem;
+          font-weight: var(--font-weight-semibold);
+          color: white;
           margin-bottom: var(--space-1);
         }
-        
-        .office-timezone {
-          font-size: 0.75rem;
-          color: var(--text-secondary);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: var(--space-1);
+
+        .office-card-country {
+          font-size: 0.875rem;
+          color: rgba(148, 163, 184, 1);
+          margin-bottom: var(--space-2);
         }
-        
-        .global-benefits {
+
+        .office-card-timezone {
+          display: inline-flex;
+          align-items: center;
+          gap: var(--space-1);
+          font-size: 0.75rem;
+          color: rgba(100, 255, 218, 0.8);
+          background: rgba(100, 255, 218, 0.1);
+          padding: var(--space-1) var(--space-2);
+          border-radius: var(--radius-full);
+        }
+
+        .benefits-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          grid-template-columns: repeat(2, 1fr);
           gap: var(--space-4);
           padding-top: var(--space-6);
-          border-top: 1px solid var(--border);
+          border-top: 1px solid rgba(100, 255, 218, 0.1);
+          position: relative;
+          z-index: 1;
         }
-        
-        .benefit-item {
+
+        .benefit-card {
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           gap: var(--space-3);
-          padding: var(--space-3);
-          background: rgba(255, 54, 33, 0.02);
+          padding: var(--space-4);
+          background: rgba(30, 41, 59, 0.3);
           border-radius: var(--radius-lg);
-          border: 1px solid rgba(255, 54, 33, 0.1);
+          border: 1px solid rgba(100, 255, 218, 0.05);
+          transition: all 0.3s ease;
         }
-        
-        .benefit-icon {
-          width: 2rem;
-          height: 2rem;
-          background: var(--primary);
-          border-radius: 50%;
+
+        .benefit-card:hover {
+          background: rgba(30, 41, 59, 0.5);
+          border-color: rgba(100, 255, 218, 0.15);
+        }
+
+        .benefit-icon-wrapper {
+          width: 2.5rem;
+          height: 2.5rem;
+          background: linear-gradient(135deg, var(--primary) 0%, #ff6b5b 100%);
+          border-radius: var(--radius-lg);
           display: flex;
           align-items: center;
           justify-content: center;
-          color: var(--background);
           flex-shrink: 0;
         }
-        
-        .benefit-content h4 {
+
+        .benefit-icon {
+          color: white;
+        }
+
+        .benefit-title {
           font-size: 0.875rem;
           font-weight: var(--font-weight-semibold);
-          color: var(--text-primary);
+          color: white;
           margin: 0 0 var(--space-1) 0;
         }
-        
-        .benefit-content p {
-          font-size: 0.75rem;
-          color: var(--text-secondary);
+
+        .benefit-desc {
+          font-size: 0.8rem;
+          color: rgba(148, 163, 184, 1);
           margin: 0;
-          line-height: 1.4;
+          line-height: 1.5;
         }
-        
-        @keyframes fadeInContinents {
-          from {
-            opacity: 0;
-            transform: scale(0.95);
-          }
-          to {
-            opacity: 0.15;
-            transform: scale(1);
-          }
-        }
-        
-        @keyframes fadeInPin {
-          from {
-            opacity: 0;
-            transform: scale(0) translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-          }
-        }
-        
+
         @media (max-width: 768px) {
           .globe-container {
             padding: var(--space-6);
           }
-          
-          .globe-visual {
-            height: 220px;
-          }
-          
-          .globe-svg {
-            width: 180px;
-            height: 180px;
-          }
-          
-          .offices-list {
+
+          .offices-grid,
+          .benefits-grid {
             grid-template-columns: 1fr;
-            gap: var(--space-3);
           }
-          
-          .global-benefits {
-            grid-template-columns: 1fr;
-            gap: var(--space-3);
+
+          .globe-title {
+            font-size: 1.25rem;
           }
         }
-        
+
         @media (max-width: 480px) {
           .globe-container {
             padding: var(--space-4);
           }
-          
-          .globe-visual {
-            height: 180px;
+
+          .office-card {
+            padding: var(--space-4);
           }
-          
-          .globe-svg {
-            width: 140px;
-            height: 140px;
-          }
-          
-          .benefit-item {
-            padding: var(--space-2);
-            gap: var(--space-2);
-          }
-          
-          .benefit-icon {
-            width: 1.5rem;
-            height: 1.5rem;
-          }
-        }
-        
-        @media (prefers-reduced-motion: reduce) {
-          .globe-continents,
-          .office-pin-globe {
-            animation: none !important;
-          }
-          
-          .office-pin-globe {
-            opacity: 1;
-          }
-          
-          .globe-continents {
-            opacity: 0.15;
+
+          .benefit-card {
+            padding: var(--space-3);
           }
         }
       `}</style>
 
-      <div className="globe-header">
-        <h3 className="globe-title">Global Operations</h3>
-        <p className="globe-subtitle">
-          Strategic locations connecting Europe and the Middle East
-        </p>
+      {/* Animated stars background */}
+      <div className="stars">
+        {[...Array(30)].map((_, i) => (
+          <div
+            key={i}
+            className="star"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+            }}
+          />
+        ))}
       </div>
 
-      <div className="globe-visual">
+      <div className="globe-header">
+        <h3 className="globe-title">{t('title')}</h3>
+        <p className="globe-subtitle">{t('subtitle')}</p>
+      </div>
+
+      {/* Interactive World Map */}
+      <div className="map-container">
         <svg
-          className="globe-svg"
-          viewBox="0 0 300 300"
+          className="world-map"
+          viewBox="0 0 800 400"
           xmlns="http://www.w3.org/2000/svg"
-          role="img"
-          aria-label="Globe showing TransformerLabs office locations"
         >
           <defs>
-            {/* Globe gradient for 3D effect */}
-            <radialGradient id="globeGradient" cx="0.3" cy="0.3">
-              <stop offset="0%" stopColor="#f8fafc" />
-              <stop offset="70%" stopColor="#e2e8f0" />
-              <stop offset="100%" stopColor="#cbd5e1" />
-            </radialGradient>
-            
-            {/* Shadow gradient */}
-            <radialGradient id="shadowGradient" cx="0.5" cy="0.8">
-              <stop offset="0%" stopColor="rgba(0,0,0,0.1)" />
-              <stop offset="100%" stopColor="rgba(0,0,0,0)" />
-            </radialGradient>
+            <linearGradient id="arcGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="var(--primary)" />
+              <stop offset="50%" stopColor="#ff6b5b" />
+              <stop offset="100%" stopColor="var(--primary)" />
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
           </defs>
-          
-          {/* Globe shadow */}
-          <ellipse cx="150" cy="260" rx="80" ry="15" fill="url(#shadowGradient)" />
-          
-          {/* Main globe */}
-          <circle cx="150" cy="150" r="100" className="globe-sphere" />
-          
-          {/* Longitude lines */}
-          <g className="globe-lines">
-            <path d="M 150 50 Q 120 150 150 250" />
-            <path d="M 150 50 Q 180 150 150 250" />
-            <path d="M 150 50 Q 100 150 150 250" />
-            <path d="M 150 50 Q 200 150 150 250" />
-            <path d="M 50 150 Q 150 120 250 150" />
-            <path d="M 50 150 Q 150 180 250 150" />
-          </g>
-          
-          {/* Latitude lines */}
-          <g className="globe-lines">
-            <ellipse cx="150" cy="150" rx="100" ry="30" fill="none" />
-            <ellipse cx="150" cy="150" rx="85" ry="15" fill="none" />
-            <ellipse cx="150" cy="150" rx="85" ry="45" fill="none" />
-            <ellipse cx="150" cy="150" rx="70" ry="60" fill="none" />
-          </g>
-          
-          {/* Simplified continents */}
-          <g className="globe-continents">
-            {/* Europe/UK area */}
-            <path d="M 120 110 Q 140 100 160 110 Q 150 120 140 125 Q 130 120 120 110" />
-            {/* Middle East/Palestine area */}
-            <path d="M 170 130 Q 185 125 195 135 Q 190 145 180 148 Q 175 140 170 130" />
-            {/* Africa */}
-            <path d="M 140 160 Q 165 155 175 180 Q 160 200 145 195 Q 135 180 140 160" />
-            {/* Asia */}
-            <path d="M 180 120 Q 210 115 220 140 Q 205 155 185 150 Q 175 135 180 120" />
-          </g>
-          
-          {/* Office pins */}
-          {offices.map((office, index) => (
-            <g
-              key={office.id}
-              className="office-pin-globe"
-              onMouseEnter={() => setHoveredOffice(office.id)}
-              onMouseLeave={() => setHoveredOffice(null)}
-              style={{ animationDelay: `${1 + index * 0.2}s` }}
-            >
-              <circle
-                cx={office.coordinates.x}
-                cy={office.coordinates.y}
-                r="8"
-                className="pin-circle-globe"
-              />
-              <MapPin
-                x={office.coordinates.x - 5}
-                y={office.coordinates.y - 5}
-                width="10"
-                height="10"
-                className="pin-icon-globe"
-              />
-            </g>
+
+          {/* Grid lines */}
+          {[...Array(9)].map((_, i) => (
+            <line
+              key={`h-${i}`}
+              x1="0"
+              y1={i * 50}
+              x2="800"
+              y2={i * 50}
+              className="grid-line"
+            />
           ))}
+          {[...Array(17)].map((_, i) => (
+            <line
+              key={`v-${i}`}
+              x1={i * 50}
+              y1="0"
+              x2={i * 50}
+              y2="400"
+              className="grid-line"
+            />
+          ))}
+
+          {/* Simplified continents */}
+          {/* Europe */}
+          <path
+            className="continent"
+            d="M340 80 L380 75 L420 80 L440 100 L430 130 L400 140 L370 135 L350 110 Z"
+          />
+          {/* UK & Ireland */}
+          <path
+            className="continent"
+            d="M335 85 L345 80 L350 90 L345 100 L335 95 Z"
+          />
+          {/* Africa */}
+          <path
+            className="continent"
+            d="M350 150 L400 145 L440 160 L450 220 L430 280 L380 290 L340 260 L330 200 Z"
+          />
+          {/* Middle East */}
+          <path
+            className="continent"
+            d="M440 130 L480 120 L510 140 L500 170 L460 175 L440 160 Z"
+          />
+          {/* Asia */}
+          <path
+            className="continent"
+            d="M500 60 L600 50 L700 70 L720 120 L700 180 L600 200 L520 170 L500 120 Z"
+          />
+          {/* North America */}
+          <path
+            className="continent"
+            d="M80 60 L180 50 L260 70 L280 130 L250 180 L180 190 L100 160 L60 100 Z"
+          />
+          {/* South America */}
+          <path
+            className="continent"
+            d="M200 200 L260 190 L280 250 L260 340 L220 360 L180 320 L190 250 Z"
+          />
+          {/* Australia */}
+          <path
+            className="continent"
+            d="M620 260 L700 250 L720 290 L700 330 L640 340 L610 300 Z"
+          />
+
+          {/* Connection arc with glow */}
+          <path
+            className={`arc-glow ${isAnimated ? 'animated' : ''}`}
+            d={`M ${aberdeenPos.x} ${aberdeenPos.y} Q ${midX} ${midY} ${nablusPos.x} ${nablusPos.y}`}
+          />
+          <path
+            className={`connection-arc ${isAnimated ? 'animated' : ''}`}
+            d={`M ${aberdeenPos.x} ${aberdeenPos.y} Q ${midX} ${midY} ${nablusPos.x} ${nablusPos.y}`}
+            filter="url(#glow)"
+          />
+
+          {/* Office markers */}
+          {offices.map((office, index) => {
+            const pos = index === 0 ? aberdeenPos : nablusPos;
+            return (
+              <g
+                key={office.id}
+                className="office-marker"
+                onMouseEnter={() => setHoveredOffice(office.id)}
+                onMouseLeave={() => setHoveredOffice(null)}
+                style={{ transform: `translate(${pos.x}px, ${pos.y}px)` }}
+              >
+                <circle
+                  cx="0"
+                  cy="0"
+                  r="8"
+                  className={`marker-pulse ${isAnimated ? 'animated' : ''}`}
+                  style={{ animationDelay: `${index * 0.5}s` }}
+                />
+                <circle
+                  cx="0"
+                  cy="0"
+                  r="8"
+                  className={`marker-pulse ${isAnimated ? 'animated' : ''}`}
+                  style={{ animationDelay: `${index * 0.5 + 1}s` }}
+                />
+                <circle cx="0" cy="0" r="8" className="marker-dot" />
+                <circle cx="0" cy="0" r="3" className="marker-inner" />
+              </g>
+            );
+          })}
         </svg>
 
         {/* Tooltips */}
-        {offices.map((office) => (
-          <div
-            key={`tooltip-${office.id}`}
-            className={`office-tooltip-globe ${hoveredOffice === office.id ? 'visible' : ''}`}
-            style={{
-              left: `calc(50% + ${office.coordinates.x - 150}px)`,
-              top: `calc(50% + ${office.coordinates.y - 150}px)`,
-            }}
-          >
-            <strong>{office.name}</strong>
-            <br />
-            {office.timezone}
-          </div>
-        ))}
+        {offices.map((office, index) => {
+          const pos = index === 0 ? aberdeenPos : nablusPos;
+          const mapWidth = containerRef.current?.querySelector('.map-container')?.clientWidth || 800;
+          const scale = mapWidth / 800;
+          return (
+            <div
+              key={`tooltip-${office.id}`}
+              className={`tooltip ${hoveredOffice === office.id ? 'visible' : ''}`}
+              style={{
+                left: `${pos.x * scale}px`,
+                top: `${pos.y * scale - 60}px`,
+                transform: 'translateX(-50%)',
+              }}
+            >
+              <div className="tooltip-name">{office.name}</div>
+              <div className="tooltip-country">{office.country}</div>
+              <div className="tooltip-timezone">
+                <Clock size={12} />
+                <span>{office.timezone}</span>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
-      <div className="offices-list">
+      {/* Office cards */}
+      <div className="offices-grid">
         {offices.map((office) => (
           <div
             key={office.id}
-            className={`office-item ${hoveredOffice === office.id ? 'highlighted' : ''}`}
+            className={`office-card ${hoveredOffice === office.id ? 'highlighted' : ''}`}
             onMouseEnter={() => setHoveredOffice(office.id)}
             onMouseLeave={() => setHoveredOffice(null)}
           >
-            <div className="office-flag">
-              <MapPin size={12} />
+            <div className="office-icon-wrapper">
+              <MapPin size={20} className="office-icon" />
             </div>
-            <div className="office-name">{office.name}</div>
-            <div className="office-timezone">
+            <div className="office-card-name">{office.name}</div>
+            <div className="office-card-country">{office.country}</div>
+            <div className="office-card-timezone">
               <Clock size={12} />
-              {office.timezone}
+              <span>{office.timezone}</span>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="global-benefits">
-        <div className="benefit-item">
-          <div className="benefit-icon">
-            <Globe size={16} />
+      {/* Benefits */}
+      <div className="benefits-grid">
+        <div className="benefit-card">
+          <div className="benefit-icon-wrapper">
+            <Globe size={18} className="benefit-icon" />
           </div>
-          <div className="benefit-content">
-            <h4>Worldwide Service Coverage</h4>
-            <p>24/7 support across all major time zones with local expertise</p>
+          <div>
+            <h4 className="benefit-title">{t('worldwideTitle')}</h4>
+            <p className="benefit-desc">{t('worldwideDescription')}</p>
           </div>
         </div>
-        
-        <div className="benefit-item">
-          <div className="benefit-icon">
-            <Users size={16} />
+        <div className="benefit-card">
+          <div className="benefit-icon-wrapper">
+            <Users size={18} className="benefit-icon" />
           </div>
-          <div className="benefit-content">
-            <h4>Cross-Cultural Teams</h4>
-            <p>Diverse perspectives enabling solutions for global markets</p>
+          <div>
+            <h4 className="benefit-title">{t('crossCulturalTitle')}</h4>
+            <p className="benefit-desc">{t('crossCulturalDescription')}</p>
           </div>
         </div>
       </div>

@@ -121,6 +121,20 @@
       "subtitle": "دعنا نناقش كيف يمكن للذكاء الاصطناعي حل تحديات عملك المحددة. نقدم تقييمات صادقة وجداول زمنية واقعية."
     }
   },
+  "globe": {
+    "title": "العمليات العالمية",
+    "subtitle": "مواقع استراتيجية تربط أوروبا بالشرق الأوسط",
+    "aberdeenName": "أبردين، اسكتلندا",
+    "aberdeenCountry": "المملكة المتحدة",
+    "aberdeenDescription": "مركز العمليات الأوروبية",
+    "nablusName": "نابلس، الضفة الغربية",
+    "nablusCountry": "فلسطين",
+    "nablusDescription": "المقر الرئيسي للشرق الأوسط",
+    "worldwideTitle": "تغطية خدمات عالمية",
+    "worldwideDescription": "دعم على مدار الساعة عبر جميع المناطق الزمنية الرئيسية مع خبرة محلية",
+    "crossCulturalTitle": "فرق متعددة الثقافات",
+    "crossCulturalDescription": "وجهات نظر متنوعة تمكّن من تقديم حلول للأسواق العالمية"
+  },
   "about": {
     "meta": {
       "title": "عن TransformerLabs",
@@ -636,7 +650,7 @@
     "companyInfo": {
       "title": "معلومات الشركة",
       "legalEntity": "الكيان القانوني:",
-      "legalEntityValue": "شركة ترانسفورمر للابتكار للبرمجة والذكاء الاصطناعي",
+      "legalEntityValue": "شركة ترانسفورمرز انوفيشن للبرمجة والذكاء الاصطناعي",
       "commercialName": "الاسم التجاري:",
       "commercialNameValue": "TransformerLabs",
       "companyNumber": "رقم الشركة:",
@@ -854,7 +868,7 @@
       "s1": {
         "title": "1. معلومات الشركة",
         "legalEntity": "الكيان القانوني:",
-        "legalEntityValue": "شركة ترانسفورمر للابتكار للبرمجة والذكاء الاصطناعي",
+        "legalEntityValue": "شركة ترانسفورمرز انوفيشن للبرمجة والذكاء الاصطناعي",
         "commercialName": "الاسم التجاري:",
         "commercialNameValue": "TransformerLabs",
         "companyNumber": "رقم الشركة:",
