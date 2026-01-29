@@ -41,8 +41,8 @@ const ThreeGlobe: React.FC = () => {
       id: 'uk',
       name: t('aberdeenName'),
       country: t('aberdeenCountry'),
-      lat: 57.1497,
-      lng: -2.0943,
+      lat: 57.5, // Little more north
+      lng: 1.0, // Tiny bit west
       timezone: 'GMT+0',
       description: t('aberdeenDescription')
     },
@@ -50,7 +50,7 @@ const ThreeGlobe: React.FC = () => {
       id: 'palestine',
       name: t('nablusName'),
       country: t('nablusCountry'),
-      lat: 32.2211,
+      lat: 33.0, // Little more north
       lng: 35.2544,
       timezone: 'GMT+2',
       description: t('nablusDescription')
@@ -135,7 +135,9 @@ const ThreeGlobe: React.FC = () => {
 
       // Load single clean map texture
       const earthTexture = await loadTexture('/textures/earth/maps.png')
-      if (earthTexture) earthTexture.colorSpace = THREE.SRGBColorSpace
+      if (earthTexture) {
+        earthTexture.colorSpace = THREE.SRGBColorSpace
+      }
 
       // Globe group for rotation
       globeGroup = new THREE.Group()
@@ -156,21 +158,16 @@ const ThreeGlobe: React.FC = () => {
       const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial)
       globeGroup.add(earthMesh)
 
-      // ===========================================
-      // TEXTURE OFFSET - Adjust this value if pins/beams are misaligned
-      // Positive = shift east, Negative = shift west
-      // ===========================================
-      const TEXTURE_LNG_OFFSET = 0 // Try values like -90, -180, 90, 180 if misaligned
-      const FLIP_HORIZONTAL = true // Set to true if pins appear on opposite side of globe
-
       // Helper: Convert lat/lng to 3D position
+      // Adjusted for custom map texture alignment
+      const LNG_OFFSET = -192 // Longitude offset
+      const LAT_OFFSET = -43 // Latitude offset (negative = move south)
       const latLngToVector3 = (lat: number, lng: number, radius: number) => {
-        const phi = (90 - lat) * (Math.PI / 180)
-        const theta = (lng + 180 + TEXTURE_LNG_OFFSET) * (Math.PI / 180)
-        // Flip x-coordinate if texture is mirrored
-        const x = FLIP_HORIZONTAL
-          ? (radius * Math.sin(phi) * Math.cos(theta))
-          : -(radius * Math.sin(phi) * Math.cos(theta))
+        const adjustedLat = lat + LAT_OFFSET
+        const phi = (90 - adjustedLat) * (Math.PI / 180)
+        const theta = (lng + LNG_OFFSET) * (Math.PI / 180)
+        // Negate x to flip horizontally (mirror left-right)
+        const x = -radius * Math.sin(phi) * Math.cos(theta)
         const y = radius * Math.cos(phi)
         const z = radius * Math.sin(phi) * Math.sin(theta)
         return new THREE.Vector3(x, y, z)
@@ -215,7 +212,6 @@ const ThreeGlobe: React.FC = () => {
             color: color,
             transparent: true,
             opacity: 0,
-            blending: THREE.AdditiveBlending,
             depthWrite: false
           })
           disposables.materials.push(segmentMaterial)
@@ -233,7 +229,6 @@ const ThreeGlobe: React.FC = () => {
             color: color,
             transparent: true,
             opacity: 0,
-            blending: THREE.AdditiveBlending,
             depthWrite: false
           })
           disposables.materials.push(glowMaterial)
@@ -255,9 +250,9 @@ const ThreeGlobe: React.FC = () => {
         return glowGroup
       }
 
-      // Destination coordinates
-      const dubaiLat = 25.2048, dubaiLng = 55.2708
-      const riyadhLat = 24.7136, riyadhLng = 46.6753
+      // Destination coordinates (adjusted for shorter beam distances)
+      const dubaiLat = 25.8, dubaiLng = 53.0 // Tiny north, shorter
+      const riyadhLat = 24.7136, riyadhLng = 45.2 // Tiny bit more east
       const miamiLat = 25.7617, miamiLng = -80.1918
 
       // Create arcs
@@ -293,77 +288,62 @@ const ThreeGlobe: React.FC = () => {
       globeGroup.add(arcNablusToMiami)
       arcMeshes.push(arcNablusToMiami)
 
-      // Office pin markers - REDUCED geometry
+      // Office pin markers - Simple pin sprite
+      // Create pin texture using canvas
+      const createPinTexture = (color: string) => {
+        const canvas = document.createElement('canvas')
+        canvas.width = 64
+        canvas.height = 64
+        const ctx = canvas.getContext('2d')!
+
+        // Draw pin shape (teardrop/marker)
+        ctx.fillStyle = color
+        ctx.beginPath()
+        // Pin head (circle)
+        ctx.arc(32, 20, 16, 0, Math.PI * 2)
+        ctx.fill()
+        // Pin point (triangle)
+        ctx.beginPath()
+        ctx.moveTo(16, 20)
+        ctx.lineTo(32, 58)
+        ctx.lineTo(48, 20)
+        ctx.fill()
+        // Inner circle (white dot)
+        ctx.fillStyle = 'white'
+        ctx.beginPath()
+        ctx.arc(32, 20, 6, 0, Math.PI * 2)
+        ctx.fill()
+
+        const texture = new THREE.CanvasTexture(canvas)
+        disposables.textures.push(texture)
+        return texture
+      }
+
+      // Both pins use red (#EB1600)
       offices.forEach(office => {
-        const pos = latLngToVector3(office.lat, office.lng, 1.02)
+        const pos = latLngToVector3(office.lat, office.lng, 1.04)
+        const pinColor = '#EB1600'
 
-        const pinGeometry = new THREE.SphereGeometry(0.02, 12, 12)
-        disposables.geometries.push(pinGeometry)
-
-        const pinMaterial = new THREE.MeshBasicMaterial({
-          color: 0xffffff,
+        const pinTexture = createPinTexture(pinColor)
+        const spriteMaterial = new THREE.SpriteMaterial({
+          map: pinTexture,
           transparent: true,
-          opacity: 1.0
+          depthTest: false
         })
-        disposables.materials.push(pinMaterial)
+        disposables.materials.push(spriteMaterial)
 
-        const pin = new THREE.Mesh(pinGeometry, pinMaterial)
-        pin.position.copy(pos)
-        pin.userData = { officeId: office.id }
-        globeGroup.add(pin)
+        const sprite = new THREE.Sprite(spriteMaterial)
+        sprite.position.copy(pos)
+        sprite.scale.set(0.08, 0.08, 1)
+        sprite.userData = { officeId: office.id }
+        globeGroup.add(sprite)
 
-        const glowSphereGeometry = new THREE.SphereGeometry(0.035, 12, 12)
-        disposables.geometries.push(glowSphereGeometry)
-
-        const glowSphereMaterial = new THREE.MeshBasicMaterial({
-          color: 0xffffff,
-          transparent: true,
-          opacity: 0.3
-        })
-        disposables.materials.push(glowSphereMaterial)
-
-        const glowSphere = new THREE.Mesh(glowSphereGeometry, glowSphereMaterial)
-        glowSphere.position.copy(pos)
-        globeGroup.add(glowSphere)
-
-        const ringGeometry = new THREE.RingGeometry(0.04, 0.055, 24)
-        disposables.geometries.push(ringGeometry)
-
-        const ringMaterial = new THREE.MeshBasicMaterial({
-          color: 0xffffff,
-          transparent: true,
-          opacity: 0.4,
-          side: THREE.DoubleSide
-        })
-        disposables.materials.push(ringMaterial)
-
-        const ring = new THREE.Mesh(ringGeometry, ringMaterial)
-        ring.position.copy(pos.clone().multiplyScalar(1.001))
-        ring.lookAt(0, 0, 0)
-        ring.userData = { isPulse: true }
-        globeGroup.add(ring)
-
-        const hoverGlowGeometry = new THREE.RingGeometry(0.05, 0.07, 24)
-        disposables.geometries.push(hoverGlowGeometry)
-
-        const hoverGlowMaterial = new THREE.MeshBasicMaterial({
-          color: 0xffffff,
-          transparent: true,
-          opacity: 0,
-          side: THREE.DoubleSide
-        })
-        disposables.materials.push(hoverGlowMaterial)
-
-        const hoverGlow = new THREE.Mesh(hoverGlowGeometry, hoverGlowMaterial)
-        hoverGlow.position.copy(pos.clone().multiplyScalar(1.002))
-        hoverGlow.lookAt(0, 0, 0)
-        globeGroup.add(hoverGlow)
-
+        // Store reference (simplified - no animations)
         markersRef.current.set(office.id, {
-          pin, pinMaterial,
-          glow: hoverGlow, glowMaterial: hoverGlowMaterial,
-          ring, ringMaterial,
-          glowSphere, glowSphereMaterial
+          pin: sprite, pinMaterial: spriteMaterial,
+          glow: sprite, glowMaterial: spriteMaterial,
+          ring: sprite, ringMaterial: spriteMaterial,
+          glowSphere: sprite, glowSphereMaterial: spriteMaterial
         })
       })
 
@@ -375,8 +355,8 @@ const ThreeGlobe: React.FC = () => {
       // rotation.x: Vertical tilt (positive = tilt down to show more north)
       //             0.4 radians ≈ 23 degrees tilt
       // ===========================================
-      const INITIAL_ROTATION_Y = -1.8 // Horizontal: adjust to center Middle East
-      const INITIAL_ROTATION_X = -0.1 // Vertical tilt
+      const INITIAL_ROTATION_Y = -1.9 // Horizontal: shows Middle East region
+      const INITIAL_ROTATION_X = -0.1 // Tilt down to show more south
 
       globeGroup.rotation.y = INITIAL_ROTATION_Y
       globeGroup.rotation.x = INITIAL_ROTATION_X
@@ -428,20 +408,7 @@ const ThreeGlobe: React.FC = () => {
           }
         })
 
-        // Pulse effects
-        markersRef.current.forEach((marker) => {
-          if (marker.ring && marker.ring.userData.isPulse) {
-            const scale = 1 + Math.sin(time * 2) * 0.3
-            marker.ring.scale.set(scale, scale, scale)
-            marker.ringMaterial.opacity = 0.4 * (1 - (scale - 1) / 0.3)
-          }
-
-          if (marker.glowSphere) {
-            const glowScale = 1 + Math.sin(time * 1.5) * 0.15
-            marker.glowSphere.scale.set(glowScale, glowScale, glowScale)
-            marker.glowSphereMaterial.opacity = 0.25 + Math.sin(time * 1.5) * 0.1
-          }
-        })
+        // Pin markers are static sprites - no animation needed
 
         renderer.render(scene, camera)
       }
