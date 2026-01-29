@@ -82,14 +82,15 @@ const ThreeGlobe: React.FC = () => {
       if (!container) return
 
       const width = container.clientWidth
-      const height = 500
+      const isMobile = width < 768
+      // Use correct height from start - CSS sets 320px on mobile, 500px on desktop
+      const height = isMobile ? 320 : 500
 
       // Scene with transparent background
       scene = new THREE.Scene()
 
       // Camera - zoom out more on mobile for better fit
       camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000)
-      const isMobile = width < 768
       camera.position.z = isMobile ? 3.5 : 2.8
 
       // Check for WebGL support
@@ -422,8 +423,9 @@ const ThreeGlobe: React.FC = () => {
         resizeTimeout = setTimeout(() => {
           if (!container) return
           const newWidth = container.clientWidth
-          const newHeight = container.clientHeight
           const isMobileNow = newWidth < 768
+          // Use consistent height values matching CSS
+          const newHeight = isMobileNow ? 320 : 500
           camera.aspect = newWidth / newHeight
           camera.position.z = isMobileNow ? 3.5 : 2.8
           camera.updateProjectionMatrix()
