@@ -137,18 +137,6 @@ const ThreeGlobe: React.FC = () => {
       const earthTexture = await loadTexture('/textures/earth/maps.png')
       if (earthTexture) {
         earthTexture.colorSpace = THREE.SRGBColorSpace
-        // Enable wrapping for texture offset adjustments
-        earthTexture.wrapS = THREE.RepeatWrapping
-        earthTexture.wrapT = THREE.RepeatWrapping
-        // ===========================================
-        // TEXTURE ADJUSTMENT - Adjust these values to align texture with coordinates
-        // offset.x: Horizontal rotation (0-1, where 0.5 = 180 degrees)
-        // offset.y: Vertical shift
-        // repeat.y = -1: Flip texture vertically
-        // ===========================================
-        earthTexture.offset.x = 0.5 // Rotate texture 180 degrees
-        earthTexture.offset.y = 1   // Needed when flipping vertically
-        earthTexture.repeat.y = -1  // Flip texture vertically
       }
 
       // Globe group for rotation
@@ -171,13 +159,12 @@ const ThreeGlobe: React.FC = () => {
       globeGroup.add(earthMesh)
 
       // Helper: Convert lat/lng to 3D position
-      // Add 180 degrees to theta to match texture offset
-      // Negate y to match vertical texture flip
+      // Standard spherical coordinate conversion
       const latLngToVector3 = (lat: number, lng: number, radius: number) => {
-        const phi = (90 - lat) * (Math.PI / 180) // Polar angle from north pole
-        const theta = (lng + 180) * (Math.PI / 180) // Add 180 to match texture offset
+        const phi = (90 - lat) * (Math.PI / 180)
+        const theta = lng * (Math.PI / 180)
         const x = radius * Math.sin(phi) * Math.cos(theta)
-        const y = -radius * Math.cos(phi) // Negated to match flipped texture
+        const y = radius * Math.cos(phi)
         const z = radius * Math.sin(phi) * Math.sin(theta)
         return new THREE.Vector3(x, y, z)
       }
@@ -383,8 +370,8 @@ const ThreeGlobe: React.FC = () => {
       // rotation.x: Vertical tilt (positive = tilt down to show more north)
       //             0.4 radians ≈ 23 degrees tilt
       // ===========================================
-      const INITIAL_ROTATION_Y = 1.3 // Horizontal: adjust to center Middle East (compensate for texture offset)
-      const INITIAL_ROTATION_X = Math.PI + 0.1 // Flip 180 degrees + slight tilt to show north
+      const INITIAL_ROTATION_Y = -1.8 // Horizontal: shows Middle East region
+      const INITIAL_ROTATION_X = 0.1 // Slight tilt
 
       globeGroup.rotation.y = INITIAL_ROTATION_Y
       globeGroup.rotation.x = INITIAL_ROTATION_X
