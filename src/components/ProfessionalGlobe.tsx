@@ -123,11 +123,11 @@ const ThreeGlobe: React.FC = () => {
       const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial)
       globeGroup.add(earthMesh)
 
-      // Night lights layer - PRIMARY visible layer
+      // Night lights layer - PRIMARY visible layer (dimmed for darker look)
       const nightMaterial = new THREE.MeshBasicMaterial({
         map: earthNightTexture,
         transparent: true,
-        opacity: 1.0,
+        opacity: 0.7, // Reduced for darker appearance
         blending: THREE.AdditiveBlending
       })
       const nightMesh = new THREE.Mesh(earthGeometry.clone(), nightMaterial)
@@ -305,14 +305,14 @@ const ThreeGlobe: React.FC = () => {
       // Rotate to show Middle East (Aberdeen -2 lng, Nablus 35 lng)
       // Need larger rotation to bring Middle East from behind to front
       globeGroup.rotation.y = -2.2 // Rotates globe ~126 degrees to show Middle East
-      globeGroup.rotation.x = 0.15
+      globeGroup.rotation.x = 0.4 // Tilt to show more of Europe/north, less Africa
 
       // Very subtle lighting - keep it very dark
-      const sunLight = new THREE.DirectionalLight(0xffffff, 0.15)
+      const sunLight = new THREE.DirectionalLight(0xffffff, 0.08) // Reduced intensity
       sunLight.position.set(5, 3, 5)
       scene.add(sunLight)
 
-      const ambientLight = new THREE.AmbientLight(0x111111, 0.3) // Pure gray, no blue
+      const ambientLight = new THREE.AmbientLight(0x080808, 0.2) // Darker ambient
       scene.add(ambientLight)
 
       // Animation - floating oscillation
