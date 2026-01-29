@@ -326,8 +326,8 @@ export default function Footer() {
                 alt="TransformerLabs"
                 width={40}
                 height={40}
-                className="footer-logo-image interactive"
-                style={styles.logoImage}
+                className="footer-logo-image interactive no-flip"
+                style={{ ...styles.logoImage, transform: 'none' }}
                 draggable={false}
               />
               <span style={styles.companyName}>
