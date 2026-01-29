@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { MapPin, Clock, Globe, Users } from 'lucide-react'
 
-// Types for Three.js (dynamically imported)
 type ThreeModule = typeof import('three')
 
 interface Office {
@@ -52,6 +51,9 @@ const ThreeGlobe: React.FC = () => {
     let renderer: any
     let scene: any
     let camera: any
+    let isDragging = false
+    let previousMousePosition = { x: 0, y: 0 }
+    let globeGroup: any
 
     const initGlobe = async () => {
       const THREE = await import('three') as ThreeModule
@@ -62,128 +64,116 @@ const ThreeGlobe: React.FC = () => {
       const width = container.clientWidth
       const height = 500
 
-      // Scene with dark space background
+      // Scene with transparent background
       scene = new THREE.Scene()
-      scene.background = new THREE.Color(0x000508)
 
-      // Camera - positioned to show full globe
+      // Camera
       camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000)
-      camera.position.z = 3.2
+      camera.position.z = 2.8
 
-      // Renderer
+      // Renderer with transparency
       renderer = new THREE.WebGLRenderer({
         antialias: true,
+        alpha: true,
         powerPreference: 'high-performance'
       })
       renderer.setSize(width, height)
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+      renderer.setClearColor(0x000000, 0)
       container.appendChild(renderer.domElement)
 
-      // Texture loader with quality settings
+      // Texture loader
       const textureLoader = new THREE.TextureLoader()
 
-      // Load textures with quality settings
-      const earthDayTexture = textureLoader.load('/textures/earth/earth-day.jpg', (texture) => {
+      // Load high quality textures
+      const earthDayTexture = textureLoader.load('/textures/earth/earthmap10k.jpg', (texture) => {
         texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
-        texture.minFilter = THREE.LinearMipmapLinearFilter
-        texture.magFilter = THREE.LinearFilter
         texture.colorSpace = THREE.SRGBColorSpace
       })
 
-      const earthNightTexture = textureLoader.load('/textures/earth/earth-night.jpg', (texture) => {
+      const earthNightTexture = textureLoader.load('/textures/earth/earth-night-4k.jpg', (texture) => {
         texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
-        texture.minFilter = THREE.LinearMipmapLinearFilter
-        texture.magFilter = THREE.LinearFilter
       })
 
       const earthBumpTexture = textureLoader.load('/textures/earth/earth-bump.jpg', (texture) => {
         texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
       })
 
-      // Create stars background
-      const starsGeometry = new THREE.BufferGeometry()
-      const starsCount = 2500
-      const starsPositions = new Float32Array(starsCount * 3)
-
-      for (let i = 0; i < starsCount; i++) {
-        const radius = 50 + Math.random() * 100
-        const u = Math.random()
-        const v = Math.random()
-        const theta = 2 * Math.PI * u
-        const phi = Math.acos(2 * v - 1)
-
-        starsPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta)
-        starsPositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta)
-        starsPositions[i * 3 + 2] = radius * Math.cos(phi)
-      }
-
-      starsGeometry.setAttribute('position', new THREE.BufferAttribute(starsPositions, 3))
-      const starsMaterial = new THREE.PointsMaterial({
-        color: 0xffffff,
-        size: 0.15,
-        transparent: true,
-        opacity: 0.8,
-        sizeAttenuation: true
+      const earthSpecularTexture = textureLoader.load('/textures/earth/earth-specular.jpg', (texture) => {
+        texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
       })
-      const stars = new THREE.Points(starsGeometry, starsMaterial)
-      scene.add(stars)
 
-      // Earth group
-      const earthGroup = new THREE.Group()
-      // Tilt like real Earth
-      earthGroup.rotation.z = -23.4 * Math.PI / 180
-      // Rotate to show Middle East / Europe region (Aberdeen at -2°, Nablus at 35°)
-      // We want to center roughly between them, around 15-20° longitude
-      earthGroup.rotation.y = -0.5 // Rotate to show Europe/Middle East
-      scene.add(earthGroup)
+      // Globe group for rotation
+      globeGroup = new THREE.Group()
+      scene.add(globeGroup)
 
-      // Earth sphere - high detail
+      // Earth geometry - high detail
       const earthGeometry = new THREE.SphereGeometry(1, 128, 128)
 
-      // Earth base with day texture (darkened for night look)
-      const earthBaseMaterial = new THREE.MeshPhongMaterial({
+      // Earth day material
+      const earthMaterial = new THREE.MeshPhongMaterial({
         map: earthDayTexture,
         bumpMap: earthBumpTexture,
         bumpScale: 0.015,
-        color: 0x222233, // Darkens the day texture
-        shininess: 8
+        specularMap: earthSpecularTexture,
+        specular: new THREE.Color(0x222222),
+        shininess: 15
       })
-      const earthBaseMesh = new THREE.Mesh(earthGeometry, earthBaseMaterial)
-      earthGroup.add(earthBaseMesh)
 
-      // City lights layer on top
-      const lightsMaterial = new THREE.MeshBasicMaterial({
+      const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial)
+      globeGroup.add(earthMesh)
+
+      // Night lights layer
+      const nightMaterial = new THREE.MeshBasicMaterial({
         map: earthNightTexture,
         transparent: true,
-        opacity: 0.95,
+        opacity: 0.4,
         blending: THREE.AdditiveBlending
       })
-      const lightsMesh = new THREE.Mesh(earthGeometry.clone(), lightsMaterial)
-      earthGroup.add(lightsMesh)
+      const nightMesh = new THREE.Mesh(earthGeometry.clone(), nightMaterial)
+      globeGroup.add(nightMesh)
 
-      // Atmosphere glow
-      const atmosphereGeometry = new THREE.SphereGeometry(1.03, 64, 64)
-      const atmosphereMaterial = new THREE.ShaderMaterial({
+      // Fresnel atmosphere glow
+      const fresnelMaterial = new THREE.ShaderMaterial({
+        uniforms: {
+          color1: { value: new THREE.Color(0x0088ff) },
+          color2: { value: new THREE.Color(0x000000) },
+          fresnelBias: { value: 0.1 },
+          fresnelScale: { value: 1.0 },
+          fresnelPower: { value: 4.0 }
+        },
         vertexShader: `
-          varying vec3 vNormal;
+          uniform float fresnelBias;
+          uniform float fresnelScale;
+          uniform float fresnelPower;
+          varying float vReflectionFactor;
+
           void main() {
-            vNormal = normalize(normalMatrix * normal);
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+            vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+            vec3 worldNormal = normalize(mat3(modelMatrix[0].xyz, modelMatrix[1].xyz, modelMatrix[2].xyz) * normal);
+            vec3 I = worldPosition.xyz - cameraPosition;
+            vReflectionFactor = fresnelBias + fresnelScale * pow(1.0 + dot(normalize(I), worldNormal), fresnelPower);
+            gl_Position = projectionMatrix * mvPosition;
           }
         `,
         fragmentShader: `
-          varying vec3 vNormal;
+          uniform vec3 color1;
+          uniform vec3 color2;
+          varying float vReflectionFactor;
+
           void main() {
-            float intensity = pow(0.55 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
-            gl_FragColor = vec4(0.3, 0.5, 1.0, 1.0) * intensity * 0.6;
+            float f = clamp(vReflectionFactor, 0.0, 1.0);
+            gl_FragColor = vec4(mix(color2, color1, vec3(f)), f);
           }
         `,
-        blending: THREE.AdditiveBlending,
-        side: THREE.BackSide,
-        transparent: true
+        transparent: true,
+        blending: THREE.AdditiveBlending
       })
-      const atmosphereMesh = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial)
-      earthGroup.add(atmosphereMesh)
+
+      const atmosphereGeometry = new THREE.SphereGeometry(1.01, 64, 64)
+      const atmosphereMesh = new THREE.Mesh(atmosphereGeometry, fresnelMaterial)
+      globeGroup.add(atmosphereMesh)
 
       // Office pin markers
       offices.forEach(office => {
@@ -194,37 +184,19 @@ const ThreeGlobe: React.FC = () => {
         const y = Math.cos(phi)
         const z = Math.sin(phi) * Math.sin(theta)
 
-        // Pin base on globe surface
-        const pinBaseGeometry = new THREE.SphereGeometry(0.015, 16, 16)
-        const pinBaseMaterial = new THREE.MeshBasicMaterial({ color: 0xff3621 })
-        const pinBase = new THREE.Mesh(pinBaseGeometry, pinBaseMaterial)
-        pinBase.position.set(x * 1.005, y * 1.005, z * 1.005)
-        earthGroup.add(pinBase)
-
-        // Pin stem
-        const pinStemGeometry = new THREE.CylinderGeometry(0.003, 0.003, 0.04, 8)
-        const pinStemMaterial = new THREE.MeshBasicMaterial({ color: 0xff3621 })
-        const pinStem = new THREE.Mesh(pinStemGeometry, pinStemMaterial)
-        const stemPos = new THREE.Vector3(x, y, z).multiplyScalar(1.025)
-        pinStem.position.copy(stemPos)
-        pinStem.lookAt(0, 0, 0)
-        pinStem.rotateX(Math.PI / 2)
-        earthGroup.add(pinStem)
-
-        // Pin head
-        const pinHeadGeometry = new THREE.SphereGeometry(0.02, 16, 16)
-        const pinHeadMaterial = new THREE.MeshBasicMaterial({
+        // Pin marker
+        const pinGeometry = new THREE.SphereGeometry(0.02, 16, 16)
+        const pinMaterial = new THREE.MeshBasicMaterial({
           color: 0xff3621,
           transparent: true,
           opacity: 1.0
         })
-        const pinHead = new THREE.Mesh(pinHeadGeometry, pinHeadMaterial)
-        const headPos = new THREE.Vector3(x, y, z).multiplyScalar(1.05)
-        pinHead.position.copy(headPos)
-        pinHead.userData = { officeId: office.id }
-        earthGroup.add(pinHead)
+        const pin = new THREE.Mesh(pinGeometry, pinMaterial)
+        pin.position.set(x * 1.02, y * 1.02, z * 1.02)
+        pin.userData = { officeId: office.id }
+        globeGroup.add(pin)
 
-        // Glow ring for hover
+        // Glow ring
         const glowGeometry = new THREE.RingGeometry(0.025, 0.04, 32)
         const glowMaterial = new THREE.MeshBasicMaterial({
           color: 0xff3621,
@@ -233,52 +205,107 @@ const ThreeGlobe: React.FC = () => {
           side: THREE.DoubleSide
         })
         const glow = new THREE.Mesh(glowGeometry, glowMaterial)
-        glow.position.copy(headPos)
+        glow.position.set(x * 1.025, y * 1.025, z * 1.025)
         glow.lookAt(0, 0, 0)
-        glow.userData = { isGlow: true, officeId: office.id }
-        earthGroup.add(glow)
+        globeGroup.add(glow)
 
-        markersRef.current.set(office.id, {
-          pinHead,
-          pinHeadMaterial,
-          glow,
-          glowMaterial
-        })
+        markersRef.current.set(office.id, { pin, pinMaterial, glow, glowMaterial })
       })
 
-      // Subtle ambient light
-      const ambientLight = new THREE.AmbientLight(0x333344, 0.4)
+      // Rotate to show Middle East
+      globeGroup.rotation.y = -0.3
+      globeGroup.rotation.x = 0.1
+
+      // Lighting
+      const sunLight = new THREE.DirectionalLight(0xffffff, 2)
+      sunLight.position.set(5, 3, 5)
+      scene.add(sunLight)
+
+      const ambientLight = new THREE.AmbientLight(0x404040, 1)
       scene.add(ambientLight)
+
+      // Mouse interaction for rotation
+      const onMouseDown = (event: MouseEvent) => {
+        isDragging = true
+        previousMousePosition = { x: event.clientX, y: event.clientY }
+      }
+
+      const onMouseMove = (event: MouseEvent) => {
+        if (!isDragging) return
+
+        const deltaX = event.clientX - previousMousePosition.x
+        const deltaY = event.clientY - previousMousePosition.y
+
+        globeGroup.rotation.y += deltaX * 0.005
+        globeGroup.rotation.x += deltaY * 0.005
+
+        // Clamp vertical rotation
+        globeGroup.rotation.x = Math.max(-Math.PI / 4, Math.min(Math.PI / 4, globeGroup.rotation.x))
+
+        previousMousePosition = { x: event.clientX, y: event.clientY }
+      }
+
+      const onMouseUp = () => {
+        isDragging = false
+      }
+
+      const onTouchStart = (event: TouchEvent) => {
+        if (event.touches.length === 1) {
+          isDragging = true
+          previousMousePosition = { x: event.touches[0].clientX, y: event.touches[0].clientY }
+        }
+      }
+
+      const onTouchMove = (event: TouchEvent) => {
+        if (!isDragging || event.touches.length !== 1) return
+
+        const deltaX = event.touches[0].clientX - previousMousePosition.x
+        const deltaY = event.touches[0].clientY - previousMousePosition.y
+
+        globeGroup.rotation.y += deltaX * 0.005
+        globeGroup.rotation.x += deltaY * 0.005
+        globeGroup.rotation.x = Math.max(-Math.PI / 4, Math.min(Math.PI / 4, globeGroup.rotation.x))
+
+        previousMousePosition = { x: event.touches[0].clientX, y: event.touches[0].clientY }
+      }
+
+      const onTouchEnd = () => {
+        isDragging = false
+      }
+
+      renderer.domElement.addEventListener('mousedown', onMouseDown)
+      renderer.domElement.addEventListener('mousemove', onMouseMove)
+      renderer.domElement.addEventListener('mouseup', onMouseUp)
+      renderer.domElement.addEventListener('mouseleave', onMouseUp)
+      renderer.domElement.addEventListener('touchstart', onTouchStart)
+      renderer.domElement.addEventListener('touchmove', onTouchMove)
+      renderer.domElement.addEventListener('touchend', onTouchEnd)
 
       // Animation
       let time = 0
-      const baseRotationY = earthBaseMesh.rotation.y
 
       const animate = () => {
         animationId = requestAnimationFrame(animate)
         time += 0.01
 
-        // Gentle floating oscillation
-        const oscillation = Math.sin(time * 0.4) * 0.12
-        earthBaseMesh.rotation.y = baseRotationY + oscillation
-        lightsMesh.rotation.y = baseRotationY + oscillation
+        // Gentle auto-rotation when not dragging
+        if (!isDragging) {
+          globeGroup.rotation.y += 0.001
+        }
 
-        // Slow star rotation
-        stars.rotation.y += 0.0001
-
-        // Hover effects
+        // Hover effects on pins
         markersRef.current.forEach((marker, id) => {
           const isHovered = hoveredOffice === id
           const targetOpacity = isHovered ? 0.9 : 0
-          const targetScale = isHovered ? 1.4 : 1.0
+          const targetScale = isHovered ? 1.5 : 1.0
 
           marker.glowMaterial.opacity += (targetOpacity - marker.glowMaterial.opacity) * 0.1
-          const currentScale = marker.pinHead.scale.x
+          const currentScale = marker.pin.scale.x
           const newScale = currentScale + (targetScale - currentScale) * 0.1
-          marker.pinHead.scale.set(newScale, newScale, newScale)
+          marker.pin.scale.set(newScale, newScale, newScale)
 
           if (isHovered) {
-            marker.glow.scale.setScalar(1 + Math.sin(time * 4) * 0.25)
+            marker.glow.scale.setScalar(1 + Math.sin(time * 4) * 0.3)
           }
         })
 
@@ -288,6 +315,7 @@ const ThreeGlobe: React.FC = () => {
       animate()
       setIsLoaded(true)
 
+      // Resize handler
       const handleResize = () => {
         if (!container) return
         const newWidth = container.clientWidth
@@ -300,15 +328,20 @@ const ThreeGlobe: React.FC = () => {
 
       return () => {
         window.removeEventListener('resize', handleResize)
+        renderer.domElement.removeEventListener('mousedown', onMouseDown)
+        renderer.domElement.removeEventListener('mousemove', onMouseMove)
+        renderer.domElement.removeEventListener('mouseup', onMouseUp)
+        renderer.domElement.removeEventListener('mouseleave', onMouseUp)
+        renderer.domElement.removeEventListener('touchstart', onTouchStart)
+        renderer.domElement.removeEventListener('touchmove', onTouchMove)
+        renderer.domElement.removeEventListener('touchend', onTouchEnd)
       }
     }
 
     initGlobe()
 
     return () => {
-      if (animationId) {
-        cancelAnimationFrame(animationId)
-      }
+      if (animationId) cancelAnimationFrame(animationId)
       if (renderer && containerRef.current) {
         containerRef.current.removeChild(renderer.domElement)
         renderer.dispose()
@@ -331,8 +364,6 @@ const ThreeGlobe: React.FC = () => {
         .globe-header {
           text-align: center;
           margin-bottom: var(--space-4);
-          position: relative;
-          z-index: 1;
         }
 
         .globe-title {
@@ -352,11 +383,13 @@ const ThreeGlobe: React.FC = () => {
           width: 100%;
           height: 500px;
           position: relative;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          cursor: grab;
           border-radius: var(--radius-lg);
           overflow: hidden;
+        }
+
+        .globe-container:active {
+          cursor: grabbing;
         }
 
         .globe-canvas {
@@ -373,13 +406,22 @@ const ThreeGlobe: React.FC = () => {
           font-size: 0.875rem;
         }
 
+        .drag-hint {
+          position: absolute;
+          bottom: var(--space-3);
+          left: 50%;
+          transform: translateX(-50%);
+          color: var(--text-secondary);
+          font-size: 0.75rem;
+          opacity: 0.7;
+          pointer-events: none;
+        }
+
         .offices-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: var(--space-4);
           margin-top: var(--space-6);
-          position: relative;
-          z-index: 1;
         }
 
         .office-card {
@@ -434,8 +476,6 @@ const ThreeGlobe: React.FC = () => {
           padding-top: var(--space-6);
           margin-top: var(--space-6);
           border-top: 1px solid var(--border);
-          position: relative;
-          z-index: 1;
         }
 
         .benefit-item {
@@ -494,6 +534,7 @@ const ThreeGlobe: React.FC = () => {
       <div className="globe-container">
         <div ref={containerRef} className="globe-canvas" />
         {!isLoaded && <div className="loading-placeholder">Loading globe...</div>}
+        {isLoaded && <div className="drag-hint">Drag to rotate</div>}
       </div>
 
       <div className="offices-grid">
