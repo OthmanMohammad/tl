@@ -51,8 +51,6 @@ const ThreeGlobe: React.FC = () => {
     let renderer: any
     let scene: any
     let camera: any
-    let isDragging = false
-    let previousMousePosition = { x: 0, y: 0 }
     let globeGroup: any
     let arcMeshes: any[] = []
 
@@ -135,14 +133,14 @@ const ThreeGlobe: React.FC = () => {
       const nightMesh = new THREE.Mesh(earthGeometry.clone(), nightMaterial)
       globeGroup.add(nightMesh)
 
-      // Fresnel atmosphere glow
+      // Fresnel atmosphere glow - subtle, less blue
       const fresnelMaterial = new THREE.ShaderMaterial({
         uniforms: {
-          color1: { value: new THREE.Color(0x0088ff) },
+          color1: { value: new THREE.Color(0x334466) }, // Darker, less saturated
           color2: { value: new THREE.Color(0x000000) },
           fresnelBias: { value: 0.1 },
-          fresnelScale: { value: 1.0 },
-          fresnelPower: { value: 4.0 }
+          fresnelScale: { value: 0.8 },
+          fresnelPower: { value: 3.0 }
         },
         vertexShader: `
           uniform float fresnelBias;
@@ -304,84 +302,28 @@ const ThreeGlobe: React.FC = () => {
         })
       })
 
-      // Rotate to show Middle East
-      globeGroup.rotation.y = -0.3
-      globeGroup.rotation.x = 0.1
+      // Rotate to show Middle East (Aberdeen -2 lng, Nablus 35 lng - center around 15-20)
+      globeGroup.rotation.y = -0.6 // Position to show Europe/Middle East
+      globeGroup.rotation.x = 0.15
 
-      // Subtle lighting - keep it dark for night view
-      const sunLight = new THREE.DirectionalLight(0xffffff, 0.3)
+      // Very subtle lighting - keep it very dark
+      const sunLight = new THREE.DirectionalLight(0xffffff, 0.15)
       sunLight.position.set(5, 3, 5)
       scene.add(sunLight)
 
-      const ambientLight = new THREE.AmbientLight(0x222233, 0.5)
+      const ambientLight = new THREE.AmbientLight(0x111118, 0.3)
       scene.add(ambientLight)
 
-      // Mouse interaction for rotation
-      const onMouseDown = (event: MouseEvent) => {
-        isDragging = true
-        previousMousePosition = { x: event.clientX, y: event.clientY }
-      }
-
-      const onMouseMove = (event: MouseEvent) => {
-        if (!isDragging) return
-
-        const deltaX = event.clientX - previousMousePosition.x
-        const deltaY = event.clientY - previousMousePosition.y
-
-        globeGroup.rotation.y += deltaX * 0.005
-        globeGroup.rotation.x += deltaY * 0.005
-        globeGroup.rotation.x = Math.max(-Math.PI / 4, Math.min(Math.PI / 4, globeGroup.rotation.x))
-
-        previousMousePosition = { x: event.clientX, y: event.clientY }
-      }
-
-      const onMouseUp = () => {
-        isDragging = false
-      }
-
-      const onTouchStart = (event: TouchEvent) => {
-        if (event.touches.length === 1) {
-          isDragging = true
-          previousMousePosition = { x: event.touches[0].clientX, y: event.touches[0].clientY }
-        }
-      }
-
-      const onTouchMove = (event: TouchEvent) => {
-        if (!isDragging || event.touches.length !== 1) return
-
-        const deltaX = event.touches[0].clientX - previousMousePosition.x
-        const deltaY = event.touches[0].clientY - previousMousePosition.y
-
-        globeGroup.rotation.y += deltaX * 0.005
-        globeGroup.rotation.x += deltaY * 0.005
-        globeGroup.rotation.x = Math.max(-Math.PI / 4, Math.min(Math.PI / 4, globeGroup.rotation.x))
-
-        previousMousePosition = { x: event.touches[0].clientX, y: event.touches[0].clientY }
-      }
-
-      const onTouchEnd = () => {
-        isDragging = false
-      }
-
-      renderer.domElement.addEventListener('mousedown', onMouseDown)
-      renderer.domElement.addEventListener('mousemove', onMouseMove)
-      renderer.domElement.addEventListener('mouseup', onMouseUp)
-      renderer.domElement.addEventListener('mouseleave', onMouseUp)
-      renderer.domElement.addEventListener('touchstart', onTouchStart)
-      renderer.domElement.addEventListener('touchmove', onTouchMove)
-      renderer.domElement.addEventListener('touchend', onTouchEnd)
-
-      // Animation
+      // Animation - floating oscillation
       let time = 0
+      const baseRotationY = globeGroup.rotation.y
 
       const animate = () => {
         animationId = requestAnimationFrame(animate)
         time += 0.016
 
-        // Gentle auto-rotation when not dragging
-        if (!isDragging) {
-          globeGroup.rotation.y += 0.001
-        }
+        // Gentle floating oscillation (left-right)
+        globeGroup.rotation.y = baseRotationY + Math.sin(time * 0.3) * 0.15
 
         // Animate traveling arcs
         arcMeshes.forEach((arc) => {
@@ -461,13 +403,6 @@ const ThreeGlobe: React.FC = () => {
 
       return () => {
         window.removeEventListener('resize', handleResize)
-        renderer.domElement.removeEventListener('mousedown', onMouseDown)
-        renderer.domElement.removeEventListener('mousemove', onMouseMove)
-        renderer.domElement.removeEventListener('mouseup', onMouseUp)
-        renderer.domElement.removeEventListener('mouseleave', onMouseUp)
-        renderer.domElement.removeEventListener('touchstart', onTouchStart)
-        renderer.domElement.removeEventListener('touchmove', onTouchMove)
-        renderer.domElement.removeEventListener('touchend', onTouchEnd)
       }
     }
 
@@ -516,13 +451,8 @@ const ThreeGlobe: React.FC = () => {
           width: 100%;
           height: 500px;
           position: relative;
-          cursor: grab;
           border-radius: var(--radius-lg);
           overflow: hidden;
-        }
-
-        .globe-container:active {
-          cursor: grabbing;
         }
 
         .globe-canvas {
@@ -537,17 +467,6 @@ const ThreeGlobe: React.FC = () => {
           transform: translate(-50%, -50%);
           color: var(--text-secondary);
           font-size: 0.875rem;
-        }
-
-        .drag-hint {
-          position: absolute;
-          bottom: var(--space-3);
-          left: 50%;
-          transform: translateX(-50%);
-          color: var(--text-secondary);
-          font-size: 0.75rem;
-          opacity: 0.7;
-          pointer-events: none;
         }
 
         .offices-grid {
@@ -667,7 +586,6 @@ const ThreeGlobe: React.FC = () => {
       <div className="globe-container">
         <div ref={containerRef} className="globe-canvas" />
         {!isLoaded && <div className="loading-placeholder">Loading globe...</div>}
-        {isLoaded && <div className="drag-hint">Drag to rotate</div>}
       </div>
 
       <div className="offices-grid">
