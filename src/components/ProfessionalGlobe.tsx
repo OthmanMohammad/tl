@@ -215,17 +215,17 @@ const ThreeGlobe: React.FC = () => {
         })
         const line = new THREE.Line(geometry, material)
 
-        // Create glow lines (slightly offset for thickness illusion)
+        // Create glow lines (multiple layers for thicker beam)
         const glowGroup = new THREE.Group()
         glowGroup.add(line)
 
-        // Add multiple glow layers
-        for (let i = 0; i < 3; i++) {
+        // Add multiple glow layers for wider, more visible beam
+        for (let i = 0; i < 6; i++) {
           const glowGeometry = new THREE.BufferGeometry().setFromPoints(points)
           const glowMaterial = new THREE.LineBasicMaterial({
             color: color,
             transparent: true,
-            opacity: 0.4 - i * 0.1,
+            opacity: 0.5 - i * 0.07,
             blending: THREE.AdditiveBlending
           })
           const glowLine = new THREE.Line(glowGeometry, glowMaterial)

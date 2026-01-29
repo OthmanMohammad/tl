@@ -98,8 +98,17 @@ html[dir="ltr"] body {
 /* Center-aligned elements stay centered in both directions */
 [dir="rtl"] .text-center,
 [dir="rtl"] .hero-content,
+[dir="rtl"] .hero-subtitle,
 [dir="rtl"] .section-header,
 [dir="rtl"] .cta-section {
+  text-align: center;
+}
+
+/* Ensure hero subtitle and hero content paragraphs are properly centered in RTL */
+[dir="rtl"] .hero-subtitle,
+[dir="rtl"] .hero-content p {
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
 }
 
