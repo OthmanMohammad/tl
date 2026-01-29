@@ -288,95 +288,62 @@ const ThreeGlobe: React.FC = () => {
       globeGroup.add(arcNablusToMiami)
       arcMeshes.push(arcNablusToMiami)
 
-      // Office pin markers - Actual pin shape
-      // Aberdeen (UK) = BLUE (#00AAFF), Nablus (Palestine) = RED (#EB1600)
+      // Office pin markers - Simple pin sprite
+      // Create pin texture using canvas
+      const createPinTexture = (color: string) => {
+        const canvas = document.createElement('canvas')
+        canvas.width = 64
+        canvas.height = 64
+        const ctx = canvas.getContext('2d')!
+
+        // Draw pin shape (teardrop/marker)
+        ctx.fillStyle = color
+        ctx.beginPath()
+        // Pin head (circle)
+        ctx.arc(32, 20, 16, 0, Math.PI * 2)
+        ctx.fill()
+        // Pin point (triangle)
+        ctx.beginPath()
+        ctx.moveTo(16, 20)
+        ctx.lineTo(32, 58)
+        ctx.lineTo(48, 20)
+        ctx.fill()
+        // Inner circle (white dot)
+        ctx.fillStyle = 'white'
+        ctx.beginPath()
+        ctx.arc(32, 20, 6, 0, Math.PI * 2)
+        ctx.fill()
+
+        const texture = new THREE.CanvasTexture(canvas)
+        disposables.textures.push(texture)
+        return texture
+      }
+
+      // Aberdeen (UK) = BLUE, Nablus (Palestine) = RED
       offices.forEach(office => {
-        const basePos = latLngToVector3(office.lat, office.lng, 1.0)
-        const outerPos = latLngToVector3(office.lat, office.lng, 1.08) // Pin head position
-        const pinColor = office.id === 'uk' ? 0x00AAFF : 0xEB1600
+        const pos = latLngToVector3(office.lat, office.lng, 1.04)
+        const pinColor = office.id === 'uk' ? '#00AAFF' : '#EB1600'
 
-        // Pin head (sphere at outer position)
-        const headGeometry = new THREE.SphereGeometry(0.022, 12, 12)
-        disposables.geometries.push(headGeometry)
-        const headMaterial = new THREE.MeshBasicMaterial({
-          color: pinColor,
+        const pinTexture = createPinTexture(pinColor)
+        const spriteMaterial = new THREE.SpriteMaterial({
+          map: pinTexture,
           transparent: true,
-          opacity: 1.0
+          depthTest: false
         })
-        disposables.materials.push(headMaterial)
-        const head = new THREE.Mesh(headGeometry, headMaterial)
-        head.position.copy(outerPos)
-        head.userData = { officeId: office.id }
-        globeGroup.add(head)
+        disposables.materials.push(spriteMaterial)
 
-        // Pin needle (cylinder from base to head)
-        const needleLength = outerPos.distanceTo(basePos)
-        const needleGeometry = new THREE.CylinderGeometry(0.004, 0.008, needleLength, 8)
-        disposables.geometries.push(needleGeometry)
-        const needleMaterial = new THREE.MeshBasicMaterial({
-          color: pinColor,
-          transparent: true,
-          opacity: 1.0
-        })
-        disposables.materials.push(needleMaterial)
-        const needle = new THREE.Mesh(needleGeometry, needleMaterial)
+        const sprite = new THREE.Sprite(spriteMaterial)
+        sprite.position.copy(pos)
+        sprite.scale.set(0.08, 0.08, 1)
+        sprite.userData = { officeId: office.id }
+        globeGroup.add(sprite)
 
-        // Position needle between base and head
-        const midPoint = new THREE.Vector3().addVectors(basePos, outerPos).multiplyScalar(0.5)
-        needle.position.copy(midPoint)
-        needle.lookAt(outerPos)
-        needle.rotateX(Math.PI / 2)
-        globeGroup.add(needle)
-
-        // Glow around pin head
-        const glowSphereGeometry = new THREE.SphereGeometry(0.032, 12, 12)
-        disposables.geometries.push(glowSphereGeometry)
-        const glowSphereMaterial = new THREE.MeshBasicMaterial({
-          color: pinColor,
-          transparent: true,
-          opacity: 0.3
-        })
-        disposables.materials.push(glowSphereMaterial)
-        const glowSphere = new THREE.Mesh(glowSphereGeometry, glowSphereMaterial)
-        glowSphere.position.copy(outerPos)
-        globeGroup.add(glowSphere)
-
-        // Pulse ring at base
-        const ringGeometry = new THREE.RingGeometry(0.015, 0.025, 24)
-        disposables.geometries.push(ringGeometry)
-        const ringMaterial = new THREE.MeshBasicMaterial({
-          color: pinColor,
-          transparent: true,
-          opacity: 0.5,
-          side: THREE.DoubleSide
-        })
-        disposables.materials.push(ringMaterial)
-        const ring = new THREE.Mesh(ringGeometry, ringMaterial)
-        ring.position.copy(basePos)
-        ring.lookAt(0, 0, 0)
-        ring.userData = { isPulse: true }
-        globeGroup.add(ring)
-
-        // Hover glow
-        const hoverGlowGeometry = new THREE.RingGeometry(0.025, 0.035, 24)
-        disposables.geometries.push(hoverGlowGeometry)
-        const hoverGlowMaterial = new THREE.MeshBasicMaterial({
-          color: pinColor,
-          transparent: true,
-          opacity: 0,
-          side: THREE.DoubleSide
-        })
-        disposables.materials.push(hoverGlowMaterial)
-        const hoverGlow = new THREE.Mesh(hoverGlowGeometry, hoverGlowMaterial)
-        hoverGlow.position.copy(basePos)
-        hoverGlow.lookAt(0, 0, 0)
-        globeGroup.add(hoverGlow)
-
+        // Store reference (simplified - no animations)
         markersRef.current.set(office.id, {
-          pin: head, pinMaterial: headMaterial,
-          glow: hoverGlow, glowMaterial: hoverGlowMaterial,
-          ring, ringMaterial,
-          glowSphere, glowSphereMaterial
+          pin: sprite, pinMaterial: spriteMaterial,
+          glow: sprite, glowMaterial: spriteMaterial,
+          ring: sprite, ringMaterial: spriteMaterial,
+          glowSphere: sprite, glowSphereMaterial: spriteMaterial
         })
       })
 
@@ -441,20 +408,7 @@ const ThreeGlobe: React.FC = () => {
           }
         })
 
-        // Pulse effects
-        markersRef.current.forEach((marker) => {
-          if (marker.ring && marker.ring.userData.isPulse) {
-            const scale = 1 + Math.sin(time * 2) * 0.3
-            marker.ring.scale.set(scale, scale, scale)
-            marker.ringMaterial.opacity = 0.4 * (1 - (scale - 1) / 0.3)
-          }
-
-          if (marker.glowSphere) {
-            const glowScale = 1 + Math.sin(time * 1.5) * 0.15
-            marker.glowSphere.scale.set(glowScale, glowScale, glowScale)
-            marker.glowSphereMaterial.opacity = 0.25 + Math.sin(time * 1.5) * 0.1
-          }
-        })
+        // Pin markers are static sprites - no animation needed
 
         renderer.render(scene, camera)
       }
