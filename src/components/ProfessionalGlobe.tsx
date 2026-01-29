@@ -42,7 +42,7 @@ const ThreeGlobe: React.FC = () => {
       name: t('aberdeenName'),
       country: t('aberdeenCountry'),
       lat: 57.1497,
-      lng: -2.0943,
+      lng: 2, // Adjusted +4 from -2.0943 to shift blue pin east on custom map
       timezone: 'GMT+0',
       description: t('aberdeenDescription')
     },
@@ -160,7 +160,7 @@ const ThreeGlobe: React.FC = () => {
 
       // Helper: Convert lat/lng to 3D position
       // Adjusted for custom map texture alignment
-      const LNG_OFFSET = -190 // Longitude offset (adjusted from -192 to move blue pin east)
+      const LNG_OFFSET = -192 // Longitude offset
       const LAT_OFFSET = -43 // Latitude offset (negative = move south)
       const latLngToVector3 = (lat: number, lng: number, radius: number) => {
         const adjustedLat = lat + LAT_OFFSET
