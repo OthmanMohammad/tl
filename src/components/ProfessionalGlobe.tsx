@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { MapPin, Clock, Globe, Users } from 'lucide-react'
 
@@ -16,11 +16,24 @@ interface Office {
   description: string
 }
 
+interface MarkerRefs {
+  pin: any
+  pinMaterial: any
+  glow: any
+  glowMaterial: any
+  ring: any
+  ringMaterial: any
+  glowSphere: any
+  glowSphereMaterial: any
+}
+
 const ThreeGlobe: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [hoveredOffice, setHoveredOffice] = useState<string | null>(null)
   const [isLoaded, setIsLoaded] = useState(false)
-  const markersRef = useRef<Map<string, any>>(new Map())
+  const markersRef = useRef<Map<string, MarkerRefs>>(new Map())
+  const isVisibleRef = useRef(true)
+  const cleanupRef = useRef<(() => void) | null>(null)
   const t = useTranslations('globe')
 
   const offices: Office[] = [
@@ -53,6 +66,14 @@ const ThreeGlobe: React.FC = () => {
     let camera: any
     let globeGroup: any
     let arcMeshes: any[] = []
+    let resizeTimeout: NodeJS.Timeout | null = null
+
+    // Store all disposable resources for cleanup
+    const disposables = {
+      textures: [] as any[],
+      geometries: [] as any[],
+      materials: [] as any[]
+    }
 
     const initGlobe = async () => {
       const THREE = await import('three') as ThreeModule
@@ -71,73 +92,99 @@ const ThreeGlobe: React.FC = () => {
       const isMobile = width < 768
       camera.position.z = isMobile ? 3.5 : 2.8
 
-      // Renderer with transparency
+      // Check for WebGL support
+      const canvas = document.createElement('canvas')
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+      if (!gl) {
+        console.warn('WebGL not supported')
+        setIsLoaded(true)
+        return
+      }
+
+      // Renderer with transparency - lower pixel ratio for performance
       renderer = new THREE.WebGLRenderer({
-        antialias: true,
+        antialias: window.devicePixelRatio < 2,
         alpha: true,
-        powerPreference: 'high-performance'
+        powerPreference: 'default'
       })
       renderer.setSize(width, height)
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5))
       renderer.setClearColor(0x000000, 0)
       container.appendChild(renderer.domElement)
 
-      // Texture loader
+      // Texture loader with error handling
       const textureLoader = new THREE.TextureLoader()
 
-      // Load high quality textures
-      const earthDayTexture = textureLoader.load('/textures/earth/earthmap10k.jpg', (texture) => {
-        texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
-        texture.colorSpace = THREE.SRGBColorSpace
-      })
+      const loadTexture = (path: string): Promise<any> => {
+        return new Promise((resolve, reject) => {
+          textureLoader.load(
+            path,
+            (texture) => {
+              texture.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 4)
+              disposables.textures.push(texture)
+              resolve(texture)
+            },
+            undefined,
+            (error) => {
+              console.warn(`Failed to load texture: ${path}`, error)
+              resolve(null)
+            }
+          )
+        })
+      }
 
-      const earthNightTexture = textureLoader.load('/textures/earth/earth-night-4k.jpg', (texture) => {
-        texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
-      })
+      // Load SMALLER textures for better performance
+      const [earthDayTexture, earthNightTexture, earthBumpTexture, earthSpecularTexture] = await Promise.all([
+        loadTexture('/textures/earth/earth-day.jpg'),
+        loadTexture('/textures/earth/earth-night.jpg'),
+        loadTexture('/textures/earth/earth-bump.jpg'),
+        loadTexture('/textures/earth/earth-specular.jpg')
+      ])
 
-      const earthBumpTexture = textureLoader.load('/textures/earth/earth-bump.jpg', (texture) => {
-        texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
-      })
-
-      const earthSpecularTexture = textureLoader.load('/textures/earth/earth-specular.jpg', (texture) => {
-        texture.anisotropy = renderer.capabilities.getMaxAnisotropy()
-      })
+      if (earthDayTexture) earthDayTexture.colorSpace = THREE.SRGBColorSpace
 
       // Globe group for rotation
       globeGroup = new THREE.Group()
       scene.add(globeGroup)
 
-      // Earth geometry - high detail
-      const earthGeometry = new THREE.SphereGeometry(1, 128, 128)
+      // Earth geometry - REDUCED complexity (64x64 instead of 128x128)
+      const earthGeometry = new THREE.SphereGeometry(1, 64, 64)
+      disposables.geometries.push(earthGeometry)
 
-      // Dark base sphere with faint geography (day texture heavily darkened)
+      // Dark base sphere with faint geography
       const earthMaterial = new THREE.MeshPhongMaterial({
         map: earthDayTexture,
         bumpMap: earthBumpTexture,
         bumpScale: 0.01,
-        color: 0x111111, // Pure dark gray, no blue
+        color: 0x111111,
         shininess: 5,
-        emissive: 0x000000, // No emissive color
+        emissive: 0x000000,
         emissiveIntensity: 0
       })
+      disposables.materials.push(earthMaterial)
 
       const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial)
       globeGroup.add(earthMesh)
 
-      // Night lights layer - PRIMARY visible layer (bright city lights)
+      // Night lights layer
+      const nightGeometry = new THREE.SphereGeometry(1, 64, 64)
+      disposables.geometries.push(nightGeometry)
+
       const nightMaterial = new THREE.MeshBasicMaterial({
         map: earthNightTexture,
         transparent: true,
-        opacity: 1.0, // Full brightness for city lights
+        opacity: 1.0,
         blending: THREE.AdditiveBlending
       })
-      const nightMesh = new THREE.Mesh(earthGeometry.clone(), nightMaterial)
+      disposables.materials.push(nightMaterial)
+
+      const nightMesh = new THREE.Mesh(nightGeometry, nightMaterial)
       globeGroup.add(nightMesh)
 
-      // Fresnel atmosphere glow - very subtle, almost no blue
+      // Fresnel atmosphere glow - REDUCED geometry
       const fresnelMaterial = new THREE.ShaderMaterial({
         uniforms: {
-          color1: { value: new THREE.Color(0x444444) }, // Gray, no blue
+          color1: { value: new THREE.Color(0x444444) },
           color2: { value: new THREE.Color(0x000000) },
           fresnelBias: { value: 0.1 },
           fresnelScale: { value: 0.5 },
@@ -171,8 +218,11 @@ const ThreeGlobe: React.FC = () => {
         transparent: true,
         blending: THREE.AdditiveBlending
       })
+      disposables.materials.push(fresnelMaterial)
 
-      const atmosphereGeometry = new THREE.SphereGeometry(1.01, 64, 64)
+      const atmosphereGeometry = new THREE.SphereGeometry(1.01, 32, 32)
+      disposables.geometries.push(atmosphereGeometry)
+
       const atmosphereMesh = new THREE.Mesh(atmosphereGeometry, fresnelMaterial)
       globeGroup.add(atmosphereMesh)
 
@@ -186,7 +236,7 @@ const ThreeGlobe: React.FC = () => {
         return new THREE.Vector3(x, y, z)
       }
 
-      // Create traveling arc (animated beam from start to end) with actual width using tube
+      // Create traveling arc with tube geometry
       const createTravelingArc = (
         startLat: number, startLng: number,
         endLat: number, endLng: number,
@@ -205,22 +255,21 @@ const ThreeGlobe: React.FC = () => {
 
         const curve = new THREE.QuadraticBezierCurve3(start, mid, end)
 
-        // Create tube segments for animation - fewer but overlapping for no gaps
-        const numSegments = 50
-        const tubeRadius = 0.005 // Thin, refined tube
+        // Fewer segments for performance
+        const numSegments = 40
+        const tubeRadius = 0.005
         const tubeSegments: any[] = []
         const glowGroup = new THREE.Group()
 
         for (let i = 0; i < numSegments; i++) {
-          // Overlap segments slightly to avoid gaps
           const t1 = Math.max(0, (i - 0.1) / numSegments)
           const t2 = Math.min(1, (i + 1.1) / numSegments)
           const p1 = curve.getPoint(t1)
           const p2 = curve.getPoint(t2)
 
-          // Create tube segment with more geometry detail
           const segmentCurve = new THREE.LineCurve3(p1, p2)
-          const segmentGeometry = new THREE.TubeGeometry(segmentCurve, 2, tubeRadius, 12, false)
+          const segmentGeometry = new THREE.TubeGeometry(segmentCurve, 1, tubeRadius, 8, false)
+          disposables.geometries.push(segmentGeometry)
 
           const segmentMaterial = new THREE.MeshBasicMaterial({
             color: color,
@@ -229,14 +278,17 @@ const ThreeGlobe: React.FC = () => {
             blending: THREE.AdditiveBlending,
             depthWrite: false
           })
+          disposables.materials.push(segmentMaterial)
 
           const segment = new THREE.Mesh(segmentGeometry, segmentMaterial)
           segment.userData.index = i
           tubeSegments.push(segment)
           glowGroup.add(segment)
 
-          // Add outer glow layer (larger, softer)
-          const glowGeometry = new THREE.TubeGeometry(segmentCurve, 2, tubeRadius * 2, 12, false)
+          // Glow layer
+          const glowGeometry = new THREE.TubeGeometry(segmentCurve, 1, tubeRadius * 2, 8, false)
+          disposables.geometries.push(glowGeometry)
+
           const glowMaterial = new THREE.MeshBasicMaterial({
             color: color,
             transparent: true,
@@ -244,6 +296,8 @@ const ThreeGlobe: React.FC = () => {
             blending: THREE.AdditiveBlending,
             depthWrite: false
           })
+          disposables.materials.push(glowMaterial)
+
           const glowSegment = new THREE.Mesh(glowGeometry, glowMaterial)
           glowSegment.userData.index = i
           glowSegment.userData.isGlow = true
@@ -261,107 +315,105 @@ const ThreeGlobe: React.FC = () => {
         return glowGroup
       }
 
-      // Dubai, Riyadh, and Miami coordinates (no pins, just arc destinations)
-      const dubaiLat = 25.2048
-      const dubaiLng = 55.2708
-      const riyadhLat = 24.7136
-      const riyadhLng = 46.6753
-      const miamiLat = 25.7617
-      const miamiLng = -80.1918
+      // Destination coordinates
+      const dubaiLat = 25.2048, dubaiLng = 55.2708
+      const riyadhLat = 24.7136, riyadhLng = 46.6753
+      const miamiLat = 25.7617, miamiLng = -80.1918
 
-      // Arc 1: Aberdeen to Nablus (main arc, longer beam segment)
+      // Create arcs
       const arcAberdeenToNablus = createTravelingArc(
-        offices[0].lat, offices[0].lng, // Aberdeen (start)
-        offices[1].lat, offices[1].lng, // Nablus (end)
-        0xEB1600, // Red color
-        35, // Tail length (adjusted for 50 segments)
-        0
+        offices[0].lat, offices[0].lng,
+        offices[1].lat, offices[1].lng,
+        0xEB1600, 28, 0
       )
       globeGroup.add(arcAberdeenToNablus)
       arcMeshes.push(arcAberdeenToNablus)
 
-      // Arc 2: Nablus to Dubai (shorter beam)
       const arcNablusToDubai = createTravelingArc(
-        offices[1].lat, offices[1].lng, // Nablus (start)
-        dubaiLat, dubaiLng, // Dubai (end)
-        0xEB1600, // Red color
-        30, // Tail length
-        -30 // Delayed start
+        offices[1].lat, offices[1].lng,
+        dubaiLat, dubaiLng,
+        0xEB1600, 24, -24
       )
       globeGroup.add(arcNablusToDubai)
       arcMeshes.push(arcNablusToDubai)
 
-      // Arc 3: Nablus to Riyadh (shorter beam)
       const arcNablusToRiyadh = createTravelingArc(
-        offices[1].lat, offices[1].lng, // Nablus (start)
-        riyadhLat, riyadhLng, // Riyadh (end)
-        0xEB1600, // Red color
-        30, // Tail length
-        -60 // More delayed start
+        offices[1].lat, offices[1].lng,
+        riyadhLat, riyadhLng,
+        0xEB1600, 24, -48
       )
       globeGroup.add(arcNablusToRiyadh)
       arcMeshes.push(arcNablusToRiyadh)
 
-      // Arc 4: Nablus to Miami
       const arcNablusToMiami = createTravelingArc(
-        offices[1].lat, offices[1].lng, // Nablus (start)
-        miamiLat, miamiLng, // Miami (end)
-        0xEB1600, // Red color
-        35, // Tail length
-        -90 // Delayed start
+        offices[1].lat, offices[1].lng,
+        miamiLat, miamiLng,
+        0xEB1600, 28, -72
       )
       globeGroup.add(arcNablusToMiami)
       arcMeshes.push(arcNablusToMiami)
 
-      // Office pin markers - WHITE GLOWING
+      // Office pin markers - REDUCED geometry
       offices.forEach(office => {
         const pos = latLngToVector3(office.lat, office.lng, 1.02)
 
-        // Inner bright white pin
-        const pinGeometry = new THREE.SphereGeometry(0.02, 16, 16)
+        const pinGeometry = new THREE.SphereGeometry(0.02, 12, 12)
+        disposables.geometries.push(pinGeometry)
+
         const pinMaterial = new THREE.MeshBasicMaterial({
           color: 0xffffff,
           transparent: true,
           opacity: 1.0
         })
+        disposables.materials.push(pinMaterial)
+
         const pin = new THREE.Mesh(pinGeometry, pinMaterial)
         pin.position.copy(pos)
         pin.userData = { officeId: office.id }
         globeGroup.add(pin)
 
-        // Outer glow sphere (larger, transparent)
-        const glowSphereGeometry = new THREE.SphereGeometry(0.035, 16, 16)
+        const glowSphereGeometry = new THREE.SphereGeometry(0.035, 12, 12)
+        disposables.geometries.push(glowSphereGeometry)
+
         const glowSphereMaterial = new THREE.MeshBasicMaterial({
           color: 0xffffff,
           transparent: true,
           opacity: 0.3
         })
+        disposables.materials.push(glowSphereMaterial)
+
         const glowSphere = new THREE.Mesh(glowSphereGeometry, glowSphereMaterial)
         glowSphere.position.copy(pos)
         globeGroup.add(glowSphere)
 
-        // Pulsing ring effect - white
-        const ringGeometry = new THREE.RingGeometry(0.04, 0.055, 32)
+        const ringGeometry = new THREE.RingGeometry(0.04, 0.055, 24)
+        disposables.geometries.push(ringGeometry)
+
         const ringMaterial = new THREE.MeshBasicMaterial({
           color: 0xffffff,
           transparent: true,
           opacity: 0.4,
           side: THREE.DoubleSide
         })
+        disposables.materials.push(ringMaterial)
+
         const ring = new THREE.Mesh(ringGeometry, ringMaterial)
         ring.position.copy(pos.clone().multiplyScalar(1.001))
         ring.lookAt(0, 0, 0)
         ring.userData = { isPulse: true }
         globeGroup.add(ring)
 
-        // Hover glow ring
-        const hoverGlowGeometry = new THREE.RingGeometry(0.05, 0.07, 32)
+        const hoverGlowGeometry = new THREE.RingGeometry(0.05, 0.07, 24)
+        disposables.geometries.push(hoverGlowGeometry)
+
         const hoverGlowMaterial = new THREE.MeshBasicMaterial({
           color: 0xffffff,
           transparent: true,
           opacity: 0,
           side: THREE.DoubleSide
         })
+        disposables.materials.push(hoverGlowMaterial)
+
         const hoverGlow = new THREE.Mesh(hoverGlowGeometry, hoverGlowMaterial)
         hoverGlow.position.copy(pos.clone().multiplyScalar(1.002))
         hoverGlow.lookAt(0, 0, 0)
@@ -375,41 +427,42 @@ const ThreeGlobe: React.FC = () => {
         })
       })
 
-      // Rotate to show Middle East (Aberdeen -2 lng, Nablus 35 lng)
-      // Need larger rotation to bring Middle East from behind to front
-      globeGroup.rotation.y = -2.2 // Rotates globe ~126 degrees to show Middle East
-      globeGroup.rotation.x = 0.4 // Tilt to show more of Europe/north, less Africa
+      // Rotate to show Middle East
+      globeGroup.rotation.y = -2.2
+      globeGroup.rotation.x = 0.4
 
-      // Very subtle lighting - keep it very dark
-      const sunLight = new THREE.DirectionalLight(0xffffff, 0.08) // Reduced intensity
+      // Lighting
+      const sunLight = new THREE.DirectionalLight(0xffffff, 0.08)
       sunLight.position.set(5, 3, 5)
       scene.add(sunLight)
 
-      const ambientLight = new THREE.AmbientLight(0x080808, 0.2) // Darker ambient
+      const ambientLight = new THREE.AmbientLight(0x080808, 0.2)
       scene.add(ambientLight)
 
-      // Animation - floating oscillation
+      // Animation with visibility detection
       let time = 0
       const baseRotationY = globeGroup.rotation.y
 
       const animate = () => {
         animationId = requestAnimationFrame(animate)
+
+        // Skip rendering if not visible
+        if (!isVisibleRef.current) return
+
         time += 0.016
 
-        // Gentle floating oscillation (left-right)
+        // Gentle floating oscillation
         globeGroup.rotation.y = baseRotationY + Math.sin(time * 0.3) * 0.15
 
-        // Animate traveling arcs - extending from A to B, then tail disappears
+        // Animate traveling arcs
         arcMeshes.forEach((arc) => {
           const data = arc.userData
-          data.progress += 0.25 // Slower speed for 50 segments
+          data.progress += 0.25
 
-          // Reset when tail has fully disappeared
-          if (data.progress > data.totalPoints + data.segmentLength + 25) {
+          if (data.progress > data.totalPoints + data.segmentLength + 20) {
             data.progress = 0
           }
 
-          // Animate tube segments by opacity
           if (data.segments) {
             data.segments.forEach((segment: any) => {
               const idx = segment.userData.index
@@ -419,7 +472,6 @@ const ThreeGlobe: React.FC = () => {
                 const head = Math.floor(data.progress)
                 const tail = Math.floor(data.progress - data.segmentLength)
 
-                // Show segment if it's between tail and head - bolder opacity
                 if (idx >= tail && idx <= head && idx < data.totalPoints) {
                   segment.material.opacity = isGlow ? 0.6 : 1.0
                 } else {
@@ -432,7 +484,7 @@ const ThreeGlobe: React.FC = () => {
           }
         })
 
-        // Pulse effect on pin rings and glow spheres (no hover effects on globe)
+        // Pulse effects
         markersRef.current.forEach((marker) => {
           if (marker.ring && marker.ring.userData.isPulse) {
             const scale = 1 + Math.sin(time * 2) * 0.3
@@ -440,7 +492,6 @@ const ThreeGlobe: React.FC = () => {
             marker.ringMaterial.opacity = 0.4 * (1 - (scale - 1) / 0.3)
           }
 
-          // Pulsing glow sphere
           if (marker.glowSphere) {
             const glowScale = 1 + Math.sin(time * 1.5) * 0.15
             marker.glowSphere.scale.set(glowScale, glowScale, glowScale)
@@ -454,35 +505,71 @@ const ThreeGlobe: React.FC = () => {
       animate()
       setIsLoaded(true)
 
-      // Resize handler - also adjust camera for mobile/desktop
+      // Debounced resize handler
       const handleResize = () => {
-        if (!container) return
-        const newWidth = container.clientWidth
-        const newHeight = container.clientHeight
-        const isMobileNow = newWidth < 768
-        camera.aspect = newWidth / newHeight
-        camera.position.z = isMobileNow ? 3.5 : 2.8
-        camera.updateProjectionMatrix()
-        renderer.setSize(newWidth, newHeight)
+        if (resizeTimeout) clearTimeout(resizeTimeout)
+        resizeTimeout = setTimeout(() => {
+          if (!container) return
+          const newWidth = container.clientWidth
+          const newHeight = container.clientHeight
+          const isMobileNow = newWidth < 768
+          camera.aspect = newWidth / newHeight
+          camera.position.z = isMobileNow ? 3.5 : 2.8
+          camera.updateProjectionMatrix()
+          renderer.setSize(newWidth, newHeight)
+        }, 100)
       }
 
       window.addEventListener('resize', handleResize)
 
-      return () => {
-        window.removeEventListener('resize', handleResize)
+      // Visibility detection using Intersection Observer
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            isVisibleRef.current = entry.isIntersecting
+          })
+        },
+        { threshold: 0.1 }
+      )
+      observer.observe(container)
+
+      // Page visibility API
+      const handleVisibilityChange = () => {
+        isVisibleRef.current = !document.hidden &&
+          (containerRef.current?.getBoundingClientRect().top ?? 0) < window.innerHeight
       }
+      document.addEventListener('visibilitychange', handleVisibilityChange)
+
+      // Store cleanup function
+      cleanupRef.current = () => {
+        window.removeEventListener('resize', handleResize)
+        document.removeEventListener('visibilitychange', handleVisibilityChange)
+        observer.disconnect()
+        if (resizeTimeout) clearTimeout(resizeTimeout)
+
+        // Dispose all resources
+        disposables.textures.forEach(t => t?.dispose())
+        disposables.geometries.forEach(g => g?.dispose())
+        disposables.materials.forEach(m => m?.dispose())
+
+        markersRef.current.clear()
+      }
+
+      return cleanupRef.current
     }
 
     initGlobe()
 
     return () => {
       if (animationId) cancelAnimationFrame(animationId)
+      if (cleanupRef.current) cleanupRef.current()
       if (renderer && containerRef.current) {
         containerRef.current.removeChild(renderer.domElement)
         renderer.dispose()
+        renderer.forceContextLoss()
       }
     }
-  }, []) // No dependencies - globe should not re-render on hover
+  }, [])
 
   return (
     <div className="globe-wrapper">
