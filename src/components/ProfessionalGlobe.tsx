@@ -172,11 +172,12 @@ const ThreeGlobe: React.FC = () => {
 
       // Helper: Convert lat/lng to 3D position
       // Add 180 degrees to theta to match texture offset
+      // Negate y to match vertical texture flip
       const latLngToVector3 = (lat: number, lng: number, radius: number) => {
         const phi = (90 - lat) * (Math.PI / 180) // Polar angle from north pole
         const theta = (lng + 180) * (Math.PI / 180) // Add 180 to match texture offset
         const x = radius * Math.sin(phi) * Math.cos(theta)
-        const y = radius * Math.cos(phi)
+        const y = -radius * Math.cos(phi) // Negated to match flipped texture
         const z = radius * Math.sin(phi) * Math.sin(theta)
         return new THREE.Vector3(x, y, z)
       }
@@ -383,7 +384,7 @@ const ThreeGlobe: React.FC = () => {
       //             0.4 radians ≈ 23 degrees tilt
       // ===========================================
       const INITIAL_ROTATION_Y = 1.3 // Horizontal: adjust to center Middle East (compensate for texture offset)
-      const INITIAL_ROTATION_X = -0.1 // Vertical tilt
+      const INITIAL_ROTATION_X = Math.PI + 0.1 // Flip 180 degrees + slight tilt to show north
 
       globeGroup.rotation.y = INITIAL_ROTATION_Y
       globeGroup.rotation.x = INITIAL_ROTATION_X
