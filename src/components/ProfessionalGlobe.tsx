@@ -41,8 +41,8 @@ const ThreeGlobe: React.FC = () => {
       id: 'uk',
       name: t('aberdeenName'),
       country: t('aberdeenCountry'),
-      lat: 56.7, // Tiny bit more south
-      lng: 1.5, // Tiny bit west
+      lat: 57.0, // Little north
+      lng: 1.0, // Tiny bit west
       timezone: 'GMT+0',
       description: t('aberdeenDescription')
     },
@@ -50,7 +50,7 @@ const ThreeGlobe: React.FC = () => {
       id: 'palestine',
       name: t('nablusName'),
       country: t('nablusCountry'),
-      lat: 32.2211,
+      lat: 32.5, // Tiny bit north
       lng: 35.2544,
       timezone: 'GMT+2',
       description: t('nablusDescription')
@@ -251,7 +251,7 @@ const ThreeGlobe: React.FC = () => {
       }
 
       // Destination coordinates (adjusted for shorter beam distances)
-      const dubaiLat = 25.2048, dubaiLng = 53.0 // Tiny bit more east
+      const dubaiLat = 25.5, dubaiLng = 53.5 // Tiny north, little more east
       const riyadhLat = 24.7136, riyadhLng = 45.2 // Tiny bit more east
       const miamiLat = 25.7617, miamiLng = -80.1918
 
