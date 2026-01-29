@@ -228,18 +228,20 @@ const ThreeGlobe: React.FC = () => {
         return line
       }
 
-      // Dubai and Riyadh coordinates (no pins, just arc destinations)
+      // Dubai, Riyadh, and Miami coordinates (no pins, just arc destinations)
       const dubaiLat = 25.2048
       const dubaiLng = 55.2708
       const riyadhLat = 24.7136
       const riyadhLng = 46.6753
+      const miamiLat = 25.7617
+      const miamiLng = -80.1918
 
       // Arc 1: Aberdeen to Nablus (main arc, longer beam segment)
       const arcAberdeenToNablus = createTravelingArc(
         offices[0].lat, offices[0].lng, // Aberdeen (start)
         offices[1].lat, offices[1].lng, // Nablus (end)
         0xEB1600, // Red color
-        25, // Longer segment length
+        70, // Tail length (when to start disappearing from behind)
         0
       )
       globeGroup.add(arcAberdeenToNablus)
@@ -250,8 +252,8 @@ const ThreeGlobe: React.FC = () => {
         offices[1].lat, offices[1].lng, // Nablus (start)
         dubaiLat, dubaiLng, // Dubai (end)
         0xEB1600, // Red color
-        12, // Shorter segment
-        -40 // Delayed start
+        60, // Tail length
+        -60 // Delayed start
       )
       globeGroup.add(arcNablusToDubai)
       arcMeshes.push(arcNablusToDubai)
@@ -261,11 +263,22 @@ const ThreeGlobe: React.FC = () => {
         offices[1].lat, offices[1].lng, // Nablus (start)
         riyadhLat, riyadhLng, // Riyadh (end)
         0xEB1600, // Red color
-        12, // Shorter segment
-        -80 // More delayed start
+        60, // Tail length
+        -120 // More delayed start
       )
       globeGroup.add(arcNablusToRiyadh)
       arcMeshes.push(arcNablusToRiyadh)
+
+      // Arc 4: Aberdeen to Miami (won't be visible but good to have)
+      const arcAberdeenToMiami = createTravelingArc(
+        offices[0].lat, offices[0].lng, // Aberdeen (start)
+        miamiLat, miamiLng, // Miami (end)
+        0xEB1600, // Red color
+        70, // Tail length
+        -180 // Delayed start
+      )
+      globeGroup.add(arcAberdeenToMiami)
+      arcMeshes.push(arcAberdeenToMiami)
 
       // Office pin markers - WHITE GLOWING
       offices.forEach(office => {
@@ -353,30 +366,28 @@ const ThreeGlobe: React.FC = () => {
         // Gentle floating oscillation (left-right)
         globeGroup.rotation.y = baseRotationY + Math.sin(time * 0.3) * 0.15
 
-        // Animate traveling arcs
+        // Animate traveling arcs - extending from A to B, then tail disappears
         arcMeshes.forEach((arc) => {
           const data = arc.userData
-          data.progress += 1.5 // Speed of travel
+          data.progress += 0.5 // Slower speed
 
-          if (data.progress > data.totalPoints + data.segmentLength + 30) {
-            // Reset after completing + pause
+          // Reset when tail has fully disappeared
+          if (data.progress > data.totalPoints + data.segmentLength + 50) {
             data.progress = 0
           }
 
           if (data.progress >= 0) {
-            // Calculate draw range for traveling segment
-            const start = Math.max(0, Math.floor(data.progress - data.segmentLength))
+            // End point: beam extends from start toward end
             const end = Math.min(data.totalPoints, Math.floor(data.progress))
-            const count = Math.max(0, end - start)
 
+            // Start point: tail starts disappearing after beam has extended past tailLength
+            const start = Math.max(0, Math.floor(data.progress - data.segmentLength))
+
+            const count = Math.max(0, end - start)
             arc.geometry.setDrawRange(start, count)
 
-            // Fade out at the end
-            if (data.progress > data.totalPoints - 5) {
-              arc.material.opacity = Math.max(0, 1 - (data.progress - data.totalPoints + 5) / 10)
-            } else {
-              arc.material.opacity = 0.9
-            }
+            // Keep full opacity while visible
+            arc.material.opacity = 0.9
           } else {
             arc.geometry.setDrawRange(0, 0)
           }
