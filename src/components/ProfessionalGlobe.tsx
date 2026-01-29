@@ -251,7 +251,7 @@ const ThreeGlobe: React.FC = () => {
       }
 
       // Destination coordinates (adjusted for shorter beam distances)
-      const dubaiLat = 25.2048, dubaiLng = 52.5 // More east, tiny bit longer
+      const dubaiLat = 25.2048, dubaiLng = 53.0 // Tiny bit more east
       const riyadhLat = 24.7136, riyadhLng = 45.2 // Tiny bit more east
       const miamiLat = 25.7617, miamiLng = -80.1918
 
@@ -291,14 +291,12 @@ const ThreeGlobe: React.FC = () => {
       // Office pin markers - Actual pin shape
       // Aberdeen (UK) = BLUE (#00AAFF), Nablus (Palestine) = RED (#EB1600)
       offices.forEach(office => {
-        const pos = latLngToVector3(office.lat, office.lng, 1.0) // Base position on globe
-        const pinColor = office.id === 'uk' ? 0x00AAFF : 0xEB1600 // Blue for Aberdeen, Red for Nablus
+        const basePos = latLngToVector3(office.lat, office.lng, 1.0)
+        const outerPos = latLngToVector3(office.lat, office.lng, 1.08) // Pin head position
+        const pinColor = office.id === 'uk' ? 0x00AAFF : 0xEB1600
 
-        // Create pin group
-        const pinGroup = new THREE.Group()
-
-        // Pin head (small sphere on top)
-        const headGeometry = new THREE.SphereGeometry(0.018, 12, 12)
+        // Pin head (sphere at outer position)
+        const headGeometry = new THREE.SphereGeometry(0.022, 12, 12)
         disposables.geometries.push(headGeometry)
         const headMaterial = new THREE.MeshBasicMaterial({
           color: pinColor,
@@ -307,11 +305,13 @@ const ThreeGlobe: React.FC = () => {
         })
         disposables.materials.push(headMaterial)
         const head = new THREE.Mesh(headGeometry, headMaterial)
-        head.position.set(0, 0.06, 0) // Position above the needle
-        pinGroup.add(head)
+        head.position.copy(outerPos)
+        head.userData = { officeId: office.id }
+        globeGroup.add(head)
 
-        // Pin needle (cone pointing down)
-        const needleGeometry = new THREE.ConeGeometry(0.008, 0.045, 8)
+        // Pin needle (cylinder from base to head)
+        const needleLength = outerPos.distanceTo(basePos)
+        const needleGeometry = new THREE.CylinderGeometry(0.004, 0.008, needleLength, 8)
         disposables.geometries.push(needleGeometry)
         const needleMaterial = new THREE.MeshBasicMaterial({
           color: pinColor,
@@ -320,36 +320,30 @@ const ThreeGlobe: React.FC = () => {
         })
         disposables.materials.push(needleMaterial)
         const needle = new THREE.Mesh(needleGeometry, needleMaterial)
-        needle.rotation.x = Math.PI // Point downward
-        needle.position.set(0, 0.022, 0)
-        pinGroup.add(needle)
 
-        // Position pin group on globe surface and orient outward
-        pinGroup.position.copy(pos)
-        pinGroup.lookAt(0, 0, 0)
-        pinGroup.rotateX(Math.PI / 2) // Rotate so pin points outward
-        pinGroup.userData = { officeId: office.id }
-        globeGroup.add(pinGroup)
+        // Position needle between base and head
+        const midPoint = new THREE.Vector3().addVectors(basePos, outerPos).multiplyScalar(0.5)
+        needle.position.copy(midPoint)
+        needle.lookAt(outerPos)
+        needle.rotateX(Math.PI / 2)
+        globeGroup.add(needle)
 
         // Glow around pin head
-        const glowSphereGeometry = new THREE.SphereGeometry(0.025, 12, 12)
+        const glowSphereGeometry = new THREE.SphereGeometry(0.032, 12, 12)
         disposables.geometries.push(glowSphereGeometry)
-
         const glowSphereMaterial = new THREE.MeshBasicMaterial({
           color: pinColor,
           transparent: true,
           opacity: 0.3
         })
         disposables.materials.push(glowSphereMaterial)
-
         const glowSphere = new THREE.Mesh(glowSphereGeometry, glowSphereMaterial)
-        glowSphere.position.set(0, 0.06, 0)
-        pinGroup.add(glowSphere)
+        glowSphere.position.copy(outerPos)
+        globeGroup.add(glowSphere)
 
         // Pulse ring at base
-        const ringGeometry = new THREE.RingGeometry(0.02, 0.03, 24)
+        const ringGeometry = new THREE.RingGeometry(0.015, 0.025, 24)
         disposables.geometries.push(ringGeometry)
-
         const ringMaterial = new THREE.MeshBasicMaterial({
           color: pinColor,
           transparent: true,
@@ -357,16 +351,15 @@ const ThreeGlobe: React.FC = () => {
           side: THREE.DoubleSide
         })
         disposables.materials.push(ringMaterial)
-
         const ring = new THREE.Mesh(ringGeometry, ringMaterial)
-        ring.rotation.x = -Math.PI / 2
+        ring.position.copy(basePos)
+        ring.lookAt(0, 0, 0)
         ring.userData = { isPulse: true }
-        pinGroup.add(ring)
+        globeGroup.add(ring)
 
-        // Store references for animation
-        const hoverGlowGeometry = new THREE.RingGeometry(0.03, 0.04, 24)
+        // Hover glow
+        const hoverGlowGeometry = new THREE.RingGeometry(0.025, 0.035, 24)
         disposables.geometries.push(hoverGlowGeometry)
-
         const hoverGlowMaterial = new THREE.MeshBasicMaterial({
           color: pinColor,
           transparent: true,
@@ -374,9 +367,8 @@ const ThreeGlobe: React.FC = () => {
           side: THREE.DoubleSide
         })
         disposables.materials.push(hoverGlowMaterial)
-
         const hoverGlow = new THREE.Mesh(hoverGlowGeometry, hoverGlowMaterial)
-        hoverGlow.rotation.x = -Math.PI / 2
+        hoverGlow.position.copy(basePos)
         hoverGlow.lookAt(0, 0, 0)
         globeGroup.add(hoverGlow)
 
