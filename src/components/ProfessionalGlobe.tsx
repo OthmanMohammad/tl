@@ -158,16 +158,20 @@ const ThreeGlobe: React.FC = () => {
 
       // ===========================================
       // TEXTURE OFFSET - Adjust this value if pins/beams are misaligned
+      // For THREE.js SphereGeometry, texture center (u=0.5) is at theta=PI (-X axis)
+      // Standard equirectangular maps have lng=0 at center, so we add 180
+      // Adjust this offset if your map has a different center point
       // ===========================================
-      const TEXTURE_LNG_OFFSET = -100 // Shift west to move from Nova Scotia to Middle East
+      const TEXTURE_LNG_OFFSET = 180 // Standard for equirectangular maps
 
-      // Helper: Convert lat/lng to 3D position (simplified for custom map)
+      // Helper: Convert lat/lng to 3D position
+      // Uses standard spherical coordinate formula for THREE.js
       const latLngToVector3 = (lat: number, lng: number, radius: number) => {
-        const phi = (90 - lat) * (Math.PI / 180)
-        const theta = (lng + TEXTURE_LNG_OFFSET) * (Math.PI / 180)
-        const x = radius * Math.sin(phi) * Math.cos(theta)
+        const phi = (90 - lat) * (Math.PI / 180) // Polar angle from north pole
+        const theta = (lng + TEXTURE_LNG_OFFSET) * (Math.PI / 180) // Azimuthal angle
+        const x = -radius * Math.sin(phi) * Math.cos(theta) // Negated x for correct orientation
         const y = radius * Math.cos(phi)
-        const z = -radius * Math.sin(phi) * Math.sin(theta) // Negated z
+        const z = radius * Math.sin(phi) * Math.sin(theta)
         return new THREE.Vector3(x, y, z)
       }
 
@@ -288,15 +292,17 @@ const ThreeGlobe: React.FC = () => {
       globeGroup.add(arcNablusToMiami)
       arcMeshes.push(arcNablusToMiami)
 
-      // Office pin markers - RED color (#EB1600)
+      // Office pin markers - Different colors for debugging
+      // Aberdeen (UK) = BLUE (#00AAFF), Nablus (Palestine) = RED (#EB1600)
       offices.forEach(office => {
         const pos = latLngToVector3(office.lat, office.lng, 1.05) // Higher radius to be clearly outside globe
+        const pinColor = office.id === 'uk' ? 0x00AAFF : 0xEB1600 // Blue for Aberdeen, Red for Nablus
 
         const pinGeometry = new THREE.SphereGeometry(0.03, 12, 12) // Larger pin
         disposables.geometries.push(pinGeometry)
 
         const pinMaterial = new THREE.MeshBasicMaterial({
-          color: 0xEB1600, // Red color
+          color: pinColor,
           transparent: true,
           opacity: 1.0
         })
@@ -311,7 +317,7 @@ const ThreeGlobe: React.FC = () => {
         disposables.geometries.push(glowSphereGeometry)
 
         const glowSphereMaterial = new THREE.MeshBasicMaterial({
-          color: 0xEB1600, // Red glow
+          color: pinColor, // Match pin color
           transparent: true,
           opacity: 0.4
         })
@@ -325,7 +331,7 @@ const ThreeGlobe: React.FC = () => {
         disposables.geometries.push(ringGeometry)
 
         const ringMaterial = new THREE.MeshBasicMaterial({
-          color: 0xEB1600, // Red ring
+          color: pinColor, // Match pin color
           transparent: true,
           opacity: 0.5,
           side: THREE.DoubleSide
@@ -342,7 +348,7 @@ const ThreeGlobe: React.FC = () => {
         disposables.geometries.push(hoverGlowGeometry)
 
         const hoverGlowMaterial = new THREE.MeshBasicMaterial({
-          color: 0xEB1600, // Red hover
+          color: pinColor, // Match pin color
           transparent: true,
           opacity: 0,
           side: THREE.DoubleSide
