@@ -13,7 +13,8 @@ export default function JsonLd({ locale }: JsonLdProps) {
     '@type': 'Organization',
     '@id': 'https://transformerlabs.io/#organization',
     name: 'Transformer Labs',
-    alternateName: 'TransformerLabs',
+    alternateName: ['TransformerLabs', 'شركة ترانسفورمرز انوفيشن للبرمجة والذكاء الاصطناعي'],
+    legalName: 'شركة ترانسفورمرز انوفيشن للبرمجة والذكاء الاصطناعي',
     url: 'https://transformerlabs.io',
     logo: {
       '@type': 'ImageObject',
