@@ -335,6 +335,16 @@ export default function Footer() {
               </span>
             </Link>
 
+            <p style={{
+              color: 'var(--text-muted)',
+              fontSize: '0.875rem',
+              margin: '0 0 var(--space-3) 0',
+              direction: 'rtl',
+              fontWeight: 'var(--font-weight-medium)'
+            }}>
+              شركة ترانسفورمرز انوفيشن للبرمجة والذكاء الاصطناعي
+            </p>
+
             <p className="footer-description" style={styles.description}>
               {t('description')}
             </p>
