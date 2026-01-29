@@ -160,7 +160,7 @@ const ThreeGlobe: React.FC = () => {
 
       // Helper: Convert lat/lng to 3D position
       // Longitude offset to align pins with texture
-      const LNG_OFFSET = -100 // Adjust this to align pins with map
+      const LNG_OFFSET = 155 // Adjust this to align pins with map
       const latLngToVector3 = (lat: number, lng: number, radius: number) => {
         const phi = (90 - lat) * (Math.PI / 180)
         const theta = (lng + LNG_OFFSET) * (Math.PI / 180)
@@ -371,8 +371,8 @@ const ThreeGlobe: React.FC = () => {
       // rotation.x: Vertical tilt (positive = tilt down to show more north)
       //             0.4 radians ≈ 23 degrees tilt
       // ===========================================
-      const INITIAL_ROTATION_Y = -1.8 // Horizontal: shows Middle East region
-      const INITIAL_ROTATION_X = -0.3 // Tilt down to show more south
+      const INITIAL_ROTATION_Y = -1.9 // Horizontal: shows Middle East region
+      const INITIAL_ROTATION_X = -0.1 // Tilt down to show more south
 
       globeGroup.rotation.y = INITIAL_ROTATION_Y
       globeGroup.rotation.x = INITIAL_ROTATION_X
