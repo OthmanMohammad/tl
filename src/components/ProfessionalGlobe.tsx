@@ -250,9 +250,9 @@ const ThreeGlobe: React.FC = () => {
         return glowGroup
       }
 
-      // Destination coordinates
-      const dubaiLat = 25.2048, dubaiLng = 54.0 // Adjusted west from 55.27 to not reach Oman
-      const riyadhLat = 24.7136, riyadhLng = 46.6753
+      // Destination coordinates (adjusted for shorter beam distances)
+      const dubaiLat = 25.2048, dubaiLng = 52.5 // Shortened from 54.0
+      const riyadhLat = 24.7136, riyadhLng = 44.5 // Shortened from 46.67
       const miamiLat = 25.7617, miamiLng = -80.1918
 
       // Create arcs
@@ -294,7 +294,7 @@ const ThreeGlobe: React.FC = () => {
         const pos = latLngToVector3(office.lat, office.lng, 1.05) // Higher radius to be clearly outside globe
         const pinColor = office.id === 'uk' ? 0x00AAFF : 0xEB1600 // Blue for Aberdeen, Red for Nablus
 
-        const pinGeometry = new THREE.SphereGeometry(0.03, 12, 12) // Larger pin
+        const pinGeometry = new THREE.SphereGeometry(0.018, 12, 12) // Smaller pin
         disposables.geometries.push(pinGeometry)
 
         const pinMaterial = new THREE.MeshBasicMaterial({
@@ -309,7 +309,7 @@ const ThreeGlobe: React.FC = () => {
         pin.userData = { officeId: office.id }
         globeGroup.add(pin)
 
-        const glowSphereGeometry = new THREE.SphereGeometry(0.05, 12, 12) // Larger glow
+        const glowSphereGeometry = new THREE.SphereGeometry(0.03, 12, 12) // Smaller glow
         disposables.geometries.push(glowSphereGeometry)
 
         const glowSphereMaterial = new THREE.MeshBasicMaterial({
@@ -323,7 +323,7 @@ const ThreeGlobe: React.FC = () => {
         glowSphere.position.copy(pos)
         globeGroup.add(glowSphere)
 
-        const ringGeometry = new THREE.RingGeometry(0.06, 0.08, 24) // Larger ring
+        const ringGeometry = new THREE.RingGeometry(0.035, 0.05, 24) // Smaller ring
         disposables.geometries.push(ringGeometry)
 
         const ringMaterial = new THREE.MeshBasicMaterial({
@@ -340,7 +340,7 @@ const ThreeGlobe: React.FC = () => {
         ring.userData = { isPulse: true }
         globeGroup.add(ring)
 
-        const hoverGlowGeometry = new THREE.RingGeometry(0.08, 0.1, 24) // Larger hover
+        const hoverGlowGeometry = new THREE.RingGeometry(0.05, 0.065, 24) // Smaller hover
         disposables.geometries.push(hoverGlowGeometry)
 
         const hoverGlowMaterial = new THREE.MeshBasicMaterial({
