@@ -186,62 +186,8 @@ const ThreeGlobe: React.FC = () => {
         return new THREE.Vector3(x, y, z)
       }
 
-      // Create arc between two points
-      const createArc = (startLat: number, startLng: number, endLat: number, endLng: number, color: number) => {
-        const start = latLngToVector3(startLat, startLng, 1.02)
-        const end = latLngToVector3(endLat, endLng, 1.02)
-
-        // Calculate arc height based on distance
-        const distance = start.distanceTo(end)
-        const arcHeight = 1.02 + distance * 0.4
-
-        // Midpoint elevated for the arc
-        const mid = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5)
-        mid.normalize().multiplyScalar(arcHeight)
-
-        // Create quadratic bezier curve
-        const curve = new THREE.QuadraticBezierCurve3(start, mid, end)
-        const points = curve.getPoints(64)
-
-        // Create geometry from points
-        const geometry = new THREE.BufferGeometry().setFromPoints(points)
-
-        // Animated dashed line material
-        const material = new THREE.LineDashedMaterial({
-          color: color,
-          dashSize: 0.02,
-          gapSize: 0.01,
-          transparent: true,
-          opacity: 0.8
-        })
-
-        const line = new THREE.Line(geometry, material)
-        line.computeLineDistances() // Required for dashed lines
-        line.userData = { dashOffset: 0 }
-
-        return line
-      }
-
-      // Create arcs between offices
-      const aberdeenToNablus = createArc(
-        offices[0].lat, offices[0].lng,
-        offices[1].lat, offices[1].lng,
-        0xff3621 // Primary red color
-      )
-      globeGroup.add(aberdeenToNablus)
-      arcMeshes.push(aberdeenToNablus)
-
-      // Second arc (reverse direction, slightly different)
-      const nablusToAberdeen = createArc(
-        offices[1].lat, offices[1].lng,
-        offices[0].lat, offices[0].lng,
-        0x00aaff // Blue color
-      )
-      globeGroup.add(nablusToAberdeen)
-      arcMeshes.push(nablusToAberdeen)
-
-      // Create glowing tube arc (more visible)
-      const createGlowArc = (startLat: number, startLng: number, endLat: number, endLng: number, color: number) => {
+      // Create traveling arc (animated beam from start to end)
+      const createTravelingArc = (startLat: number, startLng: number, endLat: number, endLng: number) => {
         const start = latLngToVector3(startLat, startLng, 1.02)
         const end = latLngToVector3(endLat, endLng, 1.02)
 
@@ -252,33 +198,57 @@ const ThreeGlobe: React.FC = () => {
         mid.normalize().multiplyScalar(arcHeight)
 
         const curve = new THREE.QuadraticBezierCurve3(start, mid, end)
+        const points = curve.getPoints(100)
 
-        // Tube geometry for thicker, more visible arc
-        const tubeGeometry = new THREE.TubeGeometry(curve, 64, 0.004, 8, false)
-        const tubeMaterial = new THREE.MeshBasicMaterial({
-          color: color,
+        const geometry = new THREE.BufferGeometry().setFromPoints(points)
+
+        // Glowing line material
+        const material = new THREE.LineBasicMaterial({
+          color: 0x00ffaa,
           transparent: true,
-          opacity: 0.7
+          opacity: 0.9,
+          linewidth: 2
         })
 
-        return new THREE.Mesh(tubeGeometry, tubeMaterial)
+        const line = new THREE.Line(geometry, material)
+        line.userData = {
+          progress: 0,
+          totalPoints: 101,
+          segmentLength: 15 // Length of the traveling segment
+        }
+
+        // Start with nothing visible
+        geometry.setDrawRange(0, 0)
+
+        return line
       }
 
-      const glowArc1 = createGlowArc(
-        offices[0].lat, offices[0].lng,
-        offices[1].lat, offices[1].lng,
-        0xff3621
+      // Create arc from Nablus to Aberdeen
+      const travelingArc = createTravelingArc(
+        offices[1].lat, offices[1].lng, // Nablus (start)
+        offices[0].lat, offices[0].lng  // Aberdeen (end)
       )
-      globeGroup.add(glowArc1)
+      globeGroup.add(travelingArc)
+      arcMeshes.push(travelingArc)
 
-      // Office pin markers
+      // Second arc going back (with delay)
+      const travelingArc2 = createTravelingArc(
+        offices[0].lat, offices[0].lng, // Aberdeen (start)
+        offices[1].lat, offices[1].lng  // Nablus (end)
+      )
+      travelingArc2.userData.progress = -50 // Start delayed
+      travelingArc2.material.color.setHex(0xff6644) // Orange color
+      globeGroup.add(travelingArc2)
+      arcMeshes.push(travelingArc2)
+
+      // Office pin markers - WHITE GLOWING
       offices.forEach(office => {
         const pos = latLngToVector3(office.lat, office.lng, 1.02)
 
-        // Pin marker
-        const pinGeometry = new THREE.SphereGeometry(0.025, 16, 16)
+        // Inner bright white pin
+        const pinGeometry = new THREE.SphereGeometry(0.02, 16, 16)
         const pinMaterial = new THREE.MeshBasicMaterial({
-          color: 0xff3621,
+          color: 0xffffff,
           transparent: true,
           opacity: 1.0
         })
@@ -287,12 +257,23 @@ const ThreeGlobe: React.FC = () => {
         pin.userData = { officeId: office.id }
         globeGroup.add(pin)
 
-        // Pulsing ring effect
-        const ringGeometry = new THREE.RingGeometry(0.03, 0.045, 32)
-        const ringMaterial = new THREE.MeshBasicMaterial({
-          color: 0xff3621,
+        // Outer glow sphere (larger, transparent)
+        const glowSphereGeometry = new THREE.SphereGeometry(0.035, 16, 16)
+        const glowSphereMaterial = new THREE.MeshBasicMaterial({
+          color: 0xffffff,
           transparent: true,
-          opacity: 0.5,
+          opacity: 0.3
+        })
+        const glowSphere = new THREE.Mesh(glowSphereGeometry, glowSphereMaterial)
+        glowSphere.position.copy(pos)
+        globeGroup.add(glowSphere)
+
+        // Pulsing ring effect - white
+        const ringGeometry = new THREE.RingGeometry(0.04, 0.055, 32)
+        const ringMaterial = new THREE.MeshBasicMaterial({
+          color: 0xffffff,
+          transparent: true,
+          opacity: 0.4,
           side: THREE.DoubleSide
         })
         const ring = new THREE.Mesh(ringGeometry, ringMaterial)
@@ -301,20 +282,25 @@ const ThreeGlobe: React.FC = () => {
         ring.userData = { isPulse: true }
         globeGroup.add(ring)
 
-        // Glow ring for hover
-        const glowGeometry = new THREE.RingGeometry(0.035, 0.055, 32)
-        const glowMaterial = new THREE.MeshBasicMaterial({
-          color: 0xff3621,
+        // Hover glow ring
+        const hoverGlowGeometry = new THREE.RingGeometry(0.05, 0.07, 32)
+        const hoverGlowMaterial = new THREE.MeshBasicMaterial({
+          color: 0xffffff,
           transparent: true,
           opacity: 0,
           side: THREE.DoubleSide
         })
-        const glow = new THREE.Mesh(glowGeometry, glowMaterial)
-        glow.position.copy(pos.clone().multiplyScalar(1.002))
-        glow.lookAt(0, 0, 0)
-        globeGroup.add(glow)
+        const hoverGlow = new THREE.Mesh(hoverGlowGeometry, hoverGlowMaterial)
+        hoverGlow.position.copy(pos.clone().multiplyScalar(1.002))
+        hoverGlow.lookAt(0, 0, 0)
+        globeGroup.add(hoverGlow)
 
-        markersRef.current.set(office.id, { pin, pinMaterial, glow, glowMaterial, ring, ringMaterial })
+        markersRef.current.set(office.id, {
+          pin, pinMaterial,
+          glow: hoverGlow, glowMaterial: hoverGlowMaterial,
+          ring, ringMaterial,
+          glowSphere, glowSphereMaterial
+        })
       })
 
       // Rotate to show Middle East
@@ -396,32 +382,54 @@ const ThreeGlobe: React.FC = () => {
           globeGroup.rotation.y += 0.001
         }
 
-        // Animate arc dash offset (creates flowing effect)
-        arcMeshes.forEach((arc, index) => {
-          if (arc.material.uniforms) {
-            arc.material.uniforms.dashOffset.value -= 0.01
+        // Animate traveling arcs
+        arcMeshes.forEach((arc) => {
+          const data = arc.userData
+          data.progress += 1.5 // Speed of travel
+
+          if (data.progress > data.totalPoints + data.segmentLength + 30) {
+            // Reset after completing + pause
+            data.progress = 0
+          }
+
+          if (data.progress >= 0) {
+            // Calculate draw range for traveling segment
+            const start = Math.max(0, Math.floor(data.progress - data.segmentLength))
+            const end = Math.min(data.totalPoints, Math.floor(data.progress))
+            const count = Math.max(0, end - start)
+
+            arc.geometry.setDrawRange(start, count)
+
+            // Fade out at the end
+            if (data.progress > data.totalPoints - 5) {
+              arc.material.opacity = Math.max(0, 1 - (data.progress - data.totalPoints + 5) / 10)
+            } else {
+              arc.material.opacity = 0.9
+            }
           } else {
-            // For LineDashedMaterial
-            arc.userData.dashOffset -= 0.002 * (index + 1)
-            const positions = arc.geometry.attributes.position.array
-            arc.geometry.setDrawRange(0, Math.floor((Math.sin(time + index) * 0.5 + 0.5) * 65))
+            arc.geometry.setDrawRange(0, 0)
           }
         })
 
-        // Pulse effect on pin rings
+        // Pulse effect on pin rings and glow spheres
         markersRef.current.forEach((marker, id) => {
           if (marker.ring && marker.ring.userData.isPulse) {
-            const scale = 1 + Math.sin(time * 2) * 0.2
+            const scale = 1 + Math.sin(time * 2) * 0.3
             marker.ring.scale.set(scale, scale, scale)
-            marker.ringMaterial.opacity = 0.5 * (1 - (scale - 1) / 0.2)
+            marker.ringMaterial.opacity = 0.4 * (1 - (scale - 1) / 0.3)
           }
-        })
 
-        // Hover effects on pins
-        markersRef.current.forEach((marker, id) => {
+          // Pulsing glow sphere
+          if (marker.glowSphere) {
+            const glowScale = 1 + Math.sin(time * 1.5) * 0.15
+            marker.glowSphere.scale.set(glowScale, glowScale, glowScale)
+            marker.glowSphereMaterial.opacity = 0.25 + Math.sin(time * 1.5) * 0.1
+          }
+
+          // Hover effects
           const isHovered = hoveredOffice === id
-          const targetOpacity = isHovered ? 0.9 : 0
-          const targetScale = isHovered ? 1.5 : 1.0
+          const targetOpacity = isHovered ? 0.8 : 0
+          const targetScale = isHovered ? 1.3 : 1.0
 
           marker.glowMaterial.opacity += (targetOpacity - marker.glowMaterial.opacity) * 0.1
           const currentScale = marker.pin.scale.x
@@ -429,7 +437,7 @@ const ThreeGlobe: React.FC = () => {
           marker.pin.scale.set(newScale, newScale, newScale)
 
           if (isHovered) {
-            marker.glow.scale.setScalar(1 + Math.sin(time * 4) * 0.3)
+            marker.glow.scale.setScalar(1 + Math.sin(time * 4) * 0.2)
           }
         })
 
