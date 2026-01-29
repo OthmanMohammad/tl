@@ -41,7 +41,7 @@ const ThreeGlobe: React.FC = () => {
       id: 'uk',
       name: t('aberdeenName'),
       country: t('aberdeenCountry'),
-      lat: 57.1497,
+      lat: 56.9, // Adjusted slightly south from 57.1497
       lng: 2, // Adjusted +4 from -2.0943 to shift blue pin east on custom map
       timezone: 'GMT+0',
       description: t('aberdeenDescription')
@@ -251,8 +251,8 @@ const ThreeGlobe: React.FC = () => {
       }
 
       // Destination coordinates (adjusted for shorter beam distances)
-      const dubaiLat = 25.2048, dubaiLng = 52.5 // Shortened from 54.0
-      const riyadhLat = 24.7136, riyadhLng = 44.5 // Shortened from 46.67
+      const dubaiLat = 25.2048, dubaiLng = 51.0 // Shortened more
+      const riyadhLat = 24.7136, riyadhLng = 45.2 // Tiny bit more east
       const miamiLat = 25.7617, miamiLng = -80.1918
 
       // Create arcs
