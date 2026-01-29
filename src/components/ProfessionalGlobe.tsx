@@ -168,11 +168,11 @@ const ThreeGlobe: React.FC = () => {
       const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial)
       globeGroup.add(earthMesh)
 
-      // Helper: Convert lat/lng to 3D position (standard formula)
-      // No offset needed - texture rotation handles alignment
+      // Helper: Convert lat/lng to 3D position
+      // Add 180 degrees to theta to match texture offset
       const latLngToVector3 = (lat: number, lng: number, radius: number) => {
         const phi = (90 - lat) * (Math.PI / 180) // Polar angle from north pole
-        const theta = lng * (Math.PI / 180) // Azimuthal angle in radians
+        const theta = (lng + 180) * (Math.PI / 180) // Add 180 to match texture offset
         const x = radius * Math.sin(phi) * Math.cos(theta)
         const y = radius * Math.cos(phi)
         const z = radius * Math.sin(phi) * Math.sin(theta)
