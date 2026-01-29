@@ -380,7 +380,7 @@ const ThreeGlobe: React.FC = () => {
       // rotation.x: Vertical tilt (positive = tilt down to show more north)
       //             0.4 radians ≈ 23 degrees tilt
       // ===========================================
-      const INITIAL_ROTATION_Y = -1.8 // Horizontal: adjust to center Middle East
+      const INITIAL_ROTATION_Y = 1.3 // Horizontal: adjust to center Middle East (compensate for texture offset)
       const INITIAL_ROTATION_X = -0.1 // Vertical tilt
 
       globeGroup.rotation.y = INITIAL_ROTATION_Y
