@@ -185,7 +185,7 @@ const ThreeGlobe: React.FC = () => {
         return new THREE.Vector3(x, y, z)
       }
 
-      // Create traveling arc (animated beam from start to end)
+      // Create traveling arc (animated beam from start to end) with glow effect
       const createTravelingArc = (
         startLat: number, startLng: number,
         endLat: number, endLng: number,
@@ -205,27 +205,48 @@ const ThreeGlobe: React.FC = () => {
         const curve = new THREE.QuadraticBezierCurve3(start, mid, end)
         const points = curve.getPoints(100)
 
+        // Create main line
         const geometry = new THREE.BufferGeometry().setFromPoints(points)
-
-        // Glowing line material
         const material = new THREE.LineBasicMaterial({
           color: color,
           transparent: true,
-          opacity: 0.9,
-          linewidth: 2
+          opacity: 1.0,
+          blending: THREE.AdditiveBlending
         })
-
         const line = new THREE.Line(geometry, material)
-        line.userData = {
+
+        // Create glow lines (slightly offset for thickness illusion)
+        const glowGroup = new THREE.Group()
+        glowGroup.add(line)
+
+        // Add multiple glow layers
+        for (let i = 0; i < 3; i++) {
+          const glowGeometry = new THREE.BufferGeometry().setFromPoints(points)
+          const glowMaterial = new THREE.LineBasicMaterial({
+            color: color,
+            transparent: true,
+            opacity: 0.4 - i * 0.1,
+            blending: THREE.AdditiveBlending
+          })
+          const glowLine = new THREE.Line(glowGeometry, glowMaterial)
+          glowGroup.add(glowLine)
+        }
+
+        glowGroup.userData = {
           progress: initialDelay,
           totalPoints: 101,
-          segmentLength: segmentLength
+          segmentLength: segmentLength,
+          lines: glowGroup.children
         }
 
         // Start with nothing visible
-        geometry.setDrawRange(0, 0)
+        glowGroup.children.forEach(child => {
+          if (child instanceof THREE.Line) {
+            child.geometry.setDrawRange(0, 0)
+          }
+        })
 
-        return line
+        return glowGroup
       }
 
       // Dubai, Riyadh, and Miami coordinates (no pins, just arc destinations)
@@ -269,16 +290,16 @@ const ThreeGlobe: React.FC = () => {
       globeGroup.add(arcNablusToRiyadh)
       arcMeshes.push(arcNablusToRiyadh)
 
-      // Arc 4: Aberdeen to Miami (won't be visible but good to have)
-      const arcAberdeenToMiami = createTravelingArc(
-        offices[0].lat, offices[0].lng, // Aberdeen (start)
+      // Arc 4: Nablus to Miami
+      const arcNablusToMiami = createTravelingArc(
+        offices[1].lat, offices[1].lng, // Nablus (start)
         miamiLat, miamiLng, // Miami (end)
         0xEB1600, // Red color
         70, // Tail length
         -180 // Delayed start
       )
-      globeGroup.add(arcAberdeenToMiami)
-      arcMeshes.push(arcAberdeenToMiami)
+      globeGroup.add(arcNablusToMiami)
+      arcMeshes.push(arcNablusToMiami)
 
       // Office pin markers - WHITE GLOWING
       offices.forEach(office => {
@@ -384,12 +405,20 @@ const ThreeGlobe: React.FC = () => {
             const start = Math.max(0, Math.floor(data.progress - data.segmentLength))
 
             const count = Math.max(0, end - start)
-            arc.geometry.setDrawRange(start, count)
 
-            // Keep full opacity while visible
-            arc.material.opacity = 0.9
+            // Update all lines in the glow group
+            arc.children.forEach((child: any) => {
+              if (child.geometry && child.geometry.setDrawRange) {
+                child.geometry.setDrawRange(start, count)
+              }
+            })
           } else {
-            arc.geometry.setDrawRange(0, 0)
+            // Hide all lines
+            arc.children.forEach((child: any) => {
+              if (child.geometry && child.geometry.setDrawRange) {
+                child.geometry.setDrawRange(0, 0)
+              }
+            })
           }
         })
 
