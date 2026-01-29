@@ -66,9 +66,10 @@ const ThreeGlobe: React.FC = () => {
       // Scene with transparent background
       scene = new THREE.Scene()
 
-      // Camera
+      // Camera - zoom out more on mobile for better fit
       camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000)
-      camera.position.z = 2.8
+      const isMobile = width < 768
+      camera.position.z = isMobile ? 3.5 : 2.8
 
       // Renderer with transparency
       renderer = new THREE.WebGLRenderer({
@@ -204,27 +205,29 @@ const ThreeGlobe: React.FC = () => {
 
         const curve = new THREE.QuadraticBezierCurve3(start, mid, end)
 
-        // Create many small tube segments for animation
-        const numSegments = 100
-        const tubeRadius = 0.008 // Wider tube
+        // Create tube segments for animation - fewer but overlapping for no gaps
+        const numSegments = 50
+        const tubeRadius = 0.012 // Wider, bolder tube
         const tubeSegments: any[] = []
         const glowGroup = new THREE.Group()
 
         for (let i = 0; i < numSegments; i++) {
-          const t1 = i / numSegments
-          const t2 = (i + 1) / numSegments
+          // Overlap segments slightly to avoid gaps
+          const t1 = Math.max(0, (i - 0.1) / numSegments)
+          const t2 = Math.min(1, (i + 1.1) / numSegments)
           const p1 = curve.getPoint(t1)
           const p2 = curve.getPoint(t2)
 
-          // Create a small cylinder between points
+          // Create tube segment with more geometry detail
           const segmentCurve = new THREE.LineCurve3(p1, p2)
-          const segmentGeometry = new THREE.TubeGeometry(segmentCurve, 1, tubeRadius, 8, false)
+          const segmentGeometry = new THREE.TubeGeometry(segmentCurve, 2, tubeRadius, 12, false)
 
           const segmentMaterial = new THREE.MeshBasicMaterial({
             color: color,
             transparent: true,
             opacity: 0,
-            blending: THREE.AdditiveBlending
+            blending: THREE.AdditiveBlending,
+            depthWrite: false
           })
 
           const segment = new THREE.Mesh(segmentGeometry, segmentMaterial)
@@ -232,13 +235,14 @@ const ThreeGlobe: React.FC = () => {
           tubeSegments.push(segment)
           glowGroup.add(segment)
 
-          // Add glow layer (slightly larger)
-          const glowGeometry = new THREE.TubeGeometry(segmentCurve, 1, tubeRadius * 2, 8, false)
+          // Add outer glow layer (larger, softer)
+          const glowGeometry = new THREE.TubeGeometry(segmentCurve, 2, tubeRadius * 2.5, 12, false)
           const glowMaterial = new THREE.MeshBasicMaterial({
             color: color,
             transparent: true,
             opacity: 0,
-            blending: THREE.AdditiveBlending
+            blending: THREE.AdditiveBlending,
+            depthWrite: false
           })
           const glowSegment = new THREE.Mesh(glowGeometry, glowMaterial)
           glowSegment.userData.index = i
@@ -270,7 +274,7 @@ const ThreeGlobe: React.FC = () => {
         offices[0].lat, offices[0].lng, // Aberdeen (start)
         offices[1].lat, offices[1].lng, // Nablus (end)
         0xEB1600, // Red color
-        70, // Tail length (when to start disappearing from behind)
+        35, // Tail length (adjusted for 50 segments)
         0
       )
       globeGroup.add(arcAberdeenToNablus)
@@ -281,8 +285,8 @@ const ThreeGlobe: React.FC = () => {
         offices[1].lat, offices[1].lng, // Nablus (start)
         dubaiLat, dubaiLng, // Dubai (end)
         0xEB1600, // Red color
-        60, // Tail length
-        -60 // Delayed start
+        30, // Tail length
+        -30 // Delayed start
       )
       globeGroup.add(arcNablusToDubai)
       arcMeshes.push(arcNablusToDubai)
@@ -292,8 +296,8 @@ const ThreeGlobe: React.FC = () => {
         offices[1].lat, offices[1].lng, // Nablus (start)
         riyadhLat, riyadhLng, // Riyadh (end)
         0xEB1600, // Red color
-        60, // Tail length
-        -120 // More delayed start
+        30, // Tail length
+        -60 // More delayed start
       )
       globeGroup.add(arcNablusToRiyadh)
       arcMeshes.push(arcNablusToRiyadh)
@@ -303,8 +307,8 @@ const ThreeGlobe: React.FC = () => {
         offices[1].lat, offices[1].lng, // Nablus (start)
         miamiLat, miamiLng, // Miami (end)
         0xEB1600, // Red color
-        70, // Tail length
-        -180 // Delayed start
+        35, // Tail length
+        -90 // Delayed start
       )
       globeGroup.add(arcNablusToMiami)
       arcMeshes.push(arcNablusToMiami)
@@ -398,10 +402,10 @@ const ThreeGlobe: React.FC = () => {
         // Animate traveling arcs - extending from A to B, then tail disappears
         arcMeshes.forEach((arc) => {
           const data = arc.userData
-          data.progress += 0.5 // Slower speed
+          data.progress += 0.25 // Slower speed for 50 segments
 
           // Reset when tail has fully disappeared
-          if (data.progress > data.totalPoints + data.segmentLength + 50) {
+          if (data.progress > data.totalPoints + data.segmentLength + 25) {
             data.progress = 0
           }
 
@@ -415,9 +419,9 @@ const ThreeGlobe: React.FC = () => {
                 const head = Math.floor(data.progress)
                 const tail = Math.floor(data.progress - data.segmentLength)
 
-                // Show segment if it's between tail and head
+                // Show segment if it's between tail and head - bolder opacity
                 if (idx >= tail && idx <= head && idx < data.totalPoints) {
-                  segment.material.opacity = isGlow ? 0.4 : 0.95
+                  segment.material.opacity = isGlow ? 0.6 : 1.0
                 } else {
                   segment.material.opacity = 0
                 }
@@ -450,13 +454,16 @@ const ThreeGlobe: React.FC = () => {
       animate()
       setIsLoaded(true)
 
-      // Resize handler
+      // Resize handler - also adjust camera for mobile/desktop
       const handleResize = () => {
         if (!container) return
         const newWidth = container.clientWidth
-        camera.aspect = newWidth / height
+        const newHeight = container.clientHeight
+        const isMobileNow = newWidth < 768
+        camera.aspect = newWidth / newHeight
+        camera.position.z = isMobileNow ? 3.5 : 2.8
         camera.updateProjectionMatrix()
-        renderer.setSize(newWidth, height)
+        renderer.setSize(newWidth, newHeight)
       }
 
       window.addEventListener('resize', handleResize)
@@ -627,13 +634,41 @@ const ThreeGlobe: React.FC = () => {
         }
 
         @media (max-width: 768px) {
-          .globe-container {
-            height: 400px;
+          .globe-wrapper {
+            padding: var(--space-4);
           }
 
-          .offices-grid,
+          .globe-container {
+            height: 320px;
+          }
+
+          .globe-header {
+            margin-bottom: var(--space-2);
+          }
+
+          .globe-title {
+            font-size: 1.1rem;
+          }
+
+          .globe-subtitle {
+            font-size: 0.8rem;
+          }
+
+          .offices-grid {
+            grid-template-columns: 1fr;
+            gap: var(--space-3);
+            margin-top: var(--space-4);
+          }
+
+          .office-card {
+            padding: var(--space-3);
+          }
+
           .benefits-section {
             grid-template-columns: 1fr;
+            gap: var(--space-3);
+            padding-top: var(--space-4);
+            margin-top: var(--space-4);
           }
         }
       `}</style>

@@ -253,6 +253,14 @@ html[dir="ltr"] body {
   text-align: center;
 }
 
+/* Prevent logo from flipping in RTL */
+[dir="rtl"] .footer-logo-image,
+[dir="rtl"] .nav-logo-image,
+[dir="rtl"] .logo-image,
+[dir="rtl"] img[src*="Logo"] {
+  transform: none !important;
+}
+
 [dir="rtl"] .footer-nav-list {
   text-align: center;
 }
