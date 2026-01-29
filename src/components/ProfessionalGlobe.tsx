@@ -160,7 +160,7 @@ const ThreeGlobe: React.FC = () => {
       // TEXTURE OFFSET - Adjust this value if pins/beams are misaligned
       // Positive = shift east, Negative = shift west
       // ===========================================
-      const TEXTURE_LNG_OFFSET = 180 // Shifted 180 degrees to move pins from Hawaii to Middle East
+      const TEXTURE_LNG_OFFSET = -35 // Adjust to align pins with Middle East/Europe
       const FLIP_HORIZONTAL = true // Set to true if pins appear on opposite side of globe
 
       // Helper: Convert lat/lng to 3D position
