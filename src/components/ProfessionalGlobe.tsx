@@ -114,10 +114,10 @@ const ThreeGlobe: React.FC = () => {
         map: earthDayTexture,
         bumpMap: earthBumpTexture,
         bumpScale: 0.01,
-        color: 0x111115, // Very dark tint
+        color: 0x111111, // Pure dark gray, no blue
         shininess: 5,
-        emissive: 0x000005,
-        emissiveIntensity: 0.1
+        emissive: 0x000000, // No emissive color
+        emissiveIntensity: 0
       })
 
       const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial)
@@ -133,14 +133,14 @@ const ThreeGlobe: React.FC = () => {
       const nightMesh = new THREE.Mesh(earthGeometry.clone(), nightMaterial)
       globeGroup.add(nightMesh)
 
-      // Fresnel atmosphere glow - subtle, less blue
+      // Fresnel atmosphere glow - very subtle, almost no blue
       const fresnelMaterial = new THREE.ShaderMaterial({
         uniforms: {
-          color1: { value: new THREE.Color(0x334466) }, // Darker, less saturated
+          color1: { value: new THREE.Color(0x444444) }, // Gray, no blue
           color2: { value: new THREE.Color(0x000000) },
           fresnelBias: { value: 0.1 },
-          fresnelScale: { value: 0.8 },
-          fresnelPower: { value: 3.0 }
+          fresnelScale: { value: 0.5 },
+          fresnelPower: { value: 2.5 }
         },
         vertexShader: `
           uniform float fresnelBias;
@@ -302,8 +302,9 @@ const ThreeGlobe: React.FC = () => {
         })
       })
 
-      // Rotate to show Middle East (Aberdeen -2 lng, Nablus 35 lng - center around 15-20)
-      globeGroup.rotation.y = -0.6 // Position to show Europe/Middle East
+      // Rotate to show Middle East (Aberdeen -2 lng, Nablus 35 lng)
+      // Need larger rotation to bring Middle East from behind to front
+      globeGroup.rotation.y = -2.2 // Rotates globe ~126 degrees to show Middle East
       globeGroup.rotation.x = 0.15
 
       // Very subtle lighting - keep it very dark
@@ -311,7 +312,7 @@ const ThreeGlobe: React.FC = () => {
       sunLight.position.set(5, 3, 5)
       scene.add(sunLight)
 
-      const ambientLight = new THREE.AmbientLight(0x111118, 0.3)
+      const ambientLight = new THREE.AmbientLight(0x111111, 0.3) // Pure gray, no blue
       scene.add(ambientLight)
 
       // Animation - floating oscillation
