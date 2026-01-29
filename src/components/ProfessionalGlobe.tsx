@@ -54,6 +54,7 @@ const ThreeGlobe: React.FC = () => {
     let isDragging = false
     let previousMousePosition = { x: 0, y: 0 }
     let globeGroup: any
+    let arcMeshes: any[] = []
 
     const initGlobe = async () => {
       const THREE = await import('three') as ThreeModule
@@ -175,29 +176,133 @@ const ThreeGlobe: React.FC = () => {
       const atmosphereMesh = new THREE.Mesh(atmosphereGeometry, fresnelMaterial)
       globeGroup.add(atmosphereMesh)
 
+      // Helper: Convert lat/lng to 3D position
+      const latLngToVector3 = (lat: number, lng: number, radius: number) => {
+        const phi = (90 - lat) * (Math.PI / 180)
+        const theta = (lng + 180) * (Math.PI / 180)
+        const x = -(radius * Math.sin(phi) * Math.cos(theta))
+        const y = radius * Math.cos(phi)
+        const z = radius * Math.sin(phi) * Math.sin(theta)
+        return new THREE.Vector3(x, y, z)
+      }
+
+      // Create arc between two points
+      const createArc = (startLat: number, startLng: number, endLat: number, endLng: number, color: number) => {
+        const start = latLngToVector3(startLat, startLng, 1.02)
+        const end = latLngToVector3(endLat, endLng, 1.02)
+
+        // Calculate arc height based on distance
+        const distance = start.distanceTo(end)
+        const arcHeight = 1.02 + distance * 0.4
+
+        // Midpoint elevated for the arc
+        const mid = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5)
+        mid.normalize().multiplyScalar(arcHeight)
+
+        // Create quadratic bezier curve
+        const curve = new THREE.QuadraticBezierCurve3(start, mid, end)
+        const points = curve.getPoints(64)
+
+        // Create geometry from points
+        const geometry = new THREE.BufferGeometry().setFromPoints(points)
+
+        // Animated dashed line material
+        const material = new THREE.LineDashedMaterial({
+          color: color,
+          dashSize: 0.02,
+          gapSize: 0.01,
+          transparent: true,
+          opacity: 0.8
+        })
+
+        const line = new THREE.Line(geometry, material)
+        line.computeLineDistances() // Required for dashed lines
+        line.userData = { dashOffset: 0 }
+
+        return line
+      }
+
+      // Create arcs between offices
+      const aberdeenToNablus = createArc(
+        offices[0].lat, offices[0].lng,
+        offices[1].lat, offices[1].lng,
+        0xff3621 // Primary red color
+      )
+      globeGroup.add(aberdeenToNablus)
+      arcMeshes.push(aberdeenToNablus)
+
+      // Second arc (reverse direction, slightly different)
+      const nablusToAberdeen = createArc(
+        offices[1].lat, offices[1].lng,
+        offices[0].lat, offices[0].lng,
+        0x00aaff // Blue color
+      )
+      globeGroup.add(nablusToAberdeen)
+      arcMeshes.push(nablusToAberdeen)
+
+      // Create glowing tube arc (more visible)
+      const createGlowArc = (startLat: number, startLng: number, endLat: number, endLng: number, color: number) => {
+        const start = latLngToVector3(startLat, startLng, 1.02)
+        const end = latLngToVector3(endLat, endLng, 1.02)
+
+        const distance = start.distanceTo(end)
+        const arcHeight = 1.02 + distance * 0.35
+
+        const mid = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5)
+        mid.normalize().multiplyScalar(arcHeight)
+
+        const curve = new THREE.QuadraticBezierCurve3(start, mid, end)
+
+        // Tube geometry for thicker, more visible arc
+        const tubeGeometry = new THREE.TubeGeometry(curve, 64, 0.004, 8, false)
+        const tubeMaterial = new THREE.MeshBasicMaterial({
+          color: color,
+          transparent: true,
+          opacity: 0.7
+        })
+
+        return new THREE.Mesh(tubeGeometry, tubeMaterial)
+      }
+
+      const glowArc1 = createGlowArc(
+        offices[0].lat, offices[0].lng,
+        offices[1].lat, offices[1].lng,
+        0xff3621
+      )
+      globeGroup.add(glowArc1)
+
       // Office pin markers
       offices.forEach(office => {
-        const phi = (90 - office.lat) * (Math.PI / 180)
-        const theta = (office.lng + 180) * (Math.PI / 180)
-
-        const x = -(Math.sin(phi) * Math.cos(theta))
-        const y = Math.cos(phi)
-        const z = Math.sin(phi) * Math.sin(theta)
+        const pos = latLngToVector3(office.lat, office.lng, 1.02)
 
         // Pin marker
-        const pinGeometry = new THREE.SphereGeometry(0.02, 16, 16)
+        const pinGeometry = new THREE.SphereGeometry(0.025, 16, 16)
         const pinMaterial = new THREE.MeshBasicMaterial({
           color: 0xff3621,
           transparent: true,
           opacity: 1.0
         })
         const pin = new THREE.Mesh(pinGeometry, pinMaterial)
-        pin.position.set(x * 1.02, y * 1.02, z * 1.02)
+        pin.position.copy(pos)
         pin.userData = { officeId: office.id }
         globeGroup.add(pin)
 
-        // Glow ring
-        const glowGeometry = new THREE.RingGeometry(0.025, 0.04, 32)
+        // Pulsing ring effect
+        const ringGeometry = new THREE.RingGeometry(0.03, 0.045, 32)
+        const ringMaterial = new THREE.MeshBasicMaterial({
+          color: 0xff3621,
+          transparent: true,
+          opacity: 0.5,
+          side: THREE.DoubleSide
+        })
+        const ring = new THREE.Mesh(ringGeometry, ringMaterial)
+        ring.position.copy(pos.clone().multiplyScalar(1.001))
+        ring.lookAt(0, 0, 0)
+        ring.userData = { isPulse: true }
+        globeGroup.add(ring)
+
+        // Glow ring for hover
+        const glowGeometry = new THREE.RingGeometry(0.035, 0.055, 32)
         const glowMaterial = new THREE.MeshBasicMaterial({
           color: 0xff3621,
           transparent: true,
@@ -205,11 +310,11 @@ const ThreeGlobe: React.FC = () => {
           side: THREE.DoubleSide
         })
         const glow = new THREE.Mesh(glowGeometry, glowMaterial)
-        glow.position.set(x * 1.025, y * 1.025, z * 1.025)
+        glow.position.copy(pos.clone().multiplyScalar(1.002))
         glow.lookAt(0, 0, 0)
         globeGroup.add(glow)
 
-        markersRef.current.set(office.id, { pin, pinMaterial, glow, glowMaterial })
+        markersRef.current.set(office.id, { pin, pinMaterial, glow, glowMaterial, ring, ringMaterial })
       })
 
       // Rotate to show Middle East
@@ -238,8 +343,6 @@ const ThreeGlobe: React.FC = () => {
 
         globeGroup.rotation.y += deltaX * 0.005
         globeGroup.rotation.x += deltaY * 0.005
-
-        // Clamp vertical rotation
         globeGroup.rotation.x = Math.max(-Math.PI / 4, Math.min(Math.PI / 4, globeGroup.rotation.x))
 
         previousMousePosition = { x: event.clientX, y: event.clientY }
@@ -286,12 +389,33 @@ const ThreeGlobe: React.FC = () => {
 
       const animate = () => {
         animationId = requestAnimationFrame(animate)
-        time += 0.01
+        time += 0.016
 
         // Gentle auto-rotation when not dragging
         if (!isDragging) {
           globeGroup.rotation.y += 0.001
         }
+
+        // Animate arc dash offset (creates flowing effect)
+        arcMeshes.forEach((arc, index) => {
+          if (arc.material.uniforms) {
+            arc.material.uniforms.dashOffset.value -= 0.01
+          } else {
+            // For LineDashedMaterial
+            arc.userData.dashOffset -= 0.002 * (index + 1)
+            const positions = arc.geometry.attributes.position.array
+            arc.geometry.setDrawRange(0, Math.floor((Math.sin(time + index) * 0.5 + 0.5) * 65))
+          }
+        })
+
+        // Pulse effect on pin rings
+        markersRef.current.forEach((marker, id) => {
+          if (marker.ring && marker.ring.userData.isPulse) {
+            const scale = 1 + Math.sin(time * 2) * 0.2
+            marker.ring.scale.set(scale, scale, scale)
+            marker.ringMaterial.opacity = 0.5 * (1 - (scale - 1) / 0.2)
+          }
+        })
 
         // Hover effects on pins
         markersRef.current.forEach((marker, id) => {
