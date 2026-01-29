@@ -156,10 +156,16 @@ const ThreeGlobe: React.FC = () => {
       const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial)
       globeGroup.add(earthMesh)
 
+      // ===========================================
+      // TEXTURE OFFSET - Adjust this value if pins/beams are misaligned
+      // Positive = shift east, Negative = shift west
+      // ===========================================
+      const TEXTURE_LNG_OFFSET = 0 // Try values like -90, -180, 90, 180 if misaligned
+
       // Helper: Convert lat/lng to 3D position
       const latLngToVector3 = (lat: number, lng: number, radius: number) => {
         const phi = (90 - lat) * (Math.PI / 180)
-        const theta = (lng + 180) * (Math.PI / 180)
+        const theta = (lng + 180 + TEXTURE_LNG_OFFSET) * (Math.PI / 180)
         const x = -(radius * Math.sin(phi) * Math.cos(theta))
         const y = radius * Math.cos(phi)
         const z = radius * Math.sin(phi) * Math.sin(theta)
@@ -357,9 +363,19 @@ const ThreeGlobe: React.FC = () => {
         })
       })
 
-      // Rotate to show Middle East
-      globeGroup.rotation.y = -2.2
-      globeGroup.rotation.x = 0.4
+      // ===========================================
+      // GLOBE VIEW ROTATION - Adjust to show desired region on load
+      // rotation.y: Horizontal rotation (negative = rotate west/left, positive = rotate east/right)
+      //             -2.2 radians ≈ -126 degrees (shows Middle East)
+      //             0 = shows Pacific Ocean
+      // rotation.x: Vertical tilt (positive = tilt down to show more north)
+      //             0.4 radians ≈ 23 degrees tilt
+      // ===========================================
+      const INITIAL_ROTATION_Y = -0.5 // Horizontal: adjust to center Middle East (-0.5 to -1.0 range)
+      const INITIAL_ROTATION_X = 0.3  // Vertical tilt: show more Europe/north
+
+      globeGroup.rotation.y = INITIAL_ROTATION_Y
+      globeGroup.rotation.x = INITIAL_ROTATION_X
 
       // No lighting needed - using MeshBasicMaterial which is unlit
 
