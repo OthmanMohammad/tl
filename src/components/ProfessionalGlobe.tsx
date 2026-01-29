@@ -159,7 +159,7 @@ const ThreeGlobe: React.FC = () => {
       // ===========================================
       // TEXTURE OFFSET - Adjust this value if pins/beams are misaligned
       // ===========================================
-      const TEXTURE_LNG_OFFSET = 0 // Adjust if pins are shifted left/right
+      const TEXTURE_LNG_OFFSET = -100 // Shift west to move from Nova Scotia to Middle East
 
       // Helper: Convert lat/lng to 3D position (simplified for custom map)
       const latLngToVector3 = (lat: number, lng: number, radius: number) => {
@@ -167,7 +167,7 @@ const ThreeGlobe: React.FC = () => {
         const theta = (lng + TEXTURE_LNG_OFFSET) * (Math.PI / 180)
         const x = radius * Math.sin(phi) * Math.cos(theta)
         const y = radius * Math.cos(phi)
-        const z = radius * Math.sin(phi) * Math.sin(theta)
+        const z = -radius * Math.sin(phi) * Math.sin(theta) // Negated z
         return new THREE.Vector3(x, y, z)
       }
 
