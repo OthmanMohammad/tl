@@ -135,7 +135,19 @@ const ThreeGlobe: React.FC = () => {
 
       // Load single clean map texture
       const earthTexture = await loadTexture('/textures/earth/maps.png')
-      if (earthTexture) earthTexture.colorSpace = THREE.SRGBColorSpace
+      if (earthTexture) {
+        earthTexture.colorSpace = THREE.SRGBColorSpace
+        // Enable wrapping for texture offset adjustments
+        earthTexture.wrapS = THREE.RepeatWrapping
+        earthTexture.wrapT = THREE.RepeatWrapping
+        // ===========================================
+        // TEXTURE ADJUSTMENT - Adjust these values to align texture with coordinates
+        // offset.x: Horizontal rotation (0-1, where 0.5 = 180 degrees)
+        // offset.y: Vertical shift (usually 0)
+        // ===========================================
+        earthTexture.offset.x = 0.5 // Rotate texture 180 degrees
+        earthTexture.offset.y = 0
+      }
 
       // Globe group for rotation
       globeGroup = new THREE.Group()
@@ -156,20 +168,12 @@ const ThreeGlobe: React.FC = () => {
       const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial)
       globeGroup.add(earthMesh)
 
-      // ===========================================
-      // TEXTURE OFFSET - Adjust this value if pins/beams are misaligned
-      // For THREE.js SphereGeometry, texture center (u=0.5) is at theta=PI (-X axis)
-      // Standard equirectangular maps have lng=0 at center, so we add 180
-      // Adjust this offset if your map has a different center point
-      // ===========================================
-      const TEXTURE_LNG_OFFSET = 180 // Standard for equirectangular maps
-
-      // Helper: Convert lat/lng to 3D position
-      // Uses standard spherical coordinate formula for THREE.js
+      // Helper: Convert lat/lng to 3D position (standard formula)
+      // No offset needed - texture rotation handles alignment
       const latLngToVector3 = (lat: number, lng: number, radius: number) => {
         const phi = (90 - lat) * (Math.PI / 180) // Polar angle from north pole
-        const theta = (lng + TEXTURE_LNG_OFFSET) * (Math.PI / 180) // Azimuthal angle
-        const x = -radius * Math.sin(phi) * Math.cos(theta) // Negated x for correct orientation
+        const theta = lng * (Math.PI / 180) // Azimuthal angle in radians
+        const x = radius * Math.sin(phi) * Math.cos(theta)
         const y = radius * Math.cos(phi)
         const z = radius * Math.sin(phi) * Math.sin(theta)
         return new THREE.Vector3(x, y, z)
