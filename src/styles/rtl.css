@@ -253,6 +253,13 @@ html[dir="ltr"] body {
   text-align: center;
 }
 
+/* Keep logo links in LTR direction so logo + text don't flip order */
+[dir="rtl"] .footer-logo-link,
+[dir="rtl"] .logo,
+[dir="rtl"] .mobile-menu-logo {
+  direction: ltr;
+}
+
 /* Prevent logo from flipping in RTL */
 [dir="rtl"] .footer-logo-image,
 [dir="rtl"] .nav-logo-image,
