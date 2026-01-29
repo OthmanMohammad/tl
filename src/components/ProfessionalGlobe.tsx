@@ -133,98 +133,28 @@ const ThreeGlobe: React.FC = () => {
         })
       }
 
-      // Load SMALLER textures for better performance
-      const [earthDayTexture, earthNightTexture, earthBumpTexture, earthSpecularTexture] = await Promise.all([
-        loadTexture('/textures/earth/earth-day.jpg'),
-        loadTexture('/textures/earth/earth-night.jpg'),
-        loadTexture('/textures/earth/earth-bump.jpg'),
-        loadTexture('/textures/earth/earth-specular.jpg')
-      ])
-
-      if (earthDayTexture) earthDayTexture.colorSpace = THREE.SRGBColorSpace
+      // Load single clean map texture
+      const earthTexture = await loadTexture('/textures/earth/maps.png')
+      if (earthTexture) earthTexture.colorSpace = THREE.SRGBColorSpace
 
       // Globe group for rotation
       globeGroup = new THREE.Group()
       scene.add(globeGroup)
 
-      // Earth geometry - REDUCED complexity (64x64 instead of 128x128)
+      // Earth geometry
       const earthGeometry = new THREE.SphereGeometry(1, 64, 64)
       disposables.geometries.push(earthGeometry)
 
-      // Dark base sphere with faint geography
-      const earthMaterial = new THREE.MeshPhongMaterial({
-        map: earthDayTexture,
-        bumpMap: earthBumpTexture,
-        bumpScale: 0.01,
-        color: 0x111111,
-        shininess: 5,
-        emissive: 0x000000,
-        emissiveIntensity: 0
+      // Simple earth material with transparency support
+      const earthMaterial = new THREE.MeshBasicMaterial({
+        map: earthTexture,
+        transparent: true,
+        side: THREE.FrontSide
       })
       disposables.materials.push(earthMaterial)
 
       const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial)
       globeGroup.add(earthMesh)
-
-      // Night lights layer
-      const nightGeometry = new THREE.SphereGeometry(1, 64, 64)
-      disposables.geometries.push(nightGeometry)
-
-      const nightMaterial = new THREE.MeshBasicMaterial({
-        map: earthNightTexture,
-        transparent: true,
-        opacity: 1.0,
-        blending: THREE.AdditiveBlending
-      })
-      disposables.materials.push(nightMaterial)
-
-      const nightMesh = new THREE.Mesh(nightGeometry, nightMaterial)
-      globeGroup.add(nightMesh)
-
-      // Fresnel atmosphere glow - REDUCED geometry
-      const fresnelMaterial = new THREE.ShaderMaterial({
-        uniforms: {
-          color1: { value: new THREE.Color(0x444444) },
-          color2: { value: new THREE.Color(0x000000) },
-          fresnelBias: { value: 0.1 },
-          fresnelScale: { value: 0.5 },
-          fresnelPower: { value: 2.5 }
-        },
-        vertexShader: `
-          uniform float fresnelBias;
-          uniform float fresnelScale;
-          uniform float fresnelPower;
-          varying float vReflectionFactor;
-
-          void main() {
-            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-            vec4 worldPosition = modelMatrix * vec4(position, 1.0);
-            vec3 worldNormal = normalize(mat3(modelMatrix[0].xyz, modelMatrix[1].xyz, modelMatrix[2].xyz) * normal);
-            vec3 I = worldPosition.xyz - cameraPosition;
-            vReflectionFactor = fresnelBias + fresnelScale * pow(1.0 + dot(normalize(I), worldNormal), fresnelPower);
-            gl_Position = projectionMatrix * mvPosition;
-          }
-        `,
-        fragmentShader: `
-          uniform vec3 color1;
-          uniform vec3 color2;
-          varying float vReflectionFactor;
-
-          void main() {
-            float f = clamp(vReflectionFactor, 0.0, 1.0);
-            gl_FragColor = vec4(mix(color2, color1, vec3(f)), f);
-          }
-        `,
-        transparent: true,
-        blending: THREE.AdditiveBlending
-      })
-      disposables.materials.push(fresnelMaterial)
-
-      const atmosphereGeometry = new THREE.SphereGeometry(1.01, 32, 32)
-      disposables.geometries.push(atmosphereGeometry)
-
-      const atmosphereMesh = new THREE.Mesh(atmosphereGeometry, fresnelMaterial)
-      globeGroup.add(atmosphereMesh)
 
       // Helper: Convert lat/lng to 3D position
       const latLngToVector3 = (lat: number, lng: number, radius: number) => {
@@ -431,13 +361,7 @@ const ThreeGlobe: React.FC = () => {
       globeGroup.rotation.y = -2.2
       globeGroup.rotation.x = 0.4
 
-      // Lighting
-      const sunLight = new THREE.DirectionalLight(0xffffff, 0.08)
-      sunLight.position.set(5, 3, 5)
-      scene.add(sunLight)
-
-      const ambientLight = new THREE.AmbientLight(0x080808, 0.2)
-      scene.add(ambientLight)
+      // No lighting needed - using MeshBasicMaterial which is unlit
 
       // Animation with visibility detection
       let time = 0
