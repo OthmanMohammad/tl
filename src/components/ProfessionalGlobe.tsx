@@ -161,12 +161,16 @@ const ThreeGlobe: React.FC = () => {
       // Positive = shift east, Negative = shift west
       // ===========================================
       const TEXTURE_LNG_OFFSET = 0 // Try values like -90, -180, 90, 180 if misaligned
+      const FLIP_HORIZONTAL = true // Set to true if pins appear on opposite side of globe
 
       // Helper: Convert lat/lng to 3D position
       const latLngToVector3 = (lat: number, lng: number, radius: number) => {
         const phi = (90 - lat) * (Math.PI / 180)
         const theta = (lng + 180 + TEXTURE_LNG_OFFSET) * (Math.PI / 180)
-        const x = -(radius * Math.sin(phi) * Math.cos(theta))
+        // Flip x-coordinate if texture is mirrored
+        const x = FLIP_HORIZONTAL
+          ? (radius * Math.sin(phi) * Math.cos(theta))
+          : -(radius * Math.sin(phi) * Math.cos(theta))
         const y = radius * Math.cos(phi)
         const z = radius * Math.sin(phi) * Math.sin(theta)
         return new THREE.Vector3(x, y, z)
@@ -371,8 +375,8 @@ const ThreeGlobe: React.FC = () => {
       // rotation.x: Vertical tilt (positive = tilt down to show more north)
       //             0.4 radians ≈ 23 degrees tilt
       // ===========================================
-      const INITIAL_ROTATION_Y = -0.5 // Horizontal: adjust to center Middle East (-0.5 to -1.0 range)
-      const INITIAL_ROTATION_X = 0.3  // Vertical tilt: show more Europe/north
+      const INITIAL_ROTATION_Y = -1.8 // Horizontal: adjust to center Middle East
+      const INITIAL_ROTATION_X = -0.1 // Vertical tilt
 
       globeGroup.rotation.y = INITIAL_ROTATION_Y
       globeGroup.rotation.x = INITIAL_ROTATION_X
