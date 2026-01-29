@@ -160,8 +160,8 @@ const ThreeGlobe: React.FC = () => {
 
       // Helper: Convert lat/lng to 3D position
       // Adjusted for custom map texture alignment
-      const LNG_OFFSET = 0 // Longitude offset
-      const LAT_OFFSET = -25 // Latitude offset (negative = move south)
+      const LNG_OFFSET = -190 // Longitude offset (adjusted from -192 to move blue pin east)
+      const LAT_OFFSET = -43 // Latitude offset (negative = move south)
       const latLngToVector3 = (lat: number, lng: number, radius: number) => {
         const adjustedLat = lat + LAT_OFFSET
         const phi = (90 - adjustedLat) * (Math.PI / 180)
@@ -212,7 +212,6 @@ const ThreeGlobe: React.FC = () => {
             color: color,
             transparent: true,
             opacity: 0,
-            blending: THREE.AdditiveBlending,
             depthWrite: false
           })
           disposables.materials.push(segmentMaterial)
@@ -230,7 +229,6 @@ const ThreeGlobe: React.FC = () => {
             color: color,
             transparent: true,
             opacity: 0,
-            blending: THREE.AdditiveBlending,
             depthWrite: false
           })
           disposables.materials.push(glowMaterial)
@@ -253,7 +251,7 @@ const ThreeGlobe: React.FC = () => {
       }
 
       // Destination coordinates
-      const dubaiLat = 25.2048, dubaiLng = 55.2708
+      const dubaiLat = 25.2048, dubaiLng = 54.0 // Adjusted west from 55.27 to not reach Oman
       const riyadhLat = 24.7136, riyadhLng = 46.6753
       const miamiLat = 25.7617, miamiLng = -80.1918
 
