@@ -159,12 +159,15 @@ const ThreeGlobe: React.FC = () => {
       globeGroup.add(earthMesh)
 
       // Helper: Convert lat/lng to 3D position
-      // Longitude offset to align pins with texture
-      const LNG_OFFSET = 155 // Adjust this to align pins with map
+      // Adjusted for custom map texture alignment
+      const LNG_OFFSET = 0 // Longitude offset
+      const LAT_OFFSET = -25 // Latitude offset (negative = move south)
       const latLngToVector3 = (lat: number, lng: number, radius: number) => {
-        const phi = (90 - lat) * (Math.PI / 180)
+        const adjustedLat = lat + LAT_OFFSET
+        const phi = (90 - adjustedLat) * (Math.PI / 180)
         const theta = (lng + LNG_OFFSET) * (Math.PI / 180)
-        const x = radius * Math.sin(phi) * Math.cos(theta)
+        // Negate x to flip horizontally (mirror left-right)
+        const x = -radius * Math.sin(phi) * Math.cos(theta)
         const y = radius * Math.cos(phi)
         const z = radius * Math.sin(phi) * Math.sin(theta)
         return new THREE.Vector3(x, y, z)
