@@ -320,7 +320,7 @@ export default function Footer() {
         <div className="footer-container" style={styles.container}>
           {/* Top Section - Company Brand */}
           <div className="footer-brand-section" style={styles.brandSection}>
-            <Link href={`/${locale}`} className="footer-logo-link" style={styles.logoLink}>
+            <Link href={`/${locale}`} className="footer-logo-link" style={{ ...styles.logoLink, direction: 'ltr' }}>
               <Image
                 src="/Logo_only_Transparent.svg"
                 alt="TransformerLabs"
