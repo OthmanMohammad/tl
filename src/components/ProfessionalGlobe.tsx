@@ -159,10 +159,11 @@ const ThreeGlobe: React.FC = () => {
       globeGroup.add(earthMesh)
 
       // Helper: Convert lat/lng to 3D position
-      // Standard spherical coordinate conversion
+      // Longitude offset to align pins with texture
+      const LNG_OFFSET = -100 // Adjust this to align pins with map
       const latLngToVector3 = (lat: number, lng: number, radius: number) => {
         const phi = (90 - lat) * (Math.PI / 180)
-        const theta = lng * (Math.PI / 180)
+        const theta = (lng + LNG_OFFSET) * (Math.PI / 180)
         const x = radius * Math.sin(phi) * Math.cos(theta)
         const y = radius * Math.cos(phi)
         const z = radius * Math.sin(phi) * Math.sin(theta)
@@ -371,7 +372,7 @@ const ThreeGlobe: React.FC = () => {
       //             0.4 radians ≈ 23 degrees tilt
       // ===========================================
       const INITIAL_ROTATION_Y = -1.8 // Horizontal: shows Middle East region
-      const INITIAL_ROTATION_X = 0.1 // Slight tilt
+      const INITIAL_ROTATION_X = -0.3 // Tilt down to show more south
 
       globeGroup.rotation.y = INITIAL_ROTATION_Y
       globeGroup.rotation.x = INITIAL_ROTATION_X
