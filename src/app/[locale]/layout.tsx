@@ -8,6 +8,7 @@ import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import CookieConsentBanner from '@/components/CookieConsentBanner'
 import Analytics from '@/components/Analytics'
+import JsonLd from '@/components/JsonLd'
 
 type Props = {
   children: React.ReactNode
@@ -131,6 +132,11 @@ export default async function LocaleLayout({ children, params }: Props) {
         <link rel="alternate" hrefLang="en" href="https://transformerlabs.io/en" />
         <link rel="alternate" hrefLang="ar" href="https://transformerlabs.io/ar" />
         <link rel="alternate" hrefLang="x-default" href="https://transformerlabs.io/en" />
+        {/* Preload critical resources */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        {/* JSON-LD Structured Data */}
+        <JsonLd locale={locale} />
       </head>
       <body className={dir === 'rtl' ? 'rtl' : 'ltr'}>
         <NextIntlClientProvider messages={messages}>

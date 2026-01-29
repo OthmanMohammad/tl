@@ -13,6 +13,7 @@ import {
   Lightbulb,
   Linkedin
 } from 'lucide-react'
+import FAQSchema from '@/components/FAQSchema'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -112,6 +113,9 @@ export default async function Contact({ params }: Props) {
 
   return (
     <main>
+      {/* FAQ Structured Data */}
+      <FAQSchema faqs={faqs} locale={locale} />
+
       {/* Hero Section */}
       <section className="hero" style={{ paddingTop: 'var(--space-20)', paddingBottom: 'var(--space-20)' }}>
         <div className="container">
