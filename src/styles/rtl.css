@@ -95,21 +95,29 @@ html[dir="ltr"] body {
   text-align: right;
 }
 
-/* Center-aligned elements stay centered in both directions */
+/* Center-aligned elements that should stay centered */
 [dir="rtl"] .text-center,
-[dir="rtl"] .hero-content,
-[dir="rtl"] .hero-subtitle,
-[dir="rtl"] .section-header,
 [dir="rtl"] .cta-section {
   text-align: center;
 }
 
-/* Ensure hero subtitle and hero content paragraphs are properly centered in RTL */
+/* Hero content - align everything to right in RTL */
+[dir="rtl"] .hero-content {
+  text-align: right;
+}
+
+[dir="rtl"] .hero-content h1,
+[dir="rtl"] .hero-content h2,
 [dir="rtl"] .hero-subtitle,
 [dir="rtl"] .hero-content p {
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
+  text-align: right;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Section headers align right */
+[dir="rtl"] .section-header {
+  text-align: right;
 }
 
 /* =====================================================

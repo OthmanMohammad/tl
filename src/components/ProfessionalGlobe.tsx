@@ -185,7 +185,7 @@ const ThreeGlobe: React.FC = () => {
         return new THREE.Vector3(x, y, z)
       }
 
-      // Create traveling arc (animated beam from start to end) with glow effect
+      // Create traveling arc (animated beam from start to end) with actual width using tube
       const createTravelingArc = (
         startLat: number, startLng: number,
         endLat: number, endLng: number,
@@ -203,48 +203,56 @@ const ThreeGlobe: React.FC = () => {
         mid.normalize().multiplyScalar(arcHeight)
 
         const curve = new THREE.QuadraticBezierCurve3(start, mid, end)
-        const points = curve.getPoints(100)
 
-        // Create main line
-        const geometry = new THREE.BufferGeometry().setFromPoints(points)
-        const material = new THREE.LineBasicMaterial({
-          color: color,
-          transparent: true,
-          opacity: 1.0,
-          blending: THREE.AdditiveBlending
-        })
-        const line = new THREE.Line(geometry, material)
-
-        // Create glow lines (multiple layers for thicker beam)
+        // Create many small tube segments for animation
+        const numSegments = 100
+        const tubeRadius = 0.008 // Wider tube
+        const tubeSegments: any[] = []
         const glowGroup = new THREE.Group()
-        glowGroup.add(line)
 
-        // Add multiple glow layers for wider, more visible beam
-        for (let i = 0; i < 6; i++) {
-          const glowGeometry = new THREE.BufferGeometry().setFromPoints(points)
-          const glowMaterial = new THREE.LineBasicMaterial({
+        for (let i = 0; i < numSegments; i++) {
+          const t1 = i / numSegments
+          const t2 = (i + 1) / numSegments
+          const p1 = curve.getPoint(t1)
+          const p2 = curve.getPoint(t2)
+
+          // Create a small cylinder between points
+          const segmentCurve = new THREE.LineCurve3(p1, p2)
+          const segmentGeometry = new THREE.TubeGeometry(segmentCurve, 1, tubeRadius, 8, false)
+
+          const segmentMaterial = new THREE.MeshBasicMaterial({
             color: color,
             transparent: true,
-            opacity: 0.5 - i * 0.07,
+            opacity: 0,
             blending: THREE.AdditiveBlending
           })
-          const glowLine = new THREE.Line(glowGeometry, glowMaterial)
-          glowGroup.add(glowLine)
+
+          const segment = new THREE.Mesh(segmentGeometry, segmentMaterial)
+          segment.userData.index = i
+          tubeSegments.push(segment)
+          glowGroup.add(segment)
+
+          // Add glow layer (slightly larger)
+          const glowGeometry = new THREE.TubeGeometry(segmentCurve, 1, tubeRadius * 2, 8, false)
+          const glowMaterial = new THREE.MeshBasicMaterial({
+            color: color,
+            transparent: true,
+            opacity: 0,
+            blending: THREE.AdditiveBlending
+          })
+          const glowSegment = new THREE.Mesh(glowGeometry, glowMaterial)
+          glowSegment.userData.index = i
+          glowSegment.userData.isGlow = true
+          tubeSegments.push(glowSegment)
+          glowGroup.add(glowSegment)
         }
 
         glowGroup.userData = {
           progress: initialDelay,
-          totalPoints: 101,
+          totalPoints: numSegments,
           segmentLength: segmentLength,
-          lines: glowGroup.children
+          segments: tubeSegments
         }
-
-        // Start with nothing visible
-        glowGroup.children.forEach(child => {
-          if (child instanceof THREE.Line) {
-            child.geometry.setDrawRange(0, 0)
-          }
-        })
 
         return glowGroup
       }
@@ -397,26 +405,24 @@ const ThreeGlobe: React.FC = () => {
             data.progress = 0
           }
 
-          if (data.progress >= 0) {
-            // End point: beam extends from start toward end
-            const end = Math.min(data.totalPoints, Math.floor(data.progress))
+          // Animate tube segments by opacity
+          if (data.segments) {
+            data.segments.forEach((segment: any) => {
+              const idx = segment.userData.index
+              const isGlow = segment.userData.isGlow
 
-            // Start point: tail starts disappearing after beam has extended past tailLength
-            const start = Math.max(0, Math.floor(data.progress - data.segmentLength))
+              if (data.progress >= 0) {
+                const head = Math.floor(data.progress)
+                const tail = Math.floor(data.progress - data.segmentLength)
 
-            const count = Math.max(0, end - start)
-
-            // Update all lines in the glow group
-            arc.children.forEach((child: any) => {
-              if (child.geometry && child.geometry.setDrawRange) {
-                child.geometry.setDrawRange(start, count)
-              }
-            })
-          } else {
-            // Hide all lines
-            arc.children.forEach((child: any) => {
-              if (child.geometry && child.geometry.setDrawRange) {
-                child.geometry.setDrawRange(0, 0)
+                // Show segment if it's between tail and head
+                if (idx >= tail && idx <= head && idx < data.totalPoints) {
+                  segment.material.opacity = isGlow ? 0.4 : 0.95
+                } else {
+                  segment.material.opacity = 0
+                }
+              } else {
+                segment.material.opacity = 0
               }
             })
           }
