@@ -319,10 +319,10 @@ const ThreeGlobe: React.FC = () => {
         return texture
       }
 
-      // Aberdeen (UK) = BLUE, Nablus (Palestine) = RED
+      // Both pins use red (#EB1600)
       offices.forEach(office => {
         const pos = latLngToVector3(office.lat, office.lng, 1.04)
-        const pinColor = office.id === 'uk' ? '#00AAFF' : '#EB1600'
+        const pinColor = '#EB1600'
 
         const pinTexture = createPinTexture(pinColor)
         const spriteMaterial = new THREE.SpriteMaterial({
