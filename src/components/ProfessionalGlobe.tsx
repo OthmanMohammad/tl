@@ -293,15 +293,15 @@ const ThreeGlobe: React.FC = () => {
       globeGroup.add(arcNablusToMiami)
       arcMeshes.push(arcNablusToMiami)
 
-      // Office pin markers - REDUCED geometry
+      // Office pin markers - RED color (#EB1600)
       offices.forEach(office => {
-        const pos = latLngToVector3(office.lat, office.lng, 1.02)
+        const pos = latLngToVector3(office.lat, office.lng, 1.05) // Higher radius to be clearly outside globe
 
-        const pinGeometry = new THREE.SphereGeometry(0.02, 12, 12)
+        const pinGeometry = new THREE.SphereGeometry(0.03, 12, 12) // Larger pin
         disposables.geometries.push(pinGeometry)
 
         const pinMaterial = new THREE.MeshBasicMaterial({
-          color: 0xffffff,
+          color: 0xEB1600, // Red color
           transparent: true,
           opacity: 1.0
         })
@@ -312,13 +312,13 @@ const ThreeGlobe: React.FC = () => {
         pin.userData = { officeId: office.id }
         globeGroup.add(pin)
 
-        const glowSphereGeometry = new THREE.SphereGeometry(0.035, 12, 12)
+        const glowSphereGeometry = new THREE.SphereGeometry(0.05, 12, 12) // Larger glow
         disposables.geometries.push(glowSphereGeometry)
 
         const glowSphereMaterial = new THREE.MeshBasicMaterial({
-          color: 0xffffff,
+          color: 0xEB1600, // Red glow
           transparent: true,
-          opacity: 0.3
+          opacity: 0.4
         })
         disposables.materials.push(glowSphereMaterial)
 
@@ -326,28 +326,28 @@ const ThreeGlobe: React.FC = () => {
         glowSphere.position.copy(pos)
         globeGroup.add(glowSphere)
 
-        const ringGeometry = new THREE.RingGeometry(0.04, 0.055, 24)
+        const ringGeometry = new THREE.RingGeometry(0.06, 0.08, 24) // Larger ring
         disposables.geometries.push(ringGeometry)
 
         const ringMaterial = new THREE.MeshBasicMaterial({
-          color: 0xffffff,
+          color: 0xEB1600, // Red ring
           transparent: true,
-          opacity: 0.4,
+          opacity: 0.5,
           side: THREE.DoubleSide
         })
         disposables.materials.push(ringMaterial)
 
         const ring = new THREE.Mesh(ringGeometry, ringMaterial)
-        ring.position.copy(pos.clone().multiplyScalar(1.001))
+        ring.position.copy(pos)
         ring.lookAt(0, 0, 0)
         ring.userData = { isPulse: true }
         globeGroup.add(ring)
 
-        const hoverGlowGeometry = new THREE.RingGeometry(0.05, 0.07, 24)
+        const hoverGlowGeometry = new THREE.RingGeometry(0.08, 0.1, 24) // Larger hover
         disposables.geometries.push(hoverGlowGeometry)
 
         const hoverGlowMaterial = new THREE.MeshBasicMaterial({
-          color: 0xffffff,
+          color: 0xEB1600, // Red hover
           transparent: true,
           opacity: 0,
           side: THREE.DoubleSide
@@ -355,7 +355,7 @@ const ThreeGlobe: React.FC = () => {
         disposables.materials.push(hoverGlowMaterial)
 
         const hoverGlow = new THREE.Mesh(hoverGlowGeometry, hoverGlowMaterial)
-        hoverGlow.position.copy(pos.clone().multiplyScalar(1.002))
+        hoverGlow.position.copy(pos)
         hoverGlow.lookAt(0, 0, 0)
         globeGroup.add(hoverGlow)
 
