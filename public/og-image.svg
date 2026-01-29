@@ -1,0 +1,60 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0a"/>
+      <stop offset="100%" style="stop-color:#1a1a1a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#FF3621"/>
+      <stop offset="100%" style="stop-color:#FF6B5B"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Accent line top -->
+  <rect x="0" y="0" width="1200" height="4" fill="url(#accent)"/>
+
+  <!-- Grid pattern (subtle) -->
+  <g opacity="0.03">
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#fff" stroke-width="1"/>
+    </pattern>
+    <rect width="1200" height="630" fill="url(#grid)"/>
+  </g>
+
+  <!-- Company Name -->
+  <text x="100" y="280" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="700" fill="#ffffff">
+    Transformer Labs
+  </text>
+
+  <!-- Tagline -->
+  <text x="100" y="350" font-family="system-ui, -apple-system, sans-serif" font-size="32" fill="#888888">
+    AI-Powered Software Solutions
+  </text>
+
+  <!-- Description -->
+  <text x="100" y="420" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#666666">
+    Building practical AI applications for businesses worldwide
+  </text>
+
+  <!-- Locations -->
+  <g transform="translate(100, 480)">
+    <circle cx="8" cy="8" r="6" fill="#FF3621"/>
+    <text x="24" y="14" font-family="system-ui, -apple-system, sans-serif" font-size="18" fill="#888888">
+      Aberdeen, Scotland  |  Nablus, Palestine
+    </text>
+  </g>
+
+  <!-- Website URL -->
+  <text x="100" y="560" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#FF3621">
+    transformerlabs.io
+  </text>
+
+  <!-- Decorative elements -->
+  <circle cx="1050" cy="315" r="150" fill="none" stroke="#FF3621" stroke-width="2" opacity="0.1"/>
+  <circle cx="1050" cy="315" r="100" fill="none" stroke="#FF3621" stroke-width="2" opacity="0.15"/>
+  <circle cx="1050" cy="315" r="50" fill="none" stroke="#FF3621" stroke-width="2" opacity="0.2"/>
+  <circle cx="1050" cy="315" r="8" fill="#FF3621" opacity="0.8"/>
+</svg>
