@@ -143,10 +143,12 @@ const ThreeGlobe: React.FC = () => {
         // ===========================================
         // TEXTURE ADJUSTMENT - Adjust these values to align texture with coordinates
         // offset.x: Horizontal rotation (0-1, where 0.5 = 180 degrees)
-        // offset.y: Vertical shift (usually 0)
+        // offset.y: Vertical shift
+        // repeat.y = -1: Flip texture vertically
         // ===========================================
         earthTexture.offset.x = 0.5 // Rotate texture 180 degrees
-        earthTexture.offset.y = 0
+        earthTexture.offset.y = 1   // Needed when flipping vertically
+        earthTexture.repeat.y = -1  // Flip texture vertically
       }
 
       // Globe group for rotation
