@@ -14,7 +14,7 @@ import {
   Mail,
   CheckCircle
 } from 'lucide-react'
-import ProfessionalGlobe from '@/components/ProfessionalGlobe'
+import ClientGlobe from '@/components/ClientGlobe'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -209,7 +209,7 @@ export default async function About({ params }: Props) {
             </p>
           </div>
 
-          <ProfessionalGlobe />
+          <ClientGlobe />
         </div>
       </section>
 
