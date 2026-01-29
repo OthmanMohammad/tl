@@ -1,6 +1,6 @@
 {
   "common": {
-    "companyName": "TransformerLabs",
+    "companyName": "Transformer Labs",
     "companyTagline": "Building the future with AI.",
     "email": "Mo@MohammadOthman.com",
     "getStarted": "Get Started",
@@ -36,7 +36,7 @@
     "linkedIn": "LinkedIn",
     "scotlandOffice": "Aberdeen, Scotland United Kingdom",
     "palestineOffice": "Nablus, West Bank, Palestine",
-    "copyright": "2026 TransformerLabs. Building the future with AI."
+    "copyright": "2026 Transformer Labs. Building the future with AI."
   },
   "home": {
     "hero": {
@@ -74,7 +74,7 @@
       }
     },
     "whyChoose": {
-      "title": "Why Choose TransformerLabs",
+      "title": "Why Choose Transformer Labs",
       "quality": {
         "title": "Quality-First Approach",
         "description": "We build solutions that last. Clean code, modern architecture, and thorough testing ensure your investment pays off."
@@ -137,16 +137,16 @@
   },
   "about": {
     "meta": {
-      "title": "About TransformerLabs",
-      "description": "Learn about TransformerLabs - AI development company specializing in practical business solutions. Based in Palestine and UK."
+      "title": "About Transformer Labs",
+      "description": "Learn about Transformer Labs - AI development company specializing in practical business solutions. Based in Palestine and UK."
     },
     "hero": {
-      "title": "About TransformerLabs",
+      "title": "About Transformer Labs",
       "subtitle": "We build AI solutions that solve real business problems. Founded in 2023, we work with companies worldwide to implement practical AI applications that deliver measurable results."
     },
     "story": {
       "title": "Our Story",
-      "p1": "TransformerLabs was founded with a simple mission: make AI accessible and practical for businesses of all sizes. We saw too many companies struggling with experimental AI projects that never delivered real value.",
+      "p1": "Transformer Labs was founded with a simple mission: make AI accessible and practical for businesses of all sizes. We saw too many companies struggling with experimental AI projects that never delivered real value.",
       "p2": "Our approach is different. We focus on proven AI technologies and practical implementations that integrate seamlessly with existing business processes. No hype, no unrealistic promises – just reliable AI solutions that work.",
       "p3": "Based in Palestine and the United Kingdom, we serve clients globally, with particular expertise in Middle Eastern and European markets."
     },
@@ -235,7 +235,7 @@
   },
   "services": {
     "meta": {
-      "title": "Services - TransformerLabs",
+      "title": "Services - Transformer Labs",
       "description": "Professional AI development, software engineering, and web design services. Chatbots, data analytics, workflow automation, custom websites, and more."
     },
     "hero": {
@@ -413,8 +413,8 @@
   },
   "contact": {
     "meta": {
-      "title": "Contact TransformerLabs",
-      "description": "Get in touch with TransformerLabs for AI development projects, partnerships, or consulting. Based in Aberdeen, Scotland and Nablus, Palestine, serving clients worldwide."
+      "title": "Contact Transformer Labs",
+      "description": "Get in touch with Transformer Labs for AI development projects, partnerships, or consulting. Based in Aberdeen, Scotland and Nablus, Palestine, serving clients worldwide."
     },
     "hero": {
       "title": "Get in Touch",
@@ -425,7 +425,7 @@
       "email": "Email",
       "emailDescription": "Best for project inquiries and detailed discussions",
       "linkedIn": "LinkedIn",
-      "linkedInPage": "TransformerLabs Company Page",
+      "linkedInPage": "Transformer Labs Company Page",
       "linkedInDescription": "Connect with us professionally",
       "offices": "Our Offices",
       "scotlandOffice": "Scotland Office",
@@ -516,7 +516,7 @@
   },
   "careers": {
     "meta": {
-      "title": "Careers - Join TransformerLabs",
+      "title": "Careers - Join Transformer Labs",
       "description": "Join our team of AI engineers and software developers. Remote-first culture with flexible hours. Help build the future of AI applications for businesses worldwide."
     },
     "hero": {
@@ -622,12 +622,12 @@
         "Your CV/resume attached",
         "The position you're interested in",
         "A brief introduction about yourself",
-        "Why you want to work with TransformerLabs",
+        "Why you want to work with Transformer Labs",
         "Any relevant projects or portfolio links"
       ],
       "emailLabel": "Email:",
       "subjectLabel": "Subject:",
-      "subjectExample": "TransformerLabs Application - [Position Name]",
+      "subjectExample": "Transformer Labs Application - [Position Name]",
       "sendButton": "Send Application"
     },
     "general": {
@@ -641,8 +641,8 @@
   },
   "privacy": {
     "meta": {
-      "title": "Privacy Policy - TransformerLabs",
-      "description": "TransformerLabs Privacy Policy. Learn how we collect, use, and protect your personal information in compliance with international data protection laws."
+      "title": "Privacy Policy - Transformer Labs",
+      "description": "Transformer Labs Privacy Policy. Learn how we collect, use, and protect your personal information in compliance with international data protection laws."
     },
     "title": "Privacy Policy",
     "subtitle": "How we collect, use, and protect your personal information",
@@ -652,7 +652,7 @@
       "legalEntity": "Legal Entity:",
       "legalEntityValue": "Transformer Innovation Co. for Programming and Artificial Intelligence",
       "commercialName": "Commercial Name:",
-      "commercialNameValue": "TransformerLabs",
+      "commercialNameValue": "Transformer Labs",
       "companyNumber": "Company Number:",
       "companyNumberValue": "564007243",
       "address": "Address:",
@@ -662,7 +662,7 @@
     "sections": {
       "s1": {
         "title": "1. Introduction",
-        "p1": "TransformerLabs (\"we,\" \"our,\" or \"us\") respects your privacy and is committed to protecting your personal data. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, use our services, or engage with us professionally.",
+        "p1": "Transformer Labs (\"we,\" \"our,\" or \"us\") respects your privacy and is committed to protecting your personal data. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, use our services, or engage with us professionally.",
         "p2": "This policy applies to all users of our website and clients of our AI development and software engineering services."
       },
       "s2": {
@@ -854,8 +854,8 @@
   },
   "terms": {
     "meta": {
-      "title": "Terms of Service - TransformerLabs",
-      "description": "TransformerLabs Terms of Service. Legal terms and conditions for our AI development and software engineering services."
+      "title": "Terms of Service - Transformer Labs",
+      "description": "Transformer Labs Terms of Service. Legal terms and conditions for our AI development and software engineering services."
     },
     "title": "Terms of Service",
     "subtitle": "Legal terms and conditions for our AI development and software engineering services",
@@ -870,7 +870,7 @@
         "legalEntity": "Legal Entity:",
         "legalEntityValue": "Transformer Innovation Co. for Programming and Artificial Intelligence",
         "commercialName": "Commercial Name:",
-        "commercialNameValue": "TransformerLabs",
+        "commercialNameValue": "Transformer Labs",
         "companyNumber": "Company Number:",
         "companyNumberValue": "564007243",
         "registeredAddress": "Registered Address:",
@@ -883,7 +883,7 @@
         "title": "2. Definitions",
         "intro": "In these Terms of Service:",
         "items": [
-          "\"Company,\" \"we,\" \"us,\" \"our\" refers to TransformerLabs",
+          "\"Company,\" \"we,\" \"us,\" \"our\" refers to Transformer Labs",
           "\"Client,\" \"you,\" \"your\" refers to the individual or entity engaging our services",
           "\"Services\" refers to AI development, software engineering, consulting, and related professional services",
           "\"Deliverables\" refers to work products, code, documentation, and other materials created for you",
@@ -973,7 +973,7 @@
           ]
         },
         "s5_2": {
-          "title": "5.2 TransformerLabs Retention",
+          "title": "5.2 Transformer Labs Retention",
           "intro": "We retain ownership of:",
           "items": [
             "Our general methodologies, frameworks, and processes",
@@ -1201,7 +1201,7 @@
     },
     "modal": {
       "title": "Cookie Preferences",
-      "description": "Manage your cookie preferences for TransformerLabs. Choose which types of cookies you want to allow.",
+      "description": "Manage your cookie preferences for Transformer Labs. Choose which types of cookies you want to allow.",
       "necessary": {
         "title": "Necessary",
         "description": "Essential cookies required for the website to function properly. Cannot be disabled."

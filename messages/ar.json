@@ -649,7 +649,7 @@
     "lastUpdated": "آخر تحديث: يناير 2025",
     "companyInfo": {
       "title": "معلومات الشركة",
-      "legalEntity": "الكيان القانوني:",
+      "legalEntity": "الاسم القانوني:",
       "legalEntityValue": "شركة ترانسفورمرز انوفيشن للبرمجة والذكاء الاصطناعي",
       "commercialName": "الاسم التجاري:",
       "commercialNameValue": "Transformer Labs",
@@ -867,7 +867,7 @@
     "sections": {
       "s1": {
         "title": "1. معلومات الشركة",
-        "legalEntity": "الكيان القانوني:",
+        "legalEntity": "الاسم القانوني:",
         "legalEntityValue": "شركة ترانسفورمرز انوفيشن للبرمجة والذكاء الاصطناعي",
         "commercialName": "الاسم التجاري:",
         "commercialNameValue": "Transformer Labs",
