@@ -123,11 +123,11 @@ const ThreeGlobe: React.FC = () => {
       const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial)
       globeGroup.add(earthMesh)
 
-      // Night lights layer - PRIMARY visible layer (dimmed for darker look)
+      // Night lights layer - PRIMARY visible layer (bright city lights)
       const nightMaterial = new THREE.MeshBasicMaterial({
         map: earthNightTexture,
         transparent: true,
-        opacity: 0.7, // Reduced for darker appearance
+        opacity: 1.0, // Full brightness for city lights
         blending: THREE.AdditiveBlending
       })
       const nightMesh = new THREE.Mesh(earthGeometry.clone(), nightMaterial)
@@ -186,7 +186,13 @@ const ThreeGlobe: React.FC = () => {
       }
 
       // Create traveling arc (animated beam from start to end)
-      const createTravelingArc = (startLat: number, startLng: number, endLat: number, endLng: number) => {
+      const createTravelingArc = (
+        startLat: number, startLng: number,
+        endLat: number, endLng: number,
+        color: number = 0xEB1600,
+        segmentLength: number = 15,
+        initialDelay: number = 0
+      ) => {
         const start = latLngToVector3(startLat, startLng, 1.02)
         const end = latLngToVector3(endLat, endLng, 1.02)
 
@@ -203,7 +209,7 @@ const ThreeGlobe: React.FC = () => {
 
         // Glowing line material
         const material = new THREE.LineBasicMaterial({
-          color: 0x00ffaa,
+          color: color,
           transparent: true,
           opacity: 0.9,
           linewidth: 2
@@ -211,9 +217,9 @@ const ThreeGlobe: React.FC = () => {
 
         const line = new THREE.Line(geometry, material)
         line.userData = {
-          progress: 0,
+          progress: initialDelay,
           totalPoints: 101,
-          segmentLength: 15 // Length of the traveling segment
+          segmentLength: segmentLength
         }
 
         // Start with nothing visible
@@ -222,23 +228,44 @@ const ThreeGlobe: React.FC = () => {
         return line
       }
 
-      // Create arc from Nablus to Aberdeen
-      const travelingArc = createTravelingArc(
-        offices[1].lat, offices[1].lng, // Nablus (start)
-        offices[0].lat, offices[0].lng  // Aberdeen (end)
-      )
-      globeGroup.add(travelingArc)
-      arcMeshes.push(travelingArc)
+      // Dubai and Riyadh coordinates (no pins, just arc destinations)
+      const dubaiLat = 25.2048
+      const dubaiLng = 55.2708
+      const riyadhLat = 24.7136
+      const riyadhLng = 46.6753
 
-      // Second arc going back (with delay)
-      const travelingArc2 = createTravelingArc(
+      // Arc 1: Aberdeen to Nablus (main arc, longer beam segment)
+      const arcAberdeenToNablus = createTravelingArc(
         offices[0].lat, offices[0].lng, // Aberdeen (start)
-        offices[1].lat, offices[1].lng  // Nablus (end)
+        offices[1].lat, offices[1].lng, // Nablus (end)
+        0xEB1600, // Red color
+        25, // Longer segment length
+        0
       )
-      travelingArc2.userData.progress = -50 // Start delayed
-      travelingArc2.material.color.setHex(0xff6644) // Orange color
-      globeGroup.add(travelingArc2)
-      arcMeshes.push(travelingArc2)
+      globeGroup.add(arcAberdeenToNablus)
+      arcMeshes.push(arcAberdeenToNablus)
+
+      // Arc 2: Nablus to Dubai (shorter beam)
+      const arcNablusToDubai = createTravelingArc(
+        offices[1].lat, offices[1].lng, // Nablus (start)
+        dubaiLat, dubaiLng, // Dubai (end)
+        0xEB1600, // Red color
+        12, // Shorter segment
+        -40 // Delayed start
+      )
+      globeGroup.add(arcNablusToDubai)
+      arcMeshes.push(arcNablusToDubai)
+
+      // Arc 3: Nablus to Riyadh (shorter beam)
+      const arcNablusToRiyadh = createTravelingArc(
+        offices[1].lat, offices[1].lng, // Nablus (start)
+        riyadhLat, riyadhLng, // Riyadh (end)
+        0xEB1600, // Red color
+        12, // Shorter segment
+        -80 // More delayed start
+      )
+      globeGroup.add(arcNablusToRiyadh)
+      arcMeshes.push(arcNablusToRiyadh)
 
       // Office pin markers - WHITE GLOWING
       offices.forEach(office => {
@@ -355,8 +382,8 @@ const ThreeGlobe: React.FC = () => {
           }
         })
 
-        // Pulse effect on pin rings and glow spheres
-        markersRef.current.forEach((marker, id) => {
+        // Pulse effect on pin rings and glow spheres (no hover effects on globe)
+        markersRef.current.forEach((marker) => {
           if (marker.ring && marker.ring.userData.isPulse) {
             const scale = 1 + Math.sin(time * 2) * 0.3
             marker.ring.scale.set(scale, scale, scale)
@@ -368,20 +395,6 @@ const ThreeGlobe: React.FC = () => {
             const glowScale = 1 + Math.sin(time * 1.5) * 0.15
             marker.glowSphere.scale.set(glowScale, glowScale, glowScale)
             marker.glowSphereMaterial.opacity = 0.25 + Math.sin(time * 1.5) * 0.1
-          }
-
-          // Hover effects
-          const isHovered = hoveredOffice === id
-          const targetOpacity = isHovered ? 0.8 : 0
-          const targetScale = isHovered ? 1.3 : 1.0
-
-          marker.glowMaterial.opacity += (targetOpacity - marker.glowMaterial.opacity) * 0.1
-          const currentScale = marker.pin.scale.x
-          const newScale = currentScale + (targetScale - currentScale) * 0.1
-          marker.pin.scale.set(newScale, newScale, newScale)
-
-          if (isHovered) {
-            marker.glow.scale.setScalar(1 + Math.sin(time * 4) * 0.2)
           }
         })
 
@@ -416,7 +429,7 @@ const ThreeGlobe: React.FC = () => {
         renderer.dispose()
       }
     }
-  }, [hoveredOffice])
+  }, []) // No dependencies - globe should not re-render on hover
 
   return (
     <div className="globe-wrapper">
