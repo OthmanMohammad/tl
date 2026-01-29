@@ -207,7 +207,7 @@ const ThreeGlobe: React.FC = () => {
 
         // Create tube segments for animation - fewer but overlapping for no gaps
         const numSegments = 50
-        const tubeRadius = 0.012 // Wider, bolder tube
+        const tubeRadius = 0.005 // Thin, refined tube
         const tubeSegments: any[] = []
         const glowGroup = new THREE.Group()
 
@@ -236,7 +236,7 @@ const ThreeGlobe: React.FC = () => {
           glowGroup.add(segment)
 
           // Add outer glow layer (larger, softer)
-          const glowGeometry = new THREE.TubeGeometry(segmentCurve, 2, tubeRadius * 2.5, 12, false)
+          const glowGeometry = new THREE.TubeGeometry(segmentCurve, 2, tubeRadius * 2, 12, false)
           const glowMaterial = new THREE.MeshBasicMaterial({
             color: color,
             transparent: true,
