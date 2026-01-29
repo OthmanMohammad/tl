@@ -111,24 +111,25 @@ const ThreeGlobe: React.FC = () => {
       // Earth geometry - high detail
       const earthGeometry = new THREE.SphereGeometry(1, 128, 128)
 
-      // Earth day material
+      // Dark base sphere with faint geography (day texture heavily darkened)
       const earthMaterial = new THREE.MeshPhongMaterial({
         map: earthDayTexture,
         bumpMap: earthBumpTexture,
-        bumpScale: 0.015,
-        specularMap: earthSpecularTexture,
-        specular: new THREE.Color(0x222222),
-        shininess: 15
+        bumpScale: 0.01,
+        color: 0x111115, // Very dark tint
+        shininess: 5,
+        emissive: 0x000005,
+        emissiveIntensity: 0.1
       })
 
       const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial)
       globeGroup.add(earthMesh)
 
-      // Night lights layer
+      // Night lights layer - PRIMARY visible layer
       const nightMaterial = new THREE.MeshBasicMaterial({
         map: earthNightTexture,
         transparent: true,
-        opacity: 0.4,
+        opacity: 1.0,
         blending: THREE.AdditiveBlending
       })
       const nightMesh = new THREE.Mesh(earthGeometry.clone(), nightMaterial)
@@ -307,12 +308,12 @@ const ThreeGlobe: React.FC = () => {
       globeGroup.rotation.y = -0.3
       globeGroup.rotation.x = 0.1
 
-      // Lighting
-      const sunLight = new THREE.DirectionalLight(0xffffff, 2)
+      // Subtle lighting - keep it dark for night view
+      const sunLight = new THREE.DirectionalLight(0xffffff, 0.3)
       sunLight.position.set(5, 3, 5)
       scene.add(sunLight)
 
-      const ambientLight = new THREE.AmbientLight(0x404040, 1)
+      const ambientLight = new THREE.AmbientLight(0x222233, 0.5)
       scene.add(ambientLight)
 
       // Mouse interaction for rotation
